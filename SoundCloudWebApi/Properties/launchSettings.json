@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "SoundCloudWebApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:50122"
+    }
+  }
+}
