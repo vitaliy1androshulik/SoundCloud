@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Filters;
+using FluentValidation.AspNetCore;
+using SoundCloudWebApi.Validators.Auth;
+using SoundCloudWebApi.Services;
+using SoundCloudWebApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SoundCloudDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
 builder.Services.AddControllers();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -29,7 +38,10 @@ builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssembli
 builder.Services.AddMvc(options =>
 {
     options.Filters.Add<ValidationFilter>();
-});
+})
+    .AddFluentValidation(fv =>
+        fv.RegisterValidatorsFromAssemblyContaining<RegisterRequestValidator>()
+    );
 
 
 var app = builder.Build();
