@@ -11,4 +11,6 @@ public class SoundCloudDbContext : DbContext
     }
     public DbSet<GenreEntity> Genres { get; set; }
 
+    public DbSet<UserEntity> Users { get; set; }
+
 }
