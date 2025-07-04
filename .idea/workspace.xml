@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="006f0eec-0fbe-4857-83b6-35652b8ce271" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Header.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +27,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "home__page",
+    "git-widget-placeholder": "react__router__dom",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "H:/SoundColud",
     "node.js.detected.package.eslint": "true",
@@ -58,7 +56,7 @@
       <updated>1751453728110</updated>
       <workItem from="1751453729251" duration="1994000" />
       <workItem from="1751642422024" duration="156000" />
-      <workItem from="1751642580414" duration="2509000" />
+      <workItem from="1751642580414" duration="3117000" />
     </task>
     <servers />
   </component>
