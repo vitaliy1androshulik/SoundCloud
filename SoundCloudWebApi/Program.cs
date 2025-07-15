@@ -17,32 +17,27 @@ builder.Services.AddDbContext<SoundCloudDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
 
-builder.Services.AddControllers();
+// 2) Реєструємо валідатори у DI
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
+// 3) Підключаємо FluentValidation у пайплайн (авто-валід + client-side адаптери)
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Вимикаємо автоматичну валідацію через ModelState
-
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
-
-// Додаємо валідацію через FluentValidation
-builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddMvc(options =>
-{
-    options.Filters.Add<ValidationFilter>();
-})
-    .AddFluentValidation(fv =>
-        fv.RegisterValidatorsFromAssemblyContaining<RegisterRequestValidator>()
-    );
-
 
 var app = builder.Build();
 
@@ -52,7 +47,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseAuthorization();
 
