@@ -1,4 +1,5 @@
 ﻿using SoundCloudWebApi.Models.Auth;
+using System.Threading.Tasks;
 
 namespace SoundCloudWebApi.Services.Interfaces
 {
@@ -6,5 +7,6 @@ namespace SoundCloudWebApi.Services.Interfaces
     {
         Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto);
         Task<AuthResponseDto> LoginAsync(LoginRequestDto dto);
+        Task<UserProfileDto> GetUserProfileAsync(string userId);
     }
 }
