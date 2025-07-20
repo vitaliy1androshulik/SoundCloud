@@ -32,12 +32,6 @@ public class ValidationFilter : IAsyncActionFilter
                         var errors = (IEnumerable<FluentValidation.Results.ValidationFailure>)
                             validationResult?.GetType().GetProperty("Errors")?.GetValue(validationResult)!;
 
-                        foreach (var error in errors)
-                        {
-                            Console.WriteLine("List errors {0}", error);
-                        }
-                        
-
                         var errorDict = errors
                             .GroupBy(e => e.PropertyName)
                             .ToDictionary(
@@ -47,7 +41,12 @@ public class ValidationFilter : IAsyncActionFilter
 
                         context.Result = new BadRequestObjectResult(new
                         {
-                            errors = errorDict
+                            //type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                            //title = "One or more validation errors occurred.",
+                            status = 400,
+                            isValid = false,
+                            errors = errorDict,
+                            //traceId = context.HttpContext.TraceIdentifier
                         });
 
                         return;
