@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Filters;
-using FluentValidation.AspNetCore;
 using SoundCloudWebApi.Validators.Auth;
 using SoundCloudWebApi.Services;
 using SoundCloudWebApi.Services.Interfaces;
@@ -26,11 +25,16 @@ builder.Services.AddControllers(options =>
 });
 
 // 2) Реєструємо валідатори у DI
-builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+//builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
 // 3) Підключаємо FluentValidation у пайплайн (авто-валід + client-side адаптери)
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
+//builder.Services.AddFluentValidationAutoValidation();
+//builder.Services.AddFluentValidationClientsideAdapters();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
