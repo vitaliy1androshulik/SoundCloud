@@ -116,5 +116,26 @@ namespace SoundCloudWebApi.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public async Task<UserProfileDto> GetUserProfileAsync(string userId)
+        {
+            var user = await _db.Users
+                .Where(u => u.Id.ToString() == userId)
+                .Select(u => new UserProfileDto
+                {
+                    Id = u.Id.ToString(),
+                    Username = u.Username,
+                    Email = u.Email,
+                    CreatedAt = u.CreatedAt
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
+        }
     }
 }
