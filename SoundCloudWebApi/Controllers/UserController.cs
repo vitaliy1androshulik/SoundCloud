@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SoundCloudWebApi.Models.Auth;
-using SoundCloudWebApi.Services.Interfaces;
 using SoundCloudWebApi.Services;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using SoundCloudWebApi.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SoundCloudWebApi.Controllers;
 
@@ -64,41 +65,60 @@ public class UserController : ControllerBase
         return Ok(profile);
     }
 
-    // Нові CRUD-ендпоінти:
-    [Authorize]
-    [SwaggerOperation(
-    OperationId = "GetAllUsers",
-    Summary = "Отримати дані всіх користувачів [Authorize]")]
-    [HttpGet(Name = "GetAllUsers")]
-    public async Task<IActionResult> GetAll()
-        => Ok(await _userService.GetAllAsync());
+
+    //// Нові CRUD-ендпоінти:
+    //[Authorize]
+    //[SwaggerOperation(
+    //OperationId = "GetAllUsers",
+    //Summary = "Отримати дані всіх користувачів [Authorize]")]
+    //[HttpGet(Name = "GetAllUsers")]
+    //public async Task<IActionResult> GetAll()
+    //    => Ok(await _userService.GetAllAsync());
+
+    //[Authorize]
+    //[SwaggerOperation(
+    //OperationId = "GetUserById",
+    //Summary = "Отримати користувача за ID [Authorize]")]
+    //[HttpGet("{id:int}")]
+    //public async Task<IActionResult> GetById(int id)
+    //    => Ok(await _userService.GetByIdAsync(id));
+
+    //[Authorize]
+    //[SwaggerOperation(
+    //OperationId = "UpdateUser",
+    //Summary = "Оновити користувача за ID [Authorize]")]
+    //[HttpPut("{id:int}")]
+    //public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequestDto dto)
+    //    => Ok(await _userService.UpdateAsync(id, dto));
+
+    //[Authorize(Roles = "Admin")]
+    //[SwaggerOperation(
+    //OperationId = "DeleteUser",
+    //Summary = "Видалити користувача за ID [Authorize]")]
+    //[HttpDelete("{id:int}")]
+    //public async Task<IActionResult> Delete(int id)
+    //{
+    //    await _userService.DeleteAsync(id);
+    //    return NoContent();
+    //}
 
     [Authorize]
+    [HttpPut("profile")]
     [SwaggerOperation(
-    OperationId = "GetUserById",
-    Summary = "Отримати користувача за ID [Authorize]")]
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
-        => Ok(await _userService.GetByIdAsync(id));
-
-    [Authorize]
-    [SwaggerOperation(
-    OperationId = "UpdateUser",
-    Summary = "Оновити користувача за ID [Authorize]")]
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequestDto dto)
-        => Ok(await _userService.UpdateAsync(id, dto));
-
-    [Authorize(Roles = "Admin")]
-    [SwaggerOperation(
-    OperationId = "DeleteUser",
-    Summary = "Видалити користувача за ID [Authorize]")]
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    OperationId = "UpdateOwnProfile",
+    Summary = "Оновити власний профіль [Authorize]")]
+    public async Task<IActionResult> UpdateOwnProfile([FromBody] UpdateUserRequestDto dto)
     {
-        await _userService.DeleteAsync(id);
-        return NoContent();
+        // Дістаємо userId з токена
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        int userId = int.Parse(userIdClaim);
+        var updated = await _userService.UpdateAsync(userId, dto);
+        return Ok(updated);
     }
+
 
 }
 

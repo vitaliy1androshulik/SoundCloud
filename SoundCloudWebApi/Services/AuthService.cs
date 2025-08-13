@@ -28,10 +28,13 @@ namespace SoundCloudWebApi.Services
         public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto)
         {
             // Перевірка, чи користувач з таким email вже існує
-            if (await _db.Users.AnyAsync(u => u.Email == dto.Email))
+            if (await _db.Users.AnyAsync(u => u.Email == dto.Email.ToLower()))
             {
                 throw new InvalidOperationException("Користувач з таким email вже існує.");
             }
+
+            if (await _db.Users.AnyAsync(u => u.Username.ToLower() == dto.Username.ToLower()))
+                throw new InvalidOperationException("Користувач з таким ім'ям вже існує.");
 
             // Хешування пароля
             CreatePasswordHash(dto.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -67,6 +70,11 @@ namespace SoundCloudWebApi.Services
                 throw new UnauthorizedAccessException("Неправильний email або пароль.");
             }
 
+            if (user.IsBlocked)
+            {
+                throw new UnauthorizedAccessException("Користувач заблокований.");
+            }
+
             var token = GenerateJwtToken(user);
 
             return new AuthResponseDto
@@ -97,7 +105,8 @@ namespace SoundCloudWebApi.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -121,21 +130,48 @@ namespace SoundCloudWebApi.Services
         {
             var user = await _db.Users
                 .Where(u => u.Id.ToString() == userId)
-                .Select(u => new UserProfileDto
+                .Select(u => new
                 {
-                    Id = u.Id.ToString(),
-                    Username = u.Username,
-                    Email = u.Email,
-                    CreatedAt = u.CreatedAt
+                   u.Id,
+                   u.Username,
+                   u.Email,
+                   u.CreatedAt,
+                   u.Role,
+                   u.IsBlocked
                 })
                 .FirstOrDefaultAsync();
 
-            if (user == null)
-            {
-                return null;
-            }
+            //if (user == null)
+            //{
+            //    return null;
+            //}
+            //// Додаткова перевірка блокування
+            //var isBlocked = await _db.Users
+            //    .Where(u => u.Id.ToString() == userId)
+            //    .Select(u => u.IsBlocked)
+            //    .FirstOrDefaultAsync();
 
-            return user;
+            //if (isBlocked)
+            //{
+            //    throw new UnauthorizedAccessException("Користувач заблокований.");
+            //}
+
+            //return user;
+
+            if (user == null)
+                throw new KeyNotFoundException("Користувач не знайдений.");
+
+            if (user.IsBlocked)
+                throw new UnauthorizedAccessException("Користувач заблокований.");
+
+            return new UserProfileDto
+            {
+                Id = user.Id.ToString(),
+                Username = user.Username,
+                Email = user.Email,
+                CreatedAt = user.CreatedAt,
+                Role = user.Role
+            };
         }
     }
 }
