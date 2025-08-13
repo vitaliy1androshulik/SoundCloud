@@ -1,20 +1,25 @@
-import React from 'react';
+// App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/main_pages/HomePage";
+import LoginSignup from "./pages/login_signup/Login_Signup";
+import LibraryPage from "./pages/main_pages/LibraryPage.tsx";
+
+
 import './index.css';
-
-const App: React.FC = () => {
-
-  return (
+export default function App() {
+    return (
         <Router>
             <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<HomePage/>}/>
+                {/* Сторінка логіну */}
+                <Route path="/" element={<LoginSignup />} />
+
+                {/* Головний Layout */}
+                <Route element={<Layout />}>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/library" element={<LibraryPage />} />
                 </Route>
             </Routes>
         </Router>
-  );
-};
-
-export default App
+    );
+}

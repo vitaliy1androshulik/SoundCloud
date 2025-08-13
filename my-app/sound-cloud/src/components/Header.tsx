@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 const Header: React.FC = () => {
     return (
         <>
@@ -7,19 +8,19 @@ const Header: React.FC = () => {
                     <div className="flex items-center space-x-4">
                         <ul className="hidden md:flex space-x-6 text-gray-300">
                             <li>
-                                <a href="#" className="header-text-color px-1 py-1 rounded text-gray font-semibold">
+                                <Link to="/home" className="navigation-text-color px-1 py-1 rounded text-gray font-semibold">
                                     Home
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="header-text-color px-1 py-1 rounded text-gray font-semibold">
+                                <Link to="#" className="navigation-text-color px-1 py-1 rounded text-gray font-semibold">
                                     Feed
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="header-text-color px-1 py-1 rounded text-gray font-semibold">
+                                <Link to="/library" className="navigation-text-color px-1 py-1 rounded text-gray font-semibold">
                                     Library
-                                </a>
+                                </Link>
                             </li>
                             <div>
                                 <input
@@ -29,20 +30,20 @@ const Header: React.FC = () => {
                                 />
                             </div>
                             <li>
-                                <a href="#"
+                                <Link to="#"
                                    className="header-text-color-orange px-1 py-1 rounded text-gray font-semibold">
                                     Try Artist Pro
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="header-text-color px-1 py-1 rounded text-gray font-semibold">
+                                <Link to="#" className="navigation-text-color px-1 py-1 rounded text-gray font-semibold">
                                     For Artists
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="header-text-color px-1 py-1 rounded text-gray font-semibold">
+                                <Link to="#" className="navigation-text-color px-1 py-1 rounded text-gray font-semibold">
                                     Upload
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
