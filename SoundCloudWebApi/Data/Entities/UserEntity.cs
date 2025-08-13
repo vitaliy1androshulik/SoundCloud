@@ -2,6 +2,12 @@
 
 namespace SoundCloudWebApi.Data.Entities
 {
+    public enum UserRole
+    {
+        User,
+        Moderator,
+        Admin
+    }
     public class UserEntity
     {
         [Key]
@@ -20,7 +26,8 @@ namespace SoundCloudWebApi.Data.Entities
 
         [Required]
         public byte[] PasswordSalt { get; set; }
-
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public UserRole Role { get; set; } = UserRole.User;
+        public bool IsBlocked { get; set; } = false;
     }
 }

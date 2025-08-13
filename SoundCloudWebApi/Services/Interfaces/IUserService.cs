@@ -1,6 +1,7 @@
 ﻿using SoundCloudWebApi.Models.Auth;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SoundCloudWebApi.Data.Entities;  
 
 namespace SoundCloudWebApi.Services.Interfaces
 {
@@ -10,5 +11,8 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task<UserProfileDto> GetByIdAsync(int id);
         Task<UserProfileDto> UpdateAsync(int id, UpdateUserRequestDto dto);
         Task DeleteAsync(int id);
+        Task BlockAsync(int id);
+        Task UnblockAsync(int id);
+        Task ChangeRoleAsync(int userId, UserRole newRole);
     }
 }

@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SoundCloudWebApi.Middleware;
 using Swashbuckle.AspNetCore.Annotations;
+using SoundCloudWebApi.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,14 @@ builder.Services.AddDbContext<SoundCloudDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+// Нові сервіси для медіа-контенту
+builder.Services.AddScoped<IPlaylistService, PlaylistService>();
+builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddScoped<ITrackService, TrackService>();
+
+builder.Services.AddHttpContextAccessor();
+
 
 // JWT.
 var jwtSection = builder.Configuration.GetSection("Jwt");
