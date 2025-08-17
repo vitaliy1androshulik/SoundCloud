@@ -1,15 +1,4 @@
 @import "tailwindcss";
-
 .html, body, #root {
     background-color: #121212;
-    font-family:'Segoe UI Semibold';
-    color: aliceblue;
-}
-.navigation-text-color
-{
-    color:#909a9b
-}
-.header-text-color-orange
-{
-    color:#d5612d
 }

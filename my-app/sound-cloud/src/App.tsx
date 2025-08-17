@@ -7,6 +7,7 @@ import LibraryPage from "./pages/main_pages/LibraryPage.tsx";
 
 
 import './index.css';
+import FeedPage from "./pages/main_pages/FeedPage.tsx";
 export default function App() {
     return (
         <Router>
@@ -17,6 +18,7 @@ export default function App() {
                 {/* Головний Layout */}
                 <Route element={<Layout />}>
                     <Route path="/home" element={<HomePage />} />
+                    <Route path="/feed" element={<FeedPage />}/>
                     <Route path="/library" element={<LibraryPage />} />
                 </Route>
             </Routes>
