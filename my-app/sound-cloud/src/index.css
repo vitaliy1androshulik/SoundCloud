@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+    /*--color-*: initial;*/
+    --color-white: #fff;
+    --color-mypurple: #e89f2e;
+    --color-midnight: #121063;
+    --color-tahiti: #3ab7bf;
+    --color-bermuda: #78dcca;
+}
 
 .html, body, #root {
     background-color: #121212;

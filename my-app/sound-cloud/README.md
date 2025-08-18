@@ -52,3 +52,5 @@ export default tseslint.config({
   },
 })
 ```
+
+npx tailwindcss init -p

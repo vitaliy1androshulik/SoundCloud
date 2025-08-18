@@ -52,7 +52,7 @@ const Header: React.FC = () => {
                         bg-purple-100 rounded-[50px] text-[20px] font-bold">Sign in
                             </button>
                             <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
-                         bg-purple-700 rounded-[50px] font-bold">Create account
+                         bg-mypurple rounded-[50px] font-bold">Create account
                             </button>
                         </div>
                     </div>
