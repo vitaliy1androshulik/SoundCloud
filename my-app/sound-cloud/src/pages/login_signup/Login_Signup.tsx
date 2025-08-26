@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../../styles/login_signup/Login_Sіgnup.css'
 const LoginSignup: React.FC = () => {
+
     const navigate = useNavigate();
     const [isChecked, setIsChecked] = useState(false);
 
