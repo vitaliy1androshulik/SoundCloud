@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
