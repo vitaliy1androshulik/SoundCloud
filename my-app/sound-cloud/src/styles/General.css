@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
+@import "tailwindcss";
+@theme {
+    --color-purple: #9354ff;
+    --color-white: #FFFFFF;
+    --color-black: #101010;
+    --color-cyan: #54E0FF;
+    --color-darkpurple: #5241B3;
+    --color-lightpurple: #C9D4FF;
 
+}
 .baloo2{
     font-family: 'Baloo 2', sans-serif;
 }
