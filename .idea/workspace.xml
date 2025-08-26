@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< login_signup_page
     <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" afterDir="false" />
@@ -11,6 +12,9 @@
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" afterDir="false" />
     </list>
+=======
+    <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="" />
+>>>>>>> main
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,7 +76,8 @@
       <workItem from="1754943342432" duration="6824000" />
       <workItem from="1755079587451" duration="1908000" />
       <workItem from="1755115139960" duration="8408000" />
-      <workItem from="1755430480854" duration="3384000" />
+      <workItem from="1755430480854" duration="14964000" />
+      <workItem from="1756235078230" duration="1847000" />
     </task>
     <servers />
   </component>

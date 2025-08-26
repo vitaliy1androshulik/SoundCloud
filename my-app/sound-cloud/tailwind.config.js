@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 
 export default {
@@ -23,15 +24,7 @@ export default {
 
                 "full-xl": "1920px",
             },
-            colors: {
-                white: "#FFFFFF",
-                black:"#101010",
-                purple:"#9354ff",
-                cyan:"#54E0FF",
-                darkpurple:"#5241B3",
-                lightpurple:"#C9D4FF",
-            },
         },
     },
     plugins: [],
-};
+}
