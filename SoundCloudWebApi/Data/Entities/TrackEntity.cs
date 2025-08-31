@@ -29,5 +29,17 @@ namespace SoundCloudWebApi.Data.Entities
 
         // Зв’язок «один трек — багато плейлистів»
         public ICollection<PlaylistEntity> Playlists { get; set; }
+        public string? ImageUrl { get; set; }
+
+        //нові: 
+        public int? GenreId { get; set; }
+        public GenreEntity? Genre { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public int? UpdatedById { get; set; }
+
+
+
+
     }
 }

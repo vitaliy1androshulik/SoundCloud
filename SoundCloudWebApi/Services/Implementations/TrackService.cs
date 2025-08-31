@@ -32,53 +32,80 @@ namespace SoundCloudWebApi.Services.Implementations
             var roleStr = principal.FindFirst(ClaimTypes.Role)?.Value ?? nameof(UserRole.User);
             if (!Enum.TryParse<UserRole>(roleStr, out var role)) role = UserRole.User;
 
-            return (int.Parse(idStr), role);
-        }
+            return (int.Parse(idStr), role);       }
 
-        public async Task<IEnumerable<TrackDto>> GetAllAsync(int userId)
+        public async Task<IEnumerable<TrackDto>> GetAllAsync()
         {
-            // за потреби фільтр на userId або видимі треки
-            return await _db.Tracks
-                .Where(t => !t.IsHidden)
+            var (actorId, _) = GetActor();
+
+            var list = await _db.Tracks
+                .AsNoTracking()
+                .Where(t => t.Album.OwnerId == actorId && !t.IsHidden) //  фільтр по власнику
                 .Select(t => new TrackDto
                 {
                     Id = t.Id,
                     Title = t.Title,
+                    Url = t.Url,
                     Duration = t.Duration,
+                    AlbumId = t.AlbumId,
+                    ImageUrl = t.ImageUrl,
                     IsHidden = t.IsHidden
                 })
                 .ToListAsync();
+
+            return list;
         }
 
         public async Task<TrackDto?> GetByIdAsync(int id)
         {
-            var t = await _db.Tracks.FindAsync(id);
+            var (actorId, actorRole) = GetActor();
+
+            //var t = await _db.Tracks.FindAsync(id);
+            var t = await _db.Tracks
+                .Include(x => x.Album)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (t == null) return null;
+            // якщо це не адмін — дозволяємо бачити лише СВОЇ треки (або не приховані, на наш вибір)
+            if (actorRole != UserRole.Admin && t.Album.OwnerId != actorId)
+                throw new UnauthorizedAccessException("You are not allowed to view this track.");
             return new TrackDto
             {
                 Id = t.Id,
                 Title = t.Title,
+                Url = t.Url,
                 Duration = t.Duration,
+                AlbumId = t.AlbumId,
+                ImageUrl = t.ImageUrl,
                 IsHidden = t.IsHidden
             };
         }
 
-        public async Task<TrackDto> CreateAsync(CreateTrackDto dto, int userId)
+        public async Task<TrackDto> CreateAsync(CreateTrackDto dto)
         {
             var (actorId, actorRole) = GetActor();
-            var album = await _db.Albums.FindAsync(dto.AlbumId)
-            ?? throw new KeyNotFoundException($"Альбом {dto.AlbumId} не знайдено");
 
-            if (actorRole != UserRole.Admin && album.OwnerId != actorId)
+            //var album = await _db.Albums.FindAsync(dto.AlbumId)
+            var albumOwner = await _db.Albums
+                .Where(a => a.Id == dto.AlbumId)
+                .Select(a => new { a.OwnerId })
+                .SingleOrDefaultAsync();
+
+            if (albumOwner is null)
+                throw new KeyNotFoundException($"Album {dto.AlbumId} не знайдено");
+
+            if (actorRole != UserRole.Admin && albumOwner.OwnerId != actorId)
                 throw new UnauthorizedAccessException("Ви не є власником цього альбому");
 
             var entity = new TrackEntity
             {
-                Title = dto.Title,
+                Title = dto.Title.Trim(),
                 Url = dto.Url,
                 Duration = dto.Duration,
                 AlbumId = dto.AlbumId,
-                IsHidden = false
+                IsHidden = false,
+                ImageUrl = null,
+                CreatedAt = DateTime.UtcNow
             };
             _db.Tracks.Add(entity);
             await _db.SaveChangesAsync();
@@ -87,7 +114,10 @@ namespace SoundCloudWebApi.Services.Implementations
             {
                 Id = entity.Id,
                 Title = entity.Title,
+                Url = entity.Url,
                 Duration = entity.Duration,
+                AlbumId = entity.AlbumId,
+                ImageUrl = entity.ImageUrl,
                 IsHidden = entity.IsHidden
             };
         }
@@ -98,7 +128,7 @@ namespace SoundCloudWebApi.Services.Implementations
             //var t = await _db.Tracks.FindAsync(id)
             //        ?? throw new KeyNotFoundException($"Track {id} не знайдено");
             var t = await _db.Tracks
-                .Include(x => x.Album)
+                .Include(x => x.Album)                
                 .FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new KeyNotFoundException($"Track {id} не знайдено");
 
@@ -153,5 +183,20 @@ namespace SoundCloudWebApi.Services.Implementations
             t.IsHidden = false;
             await _db.SaveChangesAsync();
         }
+
+        public async Task SetImageAsync(int trackId, string url)
+        {
+            var (actorId, actorRole) = GetActor();
+            var t = await _db.Tracks.Include(x => x.Album)
+                     .FirstOrDefaultAsync(x => x.Id == trackId)
+                     ?? throw new KeyNotFoundException($"Track {trackId} не знайдено");
+
+            if (actorRole != UserRole.Admin && t.Album.OwnerId != actorId)
+                throw new UnauthorizedAccessException("Ви не є власником цього альбому");
+
+            t.ImageUrl = url;
+            await _db.SaveChangesAsync();
+        }
+
     }
 }

@@ -13,10 +13,11 @@ namespace SoundCloudWebApi.Services.Interfaces
 
         Task<PlaylistDto> CreateAsync(CreatePlaylistDto dto, int userId);
 
-        //Task UpdateAsync(int id, PlaylistDto dto);
         Task UpdateAsync(int playlistId, PlaylistDto dto);
 
         Task DeleteAsync(int playlistId);
+
+        Task SetCoverAsync(int playlistId, string url);
 
     }
 }

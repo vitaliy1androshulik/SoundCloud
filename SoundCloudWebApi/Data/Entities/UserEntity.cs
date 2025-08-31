@@ -29,5 +29,11 @@ namespace SoundCloudWebApi.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public UserRole Role { get; set; } = UserRole.User;
         public bool IsBlocked { get; set; } = false;
+        public string? AvatarUrl { get; set; }
+        //нові:
+        public DateTime? UpdatedAt { get; set; }   // ← оновлюємо в сервісах при змінах профілю/аватара
+
+        public ICollection<AlbumEntity>? Albums { get; set; }
+        public ICollection<PlaylistEntity>? Playlists { get; set; }
     }
 }

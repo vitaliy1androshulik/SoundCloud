@@ -30,11 +30,14 @@ builder.Services.AddDbContext<SoundCloudDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Нові сервіси для медіа-контенту
 builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<ITrackService, TrackService>();
+builder.Services.AddScoped<IImageStorage, FileSystemImageStorage>();
+
 
 builder.Services.AddHttpContextAccessor();
 
@@ -62,7 +65,27 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSection["Audience"],
         ValidateLifetime = true,
         //ClockSkew = TimeSpan.Zero
-        ClockSkew = TimeSpan.FromMinutes(5)
+        ClockSkew = TimeSpan.FromMinutes(60)
+    };
+
+    //нове для тестування -----------
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = ctx =>
+        {
+            Console.WriteLine("[JWT] Failed: " + ctx.Exception.Message);
+            return Task.CompletedTask;
+        },
+        OnChallenge = ctx =>
+        {
+            Console.WriteLine("[JWT] Challenge: " + ctx.ErrorDescription);
+            return Task.CompletedTask;
+        },
+        OnMessageReceived = ctx =>
+        {
+            Console.WriteLine("[JWT] Authorization = " + ctx.Request.Headers["Authorization"].ToString());
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -104,7 +127,7 @@ builder.Services.AddSwaggerGen(c =>
     // Описуємо схему Bearer
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Введіть у поле: Bearer {твій токен}",
+        Description = "Вставте ЛИШЕ JWT (без 'Bearer ')",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
@@ -146,6 +169,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseGlobalErrorHandler();
+
+//app.UseHttpsRedirection();
+
+app.UseStaticFiles();          // віддаємо /uploads/** з wwwroot/uploads
 
 app.UseCors("AllowAll");
 
