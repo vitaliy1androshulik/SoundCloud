@@ -110,5 +110,19 @@ namespace SoundCloudWebApi.Services.Implementations
             _db.Albums.Remove(a);
             await _db.SaveChangesAsync();
         }
+
+        public async Task SetCoverAsync(int albumId, string url)
+        {
+            var (actorId, actorRole) = GetActor();
+            var a = await _db.Albums.FindAsync(albumId)
+                    ?? throw new KeyNotFoundException($"Album {albumId} не знайдено");
+            if (actorRole != UserRole.Admin && a.OwnerId != actorId)
+                throw new UnauthorizedAccessException("You are not owner of this album");
+            a.CoverUrl = url;
+            a.UpdatedAt = DateTime.UtcNow;
+            a.UpdatedById = actorId;
+            await _db.SaveChangesAsync();
+        }
+
     }
 }

@@ -14,5 +14,7 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task BlockAsync(int id);
         Task UnblockAsync(int id);
         Task ChangeRoleAsync(int userId, UserRole newRole);
+        Task SetAvatarAsync(int userId, string url);
+
     }
 }

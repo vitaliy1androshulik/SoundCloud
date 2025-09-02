@@ -73,5 +73,17 @@ namespace SoundCloudWebApi.Controllers
             await _albumService.DeleteAsync(id);
             return NoContent();
         }
+
+        [HttpPost("{id:int}/cover")]
+        [Consumes("multipart/form-data")]
+        [SwaggerOperation(Summary = "Завантажити обкладинку альбому")]
+        public async Task<IActionResult> UploadCover(int id, IFormFile file, [FromServices] IImageStorage storage)
+        {
+            if (file is null || file.Length == 0) return BadRequest("No file");
+            var url = await storage.SaveAsync(file, "albums");
+            await _albumService.SetCoverAsync(id, url);
+            return Ok(new { coverUrl = url });
+        }
+
     }
 }

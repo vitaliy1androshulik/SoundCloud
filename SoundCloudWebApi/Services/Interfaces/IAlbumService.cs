@@ -17,7 +17,7 @@ namespace SoundCloudWebApi.Services.Interfaces
 
         Task DeleteAsync(int albumId);
 
-
+        Task SetCoverAsync(int albumId, string url);
 
     }
 }

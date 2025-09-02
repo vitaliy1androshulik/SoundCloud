@@ -2,6 +2,7 @@
   "profiles": {
     "SoundCloudWebApi": {
       "commandName": "Project",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using SoundCloudWebApi.Models.Playlist;
 using SoundCloudWebApi.Services.Interfaces;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace SoundCloudWebApi.Controllers
 {
@@ -73,5 +74,31 @@ namespace SoundCloudWebApi.Controllers
             await _playlistService.DeleteAsync(id);
             return NoContent();
         }
+
+        [Authorize]
+        [HttpPost("{id:int}/cover")]
+        [Consumes("multipart/form-data")]
+        [SwaggerOperation(
+        OperationId = "UploadPlaylistCover",
+        Summary = "Завантажити/оновити обкладинку плейлиста (власник або Admin)")]
+        public async Task<IActionResult> UploadCover(
+        int id,
+        IFormFile file,
+        [FromServices] IImageStorage storage)
+        {
+            if (file is null || file.Length == 0)
+                return BadRequest("Файл не надано.");
+
+            // Збережемо файл і отримаємо абсолютний або відносний URL
+            var url = await storage.SaveAsync(file, "playlists"); // збережеться у /wwwroot/uploads/playlists/...
+
+            // Оновити в БД обкладинку цього плейлиста (перевірка власника всередині сервісу)
+            await _playlistService.SetCoverAsync(id, url);
+
+            return Ok(new { coverUrl = url });
+        }
+
+
+
     }
 }

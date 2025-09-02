@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SoundCloudWebApi.Data;
@@ -11,9 +12,11 @@ using SoundCloudWebApi.Data;
 namespace SoundCloudWebApi.Migrations
 {
     [DbContext(typeof(SoundCloudDbContext))]
-    partial class SoundCloudDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250830201920_Update_Roles_To_String_And_User_and_Media")]
+    partial class Update_Roles_To_String_And_User_and_Media
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace SoundCloudWebApi.Migrations
 
                     b.HasIndex("TracksId");
 
-                    b.ToTable("PlaylistEntityTrackEntity", (string)null);
+                    b.ToTable("PlaylistEntityTrackEntity");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.AlbumEntity", b =>
@@ -72,7 +75,7 @@ namespace SoundCloudWebApi.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Albums", (string)null);
+                    b.ToTable("Albums");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.CategoryEntity", b =>
@@ -98,7 +101,7 @@ namespace SoundCloudWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.GenreEntity", b =>
@@ -116,7 +119,7 @@ namespace SoundCloudWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.PlaylistEntity", b =>
@@ -150,7 +153,7 @@ namespace SoundCloudWebApi.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Playlists", (string)null);
+                    b.ToTable("Playlists");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
@@ -200,7 +203,7 @@ namespace SoundCloudWebApi.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Tracks", (string)null);
+                    b.ToTable("Tracks");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.UserEntity", b =>
@@ -253,7 +256,7 @@ namespace SoundCloudWebApi.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users", null, t =>
+                    b.ToTable("Users", t =>
                         {
                             t.HasCheckConstraint("CK_Users_Role_Enum", "\"Role\" IN ('User','Moderator','Admin')");
                         });

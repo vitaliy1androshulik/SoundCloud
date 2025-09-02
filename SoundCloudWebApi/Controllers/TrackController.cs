@@ -26,8 +26,9 @@ namespace SoundCloudWebApi.Controllers
             Summary = "Отримати всі видимі треки поточного користувача")]
         public async Task<IActionResult> GetAll()
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var tracks = await _trackService.GetAllAsync(userId);
+            //var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            //var tracks = await _trackService.GetAllAsync(userId);
+            var tracks = await _trackService.GetAllAsync();
             return Ok(tracks);
         }
 
@@ -48,8 +49,9 @@ namespace SoundCloudWebApi.Controllers
             Summary = "Створити новий трек")]
         public async Task<IActionResult> Create([FromBody] CreateTrackDto dto)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var created = await _trackService.CreateAsync(dto, userId);
+            //var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            //var created = await _trackService.CreateAsync(dto, userId);
+            var created = await _trackService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -94,5 +96,22 @@ namespace SoundCloudWebApi.Controllers
             await _trackService.UnhideAsync(id);
             return NoContent();
         }
+
+        [HttpPost("{id:int}/image")]
+        [Consumes("multipart/form-data")]
+        [SwaggerOperation(Summary = "Завантажити обкладинку треку")]
+        public async Task<IActionResult> UploadImage(int id, IFormFile file, [FromServices] IImageStorage storage)
+        {
+            if (file is null || file.Length == 0) return BadRequest("No file");
+
+            var track = await _trackService.GetByIdAsync(id);
+            if (track == null) return NotFound();
+
+            //  апдейт у сервісі:
+            var url = await storage.SaveAsync(file, "tracks");
+            await _trackService.SetImageAsync(id, url);
+            return Ok(new { imageUrl = url });
+        }
+
     }
 }

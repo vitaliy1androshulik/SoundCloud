@@ -27,13 +27,19 @@ namespace SoundCloudWebApi.Services
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto)
         {
-            // Перевірка, чи користувач з таким email вже існує
-            if (await _db.Users.AnyAsync(u => u.Email == dto.Email.ToLower()))
-            {
-                throw new InvalidOperationException("Користувач з таким email вже існує.");
-            }
+            var emailNorm = dto.Email.Trim().ToLower();
+            var usernameNorm = dto.Username.Trim();
+            /// Перевірка, чи користувач з таким email вже існує, більш точна перевірка
 
-            if (await _db.Users.AnyAsync(u => u.Username.ToLower() == dto.Username.ToLower()))
+            //if (await _db.Users.AnyAsync(u => u.Email == dto.Email.ToLower()))
+            //{
+            //    throw new InvalidOperationException("Користувач з таким email вже існує.");
+            //}
+            if (await _db.Users.AnyAsync(u => u.Email.ToLower() == emailNorm))
+                throw new InvalidOperationException("Користувач з таким email вже існує.");
+
+            //if (await _db.Users.AnyAsync(u => u.Username.ToLower() == dto.Username.ToLower()))
+            if (await _db.Users.AnyAsync(u => u.Username.ToLower() == usernameNorm.ToLower()))
                 throw new InvalidOperationException("Користувач з таким ім'ям вже існує.");
 
             // Хешування пароля
@@ -41,8 +47,10 @@ namespace SoundCloudWebApi.Services
 
             var user = new UserEntity
             {
-                Username = dto.Username,
-                Email = dto.Email,
+                //Username = dto.Username,
+                //Email = dto.Email,
+                Username = usernameNorm,
+                Email = emailNorm,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 CreatedAt = DateTime.UtcNow
@@ -64,7 +72,10 @@ namespace SoundCloudWebApi.Services
 
         public async Task<AuthResponseDto> LoginAsync(LoginRequestDto dto)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var emailNorm = dto.Email.Trim().ToLower();
+
+            //var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == emailNorm);
             if (user == null || !VerifyPasswordHash(dto.Password, user.PasswordHash, user.PasswordSalt))
             {
                 throw new UnauthorizedAccessException("Неправильний email або пароль.");
@@ -137,26 +148,10 @@ namespace SoundCloudWebApi.Services
                    u.Email,
                    u.CreatedAt,
                    u.Role,
-                   u.IsBlocked
+                   u.IsBlocked,
+                   u.UpdatedAt
                 })
-                .FirstOrDefaultAsync();
-
-            //if (user == null)
-            //{
-            //    return null;
-            //}
-            //// Додаткова перевірка блокування
-            //var isBlocked = await _db.Users
-            //    .Where(u => u.Id.ToString() == userId)
-            //    .Select(u => u.IsBlocked)
-            //    .FirstOrDefaultAsync();
-
-            //if (isBlocked)
-            //{
-            //    throw new UnauthorizedAccessException("Користувач заблокований.");
-            //}
-
-            //return user;
+                .FirstOrDefaultAsync(); 
 
             if (user == null)
                 throw new KeyNotFoundException("Користувач не знайдений.");
@@ -170,7 +165,8 @@ namespace SoundCloudWebApi.Services
                 Username = user.Username,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
-                Role = user.Role
+                Role = user.Role,
+                UpdatedAt   = user.UpdatedAt
             };
         }
     }

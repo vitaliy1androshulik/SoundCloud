@@ -8,6 +8,8 @@ using SoundCloudWebApi.Models.Playlist;
 using SoundCloudWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System;
+
 
 namespace SoundCloudWebApi.Services.Implementations
 {
@@ -97,5 +99,19 @@ namespace SoundCloudWebApi.Services.Implementations
             _db.Playlists.Remove(p);
             await _db.SaveChangesAsync();
         }
+
+        public async Task SetCoverAsync(int playlistId, string url)
+        {
+            var (actorId, actorRole) = GetActor();
+            var a = await _db.Playlists.FindAsync(playlistId)
+                    ?? throw new KeyNotFoundException($"Playlist {playlistId} не знайдено");
+            if (actorRole != UserRole.Admin && a.OwnerId != actorId)
+                throw new UnauthorizedAccessException("You are not owner of this playlist");
+            a.CoverUrl = url;
+            a.UpdatedAt = DateTime.UtcNow;
+            a.UpdatedById = actorId;
+            await _db.SaveChangesAsync();
+        }
+
     }
 }

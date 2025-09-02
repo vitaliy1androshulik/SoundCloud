@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SoundCloudWebApi.Data.Entities;  
 using SoundCloudWebApi.Models.Auth;
 using SoundCloudWebApi.Services.Interfaces;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using SoundCloudWebApi.Data.Entities;  
 
 namespace SoundCloudWebApi.Controllers
 {
@@ -56,6 +57,10 @@ namespace SoundCloudWebApi.Controllers
             Summary = "Заблокувати користувача (Admin)")]
         public async Task<IActionResult> Block(int id)
         {
+            var me = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (me == id.ToString())
+                return BadRequest("Admin cannot block self.");
+
             await _userService.BlockAsync(id);
             return NoContent();
         }
@@ -76,6 +81,10 @@ namespace SoundCloudWebApi.Controllers
             Summary = "Видалити користувача (Admin)")]
         public async Task<IActionResult> Delete(int id)
         {
+            var me = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (me == id.ToString())
+                return BadRequest("Admin cannot delete self.");
+
             await _userService.DeleteAsync(id);
             return NoContent();
         }

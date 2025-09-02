@@ -78,10 +78,54 @@ namespace SoundCloudWebApi.Services
             var user = await _db.Users.FindAsync(id)
                 ?? throw new KeyNotFoundException($"User with id={id} not found");
 
-            if (!string.IsNullOrWhiteSpace(dto.Username))
-                user.Username = dto.Username;
+            //if (!string.IsNullOrWhiteSpace(dto.Username))
+            //    user.Username = dto.Username;
+            //if (!string.IsNullOrWhiteSpace(dto.Email))
+            //    user.Email = dto.Email;
+
+            //більш ефективні методи перевірки:
+            // - Email 
             if (!string.IsNullOrWhiteSpace(dto.Email))
-                user.Email = dto.Email;
+            {
+                var emailTrim = dto.Email.Trim();
+                var emailNorm = emailTrim.ToLower();
+
+                // Якщо змінюється (ігноруємо лише різницю в регістрі)
+                var currentEmailNorm = (user.Email ?? string.Empty).ToLower();
+                if (currentEmailNorm != emailNorm)
+                {
+                    var emailTaken = await _db.Users
+                        .AsNoTracking()
+                        .AnyAsync(u => u.Id != id && u.Email.ToLower() == emailNorm);
+
+                    if (emailTaken)
+                        throw new InvalidOperationException("Користувач з таким email вже існує");
+
+                    user.Email = emailTrim; // зберігаємо нормалізовано (без зайвих пробілів)
+                }
+            }
+
+            // - Username 
+            if (!string.IsNullOrWhiteSpace(dto.Username))
+            {
+                var usernameTrim = dto.Username.Trim();
+                var usernameNorm = usernameTrim.ToLower();
+
+                var currentNameNorm = (user.Username ?? string.Empty).ToLower();
+                if (currentNameNorm != usernameNorm)
+                {
+                    var nameTaken = await _db.Users
+                        .AsNoTracking()
+                        .AnyAsync(u => u.Id != id && u.Username.ToLower() == usernameNorm);
+
+                    if (nameTaken)
+                        throw new InvalidOperationException("Користувач з таким ім'ям вже існує");
+
+                    user.Username = usernameTrim;
+                }
+            }
+
+            user.UpdatedAt = DateTime.UtcNow;
 
             await _db.SaveChangesAsync();
 
@@ -91,7 +135,8 @@ namespace SoundCloudWebApi.Services
                 Username = user.Username,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
-                Role = user.Role
+                Role = user.Role,
+                UpdatedAt = user.UpdatedAt
             };
         }
 
@@ -99,8 +144,19 @@ namespace SoundCloudWebApi.Services
         {
             var user = await _db.Users.FindAsync(id)
                 ?? throw new KeyNotFoundException($"User with id={id} not found");
-            //_db.Users.Remove(user); // - фізичне видалення
-            user.IsBlocked = true; // - лише бллокування
+
+            // Перевіряємо залежності, щоб не впасти на FK-обмеженнях
+            var hasAlbums = await _db.Albums.AnyAsync(a => a.OwnerId == id);
+            var hasPlaylists = await _db.Playlists.AnyAsync(p => p.OwnerId == id);
+            var hasTracks = await _db.Tracks.AnyAsync(t => t.Album.OwnerId == id);
+
+            if (hasAlbums || hasPlaylists || hasTracks)
+                throw new InvalidOperationException(
+                    "Cannot hard delete user: there are related albums/playlists/tracks. " +
+                    "Transfer or delete related entities first.");
+
+            _db.Users.Remove(user); // - фізичне видалення
+            //user.IsBlocked = true; // - лише бллокування
             await _db.SaveChangesAsync();
         }   
         public async Task BlockAsync(int id)
@@ -129,6 +185,20 @@ namespace SoundCloudWebApi.Services
             user.Role = newRole;
             await _db.SaveChangesAsync();
         }
+
+        public async Task SetAvatarAsync(int userId, string url)
+        {
+            var (actorId, actorRole) = GetActor();
+            if (actorRole != UserRole.Admin && actorId != userId)
+                throw new UnauthorizedAccessException("You cannot update another user's avatar.");
+
+            var user = await _db.Users.FindAsync(userId)
+                       ?? throw new KeyNotFoundException($"User {userId} not found");
+            user.AvatarUrl = url;
+            user.UpdatedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+        }
+
 
 
     }

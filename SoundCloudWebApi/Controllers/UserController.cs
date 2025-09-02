@@ -58,11 +58,11 @@ public class UserController : ControllerBase
             return Unauthorized("User ID not found in token.");
         }
         var profile = await _authService.GetUserProfileAsync(userId);
-        if (profile == null)
-        {
-            return NotFound("User profile not found.");
-        }
-        return Ok(profile);
+        //if (profile == null)
+        //{
+        //    return NotFound("User profile not found.");
+        //}
+        return Ok(profile); // // винятки перехолювати має  GlobalErrorHandler
     }
 
 
@@ -118,6 +118,36 @@ public class UserController : ControllerBase
         var updated = await _userService.UpdateAsync(userId, dto);
         return Ok(updated);
     }
+
+    [Authorize]
+    [HttpPost("profile/avatar")]
+    [Consumes("multipart/form-data")]
+    [SwaggerOperation(Summary = "Оновити свій аватар")]
+    public async Task<IActionResult> UploadAvatar(IFormFile file, [FromServices] IImageStorage storage)
+    {
+        if (file is null || file.Length == 0) return BadRequest("No file");
+        var uid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var url = await storage.SaveAsync(file, "avatars");
+        await _userService.SetAvatarAsync(uid, url);
+        return Ok(new { avatarUrl = url });
+    }
+
+    [Authorize]
+    [HttpGet("whoami")]
+    public IActionResult WhoAmI()
+    {
+        return Ok(new
+        {
+            Authenticated = User.Identity?.IsAuthenticated ?? false,
+            NameId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+            Name = User.FindFirst(ClaimTypes.Name)?.Value,
+            Email = User.FindFirst(ClaimTypes.Email)?.Value,
+            Role = User.FindFirst(ClaimTypes.Role)?.Value,
+            HeadersAuth = Request.Headers["Authorization"].ToString()
+        });
+    }
+
+
 
 
 }
