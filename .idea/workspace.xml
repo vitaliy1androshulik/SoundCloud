@@ -4,7 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="" />
+    <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/.env.development" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/env/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/authApi.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/store/slices/userSlice.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/store/store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/utilities/jwtParse.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/tailwind.config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,20 +40,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "login__signup__page",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "ts.external.directory.path": "H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging login__signup__page&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.General&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="H:\SoundColud\my-app\sound-cloud\src\images" />
@@ -67,10 +86,23 @@
       <workItem from="1755079587451" duration="1908000" />
       <workItem from="1755115139960" duration="8408000" />
       <workItem from="1755430480854" duration="3384000" />
+      <workItem from="1756367990416" duration="296000" />
+      <workItem from="1756840989341" duration="8085000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

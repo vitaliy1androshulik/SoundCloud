@@ -17,7 +17,7 @@ const Header: React.FC = () => {
                                 <img src="src/images/logo/logo_WaveCloud.png" alt="logo"/>
                             </div>
                             <div className="lg:w-[167px] lg:h-[45px] xl:w-[197px] xl:h-[56px]">
-                                <p className="baloo2 text-white font-bold lg:text-[13px]
+                                <p className="baloo2 text-lightpurple font-bold lg:text-[13px]
                                  xl:text-[36px]">WaveCloud</p>
                             </div>
                         </div>
@@ -29,19 +29,19 @@ const Header: React.FC = () => {
                                   onClick={() => setActive("home")}
                                   className={`px-1 py-1 xl:text-[26px] font-medium 
                                   ${active === "home"
-                                      ? "text-purple-400 border-b-2 border-white" : "text-white"}`}>
+                                      ? "text-purple border-b-2 border-white" : "text-white"}`}>
                                 Home
                             </Link>
                             <Link to="/feed" onClick={() => setActive("feed")}
                                   className={`px-1 py-1 xl:text-[26px] font-medium 
                                   ${active === "feed"
-                                      ? "text-purple-400 border-b-2 border-white" : "text-white"}`}>
+                                      ? "text-purple border-b-2 border-white" : "text-white"}`}>
                                 Feed
                             </Link>
                             <Link to="/library" onClick={() => setActive("library")}
                                   className={`px-1 py-1 xl:text-[26px] font-medium 
                                   ${active === "library"
-                                      ? "text-purple-400 border-b-2 border-white" : "text-white"}`}>
+                                      ? "text-purple border-b-2 border-white" : "text-white"}`}>
                                 Library
                             </Link>
                         </div>
@@ -49,10 +49,10 @@ const Header: React.FC = () => {
 
                         <div className="flex w-[348px] h-[56px] items-center justify-between">
                             <button className="baloo2 w-[124px] h-[56px]
-                        bg-purple rounded-[50px] text-[20px] font-bold">Sign in
+                        bg-lightpurple rounded-[50px] text-[20px] font-bold">Sign in
                             </button>
                             <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
-                         bg-purple-700 rounded-[50px] font-bold">Create account
+                         bg-purple rounded-[50px] font-bold">Create account
                             </button>
                         </div>
                     </div>
