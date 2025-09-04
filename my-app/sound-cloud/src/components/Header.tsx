@@ -1,10 +1,15 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import '../styles/General.css';
+import {useSelector} from "react-redux";
+import {RootState} from "../store/store.ts";
 
 
 const Header: React.FC = () => {
     const [active, setActive] = useState<string>("home");
+    const user = useSelector((state: RootState) => state.user.user);
+
+    console.log("header user", user);
     return (
         <>
             <div className="hidden lg:block mx-auto max-w-screen-full-xl">
@@ -45,16 +50,20 @@ const Header: React.FC = () => {
                                 Library
                             </Link>
                         </div>
-
-
-                        <div className="flex w-[348px] h-[56px] items-center justify-between">
-                            <button className="baloo2 w-[124px] h-[56px]
-                        bg-lightpurple rounded-[50px] text-[20px] font-bold">Sign in
-                            </button>
+                        {user ? (
                             <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
-                         bg-purple rounded-[50px] font-bold">Create account
+                         bg-purple rounded-[50px] font-bold">{user.username}
                             </button>
-                        </div>
+                        ) : (
+                            <div className="flex w-[348px] h-[56px] items-center justify-between">
+                                <button className="baloo2 w-[124px] h-[56px]
+                        bg-lightpurple rounded-[50px] text-[20px] font-bold">Sign in
+                                </button>
+                                <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
+                         bg-purple rounded-[50px] font-bold">Create account
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </header>
             </div>
