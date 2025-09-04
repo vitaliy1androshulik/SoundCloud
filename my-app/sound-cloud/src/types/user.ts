@@ -8,3 +8,4 @@ export interface IUser {
     isBlocked: boolean;
     password:string;
 }
+
