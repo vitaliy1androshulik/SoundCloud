@@ -1,35 +1,60 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {ITrack} from "../../types/track";
+import {trackService} from "../../services/trackApi.ts";
 
 const HomePage: React.FC = () => {
+    const [tracks, setTracks] = useState<ITrack[]>([]);
+    const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        trackService.getAll()
+            .then((data) => setTracks(data))
+            .catch((err) => console.error(err));
+    }, []);
+
+    const handlePlayPause = (track: ITrack) => {
+        if (currentTrackId === track.id) {
+            audioRef.current?.pause();
+            setCurrentTrackId(null);
+        } else {
+            if (audioRef.current) {
+                audioRef.current.src = track.url;
+                audioRef.current.play();
+            }
+            setCurrentTrackId(track.id);
+        }
+    };
 
     return (
-        <div className="hidden lg:block mx-auto max-w-screen-full-xl">
-            <div className="mx-auto lg:max-w-[904px] xl:max-w-[1382px]
-                                full-xl:max-w-screen-center-xl">
-                <div className="flex justify-between items-center">
-                    <div className="flex w-[1382px] h-[56px] justify-between">
-
-                        <div className="flex w-[56px] h-[56px] items-center justify-center
-                         bg-lightpurple rounded-[50px]">
-                            <img src="src/images/home_page/search_bar/people.png" width="37"/>
+        <div className="text-white mx-auto lg:max-w-[904px] xl:max-w-[1382px]">
+            <h2 className="text-xl font-bold mb-4">Tracks</h2>
+            <ul className="space-y-4">
+                {tracks.map((track) => (
+                    <li key={track.id} className="flex items-center gap-4">
+                        {track.imageUrl && (
+                            <img
+                                src={track.imageUrl}
+                                alt={track.title}
+                                className="w-12 h-12 rounded-lg"
+                            />
+                        )}
+                        <div className="flex-1">
+                            <p className="font-semibold">{track.title}</p>
+                            <span className="text-sm text-gray-400">{track.duration}</span>
                         </div>
-
-                        <div className="flex w-[1302px] h-[56px] items-center justify-start
-                         border-[2px] border-darkpurple rounded-[50px]">
-                            <img className="ml-[12px] mr-[10px]" src="src/images/home_page/search_bar/search.png" width="37"/>
-
-                            <div className="">
-                                <p className="baloo2 font-bold text-lightpurple">Search for artist, bands, tracks or music</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
+                        <button
+                            onClick={() => handlePlayPause(track)}
+                            className="px-3 py-1 rounded bg-lightpurple text-white"
+                        >
+                            {currentTrackId === track.id ? "⏸ Pause" : "▶ Play"}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+            <audio ref={audioRef} />
         </div>
-
     );
-
 };
+
 export default HomePage;
