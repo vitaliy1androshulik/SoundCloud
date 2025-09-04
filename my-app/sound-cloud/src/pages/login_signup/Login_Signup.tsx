@@ -4,16 +4,10 @@ import { Button, Form, Input} from 'antd';
 import { useDispatch } from "react-redux";
 import { register } from "../../services/authApi";
 import { setUser } from "../../store/slices/userSlice";
-import { jwtParse } from "../../utilities/jwtParse";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-
-interface IRegisterForm {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
+import {IRegisterForm} from "../../types/registerForm.ts";
+import {normalizeUser} from "../../utilities/normalizeUser.ts";
 
 const LoginSignup: React.FC = () => {
     const dispatch = useDispatch();
@@ -26,8 +20,9 @@ const LoginSignup: React.FC = () => {
 
             // якщо токен повернувся, декодуємо його
             if (data.token) {
-                const user = jwtParse(data.token);
+                const user = normalizeUser(data.token);
                 if (user) {
+                    localStorage.setItem("token", data.token);
                     dispatch(setUser({ user, token: data.token }));
                 }
             }
