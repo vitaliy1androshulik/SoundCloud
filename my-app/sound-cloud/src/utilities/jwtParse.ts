@@ -1,11 +1,17 @@
-import {jwtDecode} from "jwt-decode";
-import { IUser } from "../types/user";
-
-export const jwtParse = (token: string | null): IUser | null => {
-    if (!token) return null;
+export const jwtParse = (token: string) => {
     try {
-        return jwtDecode<IUser>(token);
-    } catch {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split("")
+                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                .join("")
+        );
+        console.log(jsonPayload);
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error("JWT parse error", e);
         return null;
     }
 };
