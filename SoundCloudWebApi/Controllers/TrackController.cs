@@ -113,5 +113,80 @@ namespace SoundCloudWebApi.Controllers
             return Ok(new { imageUrl = url });
         }
 
+        [HttpPost("{id:int}/listen")]
+        [SwaggerOperation(
+            OperationId = "ListenTrack",
+            Summary = "Зареєструвати прослуховування треку поточним користувачем")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Listen(int id)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            await _trackService.AddListenAsync(id, userId);
+            return Ok(new { trackId = id, status = "listen-registered" });
+        }
+
+        [HttpPost("{id:int}/like")]
+        [SwaggerOperation(
+            OperationId = "LikeTrack",
+            Summary = "Поставити лайк треку поточним користувачем")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> Like(int id)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try
+            {
+                await _trackService.LikeAsync(id, userId);
+                return Ok(new { trackId = id, status = "liked" });
+            }
+            catch (InvalidOperationException)
+            {
+                // Already liked
+                return Conflict(new { trackId = id, error = "already-liked" });
+            }
+        }
+
+        [HttpDelete("{id:int}/like")]
+        [SwaggerOperation(
+            OperationId = "UnlikeTrack",
+            Summary = "Зняти лайк з треку поточним користувачем")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Unlike(int id)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            await _trackService.UnlikeAsync(id, userId);
+            return Ok(new { trackId = id, status = "unliked" });
+        }
+
+        [HttpGet("{id:int}/stats")]
+        [SwaggerOperation(
+            OperationId = "GetTrackStats",
+            Summary = "Отримати статистику по треку (прослуховування, лайки)")]
+        [ProducesResponseType(typeof(TrackStatsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetTrackStats(int id)
+        {
+            var stats = await _trackService.GetTrackStatsAsync(id);
+            return Ok(stats);
+        }
+
+        [HttpGet("author/{authorId:int}/stats")]
+        [SwaggerOperation(
+            OperationId = "GetAuthorStats",
+            Summary = "Отримати агреговану статистику по автору (кількість треків, сумарні прослуховування/лайки)")]
+        [ProducesResponseType(typeof(AuthorStatsDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAuthorStats(int authorId)
+        {
+            var stats = await _trackService.GetAuthorStatsAsync(authorId);
+            return Ok(stats);
+        }
+
+
     }
 }

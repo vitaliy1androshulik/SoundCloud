@@ -23,5 +23,13 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task UnhideAsync(int id);
         Task SetImageAsync(int trackId, string imageUrl);
 
+        // НОВЕ:
+        Task AddListenAsync(int trackId, int userId);
+        Task LikeAsync(int trackId, int userId);
+        Task UnlikeAsync(int trackId, int userId);
+
+        Task<TrackStatsDto> GetTrackStatsAsync(int trackId);
+        Task<AuthorStatsDto> GetAuthorStatsAsync(int authorId);
+
     }
 }
