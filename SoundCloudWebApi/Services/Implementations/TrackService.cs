@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
+
 namespace SoundCloudWebApi.Services.Implementations
 {
     public class TrackService : ITrackService
@@ -196,6 +197,106 @@ namespace SoundCloudWebApi.Services.Implementations
 
             t.ImageUrl = url;
             await _db.SaveChangesAsync();
+        }
+
+        public async Task AddListenAsync(int trackId, int userId)
+        {
+            var exists = await _db.Tracks.AnyAsync(t => t.Id == trackId);
+            if (!exists) throw new KeyNotFoundException("Track not found");
+
+            _db.TrackListens.Add(new TrackListenEntity
+            {
+                TrackId = trackId,
+                UserId = userId
+            });
+
+            await _db.SaveChangesAsync();
+        }
+
+        //public async Task AddLikeAsync(int trackId, int userId)
+        //{
+        //    var alreadyLiked = await _db.TrackLikes
+        //        .AnyAsync(l => l.TrackId == trackId && l.UserId == userId);
+
+        //    if (alreadyLiked)
+        //        throw new InvalidOperationException("Already liked");
+
+        //    _db.TrackLikes.Add(new TrackLikeEntity
+        //    {
+        //        TrackId = trackId,
+        //        UserId = userId
+        //    });
+
+        //    await _db.SaveChangesAsync();
+        //}
+
+        public async Task LikeAsync(int trackId, int userId)
+        {
+            var exists = await _db.Tracks.AnyAsync(t => t.Id == trackId);
+            if (!exists) throw new KeyNotFoundException($"Track {trackId} not found");
+
+            var already = await _db.TrackLikes
+                .AnyAsync(l => l.TrackId == trackId && l.UserId == userId);
+            if (already)
+                throw new InvalidOperationException("Already liked");
+
+            _db.TrackLikes.Add(new TrackLikeEntity
+            {
+                TrackId = trackId,
+                UserId = userId
+            });
+
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task UnlikeAsync(int trackId, int userId)
+        {
+            var like = await _db.TrackLikes
+                .FirstOrDefaultAsync(l => l.TrackId == trackId && l.UserId == userId);
+
+            if (like == null)
+                throw new KeyNotFoundException("Like not found");
+
+            _db.TrackLikes.Remove(like);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<TrackStatsDto> GetTrackStatsAsync(int trackId)
+        {
+            var exists = await _db.Tracks.AnyAsync(t => t.Id == trackId);
+            if (!exists) throw new KeyNotFoundException($"Track {trackId} not found");
+
+            var listens = await _db.TrackListens.CountAsync(l => l.TrackId == trackId);
+            var likes = await _db.TrackLikes.CountAsync(l => l.TrackId == trackId);
+
+            return new TrackStatsDto
+            {
+                TrackId = trackId,
+                Listens = listens,
+                Likes = likes
+            };
+        }
+
+        public async Task<AuthorStatsDto> GetAuthorStatsAsync(int authorId)
+        {
+            // кількість треків у автора
+            var tracksCount = await _db.Tracks.CountAsync(t => t.Album.OwnerId == authorId);
+
+            // сумарні прослуховування по всіх треках автора
+            var listens = await _db.TrackListens
+                .CountAsync(l => l.Track.Album.OwnerId == authorId);
+
+            // сумарні лайки по всіх треках автора
+            var likes = await _db.TrackLikes
+                .CountAsync(l => l.Track.Album.OwnerId == authorId);
+
+            return new AuthorStatsDto
+            {
+                AuthorId = authorId,
+                Tracks = tracksCount,
+                Listens = listens,
+                Likes = likes
+            };
         }
 
     }
