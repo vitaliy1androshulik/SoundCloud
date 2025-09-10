@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
 @import "tailwindcss";
 @theme {
+
     --color-purple: #9354ff;
     --color-white: #FFFFFF;
     --color-black: #101010;
@@ -8,6 +9,18 @@
     --color-darkpurple: #5241B3;
     --color-lightpurple: #C9D4FF;
 
+    --breakpoint-xs: 360px;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+    --breakpoint-center-lg: 1080px;
+    --breakpoint-center-xl: 1568px;
+    --breakpoint-full-xl: 1920px;
+}
+.button_hover:hover{
+    background-color: #5241B3;
 }
 .baloo2{
     font-family: 'Baloo 2', sans-serif;

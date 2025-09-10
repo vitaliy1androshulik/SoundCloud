@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {ITrack} from "../../types/track";
 import {trackService} from "../../services/trackApi.ts";
+import {TokenService} from "../../utilities/tokenService.ts";
 
 const HomePage: React.FC = () => {
     const [tracks, setTracks] = useState<ITrack[]>([]);
@@ -12,7 +13,7 @@ const HomePage: React.FC = () => {
             .then((data) => setTracks(data))
             .catch((err) => console.error(err));
     }, []);
-
+    console.log("Token Service "+TokenService.getAccessToken());
     const handlePlayPause = (track: ITrack) => {
         if (currentTrackId === track.id) {
             audioRef.current?.pause();

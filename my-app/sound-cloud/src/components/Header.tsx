@@ -1,14 +1,24 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import '../styles/General.css';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store/store.ts";
+import {logout} from "../store/slices/userSlice.ts";
 
 
 const Header: React.FC = () => {
     const [active, setActive] = useState<string>("home");
     const user = useSelector((state: RootState) => state.user.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    const Logout = ()=>
+    {
+        dispatch(logout());
+        logout();
+        alert("Ви вийшли з аккаунту!");
+        navigate("/");
+    }
     console.log("header user", user);
     return (
         <>
@@ -51,16 +61,21 @@ const Header: React.FC = () => {
                             </Link>
                         </div>
                         {user ? (
-                            <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
-                         bg-purple rounded-[50px] font-bold">{user.username}
-                            </button>
+                            <div>
+                                <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
+                         bg-purple rounded-[50px] font-bold button_hover">{user.username}
+                                </button>
+                                <button className="baloo2 w-[200px] h-[56px] text-black text-[20px]
+                         bg-lightpurple rounded-[50px] font-bold button_hover" onClick={Logout}>Вихід
+                                </button>
+                            </div>
                         ) : (
                             <div className="flex w-[348px] h-[56px] items-center justify-between">
                                 <button className="baloo2 w-[124px] h-[56px]
-                        bg-lightpurple rounded-[50px] text-[20px] font-bold">Sign in
+                        bg-lightpurple rounded-[50px] text-[20px] font-bold button_hover text-black">Sign in
                                 </button>
                                 <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
-                         bg-purple rounded-[50px] font-bold">Create account
+                         bg-purple rounded-[50px] font-bold button_hover">Create account
                                 </button>
                             </div>
                         )}
