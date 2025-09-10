@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38272a08-7955-4302-b8b5-622e7fbeb83e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/track.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/AdminLayout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/TracksPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/UsersPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/adminApi.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/types/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +39,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;наÐtracks__list&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;admin__panel&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -84,7 +85,9 @@
       <workItem from="1756840989341" duration="8085000" />
       <workItem from="1756931939677" duration="941000" />
       <workItem from="1757002634301" duration="6168000" />
-      <workItem from="1757024002508" duration="772000" />
+      <workItem from="1757024002508" duration="1799000" />
+      <workItem from="1757366568823" duration="3230000" />
+      <workItem from="1757521468327" duration="4166000" />
     </task>
     <servers />
   </component>

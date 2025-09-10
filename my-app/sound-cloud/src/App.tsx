@@ -11,6 +11,12 @@ import {useEffect} from "react";
 import {setUser} from "./store/slices/userSlice.ts";
 import {normalizeUser} from "./utilities/normalizeUser.ts";
 
+//імпорти для адмінки
+
+import AdminLayout from "./pages/admin/AdminLayout";
+import UsersPage from "./pages/admin/UsersPage";
+import TracksPage from "./pages/admin/TracksPage";
+
 
 export default function App() {
     const dispatch = useDispatch();
@@ -34,8 +40,14 @@ export default function App() {
                 {/* Головний Layout */}
                 <Route element={<Layout />}>
                     <Route path="/home" element={<HomePage />} />
-                    <Route path="/feed" element={<FeedPage />}/>
+                    <Route path="/feed" element={<FeedPage />} />
                     <Route path="/library" element={<LibraryPage />} />
+                </Route>
+
+                {/*  Адмінка (ОКРЕМО, без Layout) */}
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="users" element={<UsersPage />} />
+                    <Route path="tracks" element={<TracksPage />} />
                 </Route>
             </Routes>
         </Router>
