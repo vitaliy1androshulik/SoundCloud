@@ -10,6 +10,5 @@ export const normalizeUser = (token: string): IUser | null => {
         username: payload.unique_name || payload.username || "",
         email: payload.email,
         role: payload.role||"User",
-        //...payload, // якщо хочеш залишити решту даних
     };
 };
