@@ -2,12 +2,12 @@ import React from 'react';
 import '../../styles/login_signup/Login_Sіgnup.css'
 import { Button, Form, Input} from 'antd';
 import { useDispatch } from "react-redux";
-import { register } from "../../services/authApi";
 import { setUser } from "../../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
 import {IRegisterForm} from "../../types/registerForm.ts";
 import {normalizeUser} from "../../utilities/normalizeUser.ts";
+import {AxiosError} from "axios";
+import {register} from "../../services/authApi.ts";
 
 const LoginSignup: React.FC = () => {
     const dispatch = useDispatch();

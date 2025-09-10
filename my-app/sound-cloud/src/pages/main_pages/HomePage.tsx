@@ -6,7 +6,7 @@ const HomePage: React.FC = () => {
     const [tracks, setTracks] = useState<ITrack[]>([]);
     const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-
+    console.log(tracks);
     useEffect(() => {
         trackService.getAll()
             .then((data) => setTracks(data))
@@ -24,13 +24,15 @@ const HomePage: React.FC = () => {
             }
             setCurrentTrackId(track.id);
         }
+
     };
 
     return (
         <div className="text-white mx-auto lg:max-w-[904px] xl:max-w-[1382px]">
             <h2 className="text-xl font-bold mb-4">Tracks</h2>
-            <ul className="space-y-4">
+            <ul className="space-y-4 text-white">
                 {tracks.map((track) => (
+
                     <li key={track.id} className="flex items-center gap-4">
                         {track.imageUrl && (
                             <img
