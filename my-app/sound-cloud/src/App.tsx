@@ -1,6 +1,7 @@
 // App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
+import Layout from "./components/Layout.tsx";
+import Layout_login_page from "./components/login_signup_components/Layout_login_page.tsx";
 import HomePage from "./pages/main_pages/HomePage";
 import LoginSignup from "./pages/login_signup/Login_Signup";
 import LibraryPage from "./pages/main_pages/LibraryPage.tsx";
@@ -29,9 +30,10 @@ export default function App() {
         <Router>
             <Routes>
                 {/* Сторінка логіну */}
-                <Route path="/" element={<LoginSignup />} />
-
-                {/* Головний Layout */}
+                <Route element={<Layout_login_page/>}>
+                    <Route path="/" element={<LoginSignup/>}/>
+                </Route>
+                {/* Головний Layout_LS */}
                 <Route element={<Layout />}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/feed" element={<FeedPage />}/>
