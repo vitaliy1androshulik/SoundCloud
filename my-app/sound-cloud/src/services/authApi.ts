@@ -1,9 +1,9 @@
-import axios from "axios";
+import api from "../utilities/axiosInstance.ts";
 
 const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000/api/auth";
 
 export const register = async (username: string, email: string, password: string, confirmPassword:string) => {
-    const response = await axios.post(`${API_URL}/User/register`, { username, email, password, confirmPassword});
+    const response = await api.post(`${API_URL}/User/register`, { username, email, password, confirmPassword});
     if (response.data.token) {
         localStorage.setItem("token", response.data.token);
     }
@@ -11,7 +11,7 @@ export const register = async (username: string, email: string, password: string
 };
 
 export const login = async (username: string, password: string) => {
-    const response = await axios.post(`${API_URL}/User/login`, { username, password });
+    const response = await api.post(`${API_URL}/User/login`, { username, password });
     if (response.data.token) {
         localStorage.setItem("token", response.data.token);
     }

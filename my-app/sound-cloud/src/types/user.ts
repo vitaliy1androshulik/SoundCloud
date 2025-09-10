@@ -10,12 +10,16 @@ export interface IUser {
     role?:string;
 }
 
+export interface IAuthResponse {
+    user: IUser;
+    token: string;
+}
 export interface IUserState {
-    user: IUser | null;
     token: string | null;
+    user: IUser | null;
 }
 
 export const initialState: IUserState = {
     user: null,
-    token: localStorage.getItem("token"),
+    token: null,
 };
