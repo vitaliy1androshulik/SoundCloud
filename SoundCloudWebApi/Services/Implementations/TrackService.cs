@@ -3,11 +3,7 @@ using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Data.Entities;
 using SoundCloudWebApi.Models.Track;
 using SoundCloudWebApi.Services.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 
 namespace SoundCloudWebApi.Services.Implementations
@@ -100,10 +96,83 @@ namespace SoundCloudWebApi.Services.Implementations
                 IsHidden = t.IsHidden
             };
         }
+        ////////
+        public async Task<string> SaveTrackAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("Файл не завантажено");
 
+            // генеруємо унікальне ім’я файлу
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            // шлях до wwwroot/tracks
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "tracks", fileName);
+
+            // зберігаємо файл
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // повертаємо URL, який збережемо в БД
+            return "/tracks/" + fileName;
+        }
+        public async Task<TrackDto> CreateAsyncFile(CreateTrackDto dto)
+        {
+            if (dto.File == null || dto.File.Length == 0)
+                throw new ArgumentException("Файл не надано");
+
+            // Папка для збереження треків
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tracks");
+
+            // Створюємо папку, якщо її немає
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            // Генеруємо унікальне ім'я файлу
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.File.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            // Зберігаємо файл
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.File.CopyToAsync(stream);
+            }
+
+            // Формуємо URL для клієнта (без wwwroot)
+            var url = $"/uploads/tracks/{fileName}";
+
+            // Створюємо запис у БД
+            var track = new TrackEntity
+            {
+                Title = dto.Title.Trim(),
+                Url = url,
+                Duration = dto.Duration,
+                AlbumId = dto.AlbumId,
+                IsHidden = false,
+                ImageUrl = null,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _db.Tracks.Add(track);
+            await _db.SaveChangesAsync();
+
+            // Повертаємо DTO
+            return new TrackDto
+            {
+                Id = track.Id,
+                Title = track.Title,
+                Url = track.Url,
+                Duration = track.Duration,
+                AlbumId = track.AlbumId,
+                ImageUrl = track.ImageUrl,
+                IsHidden = track.IsHidden
+            };
+        }
+        ////////////
         public async Task<TrackDto> CreateAsync(CreateTrackDto dto)
         {
-            var (actorId, actorRole) = GetActor();
+            //var (actorId, actorRole) = GetActor();
 
             //var album = await _db.Albums.FindAsync(dto.AlbumId)
             var albumOwner = await _db.Albums
@@ -114,13 +183,13 @@ namespace SoundCloudWebApi.Services.Implementations
             if (albumOwner is null)
                 throw new KeyNotFoundException($"Album {dto.AlbumId} не знайдено");
 
-            if (actorRole != UserRole.Admin && albumOwner.OwnerId != actorId)
-                throw new UnauthorizedAccessException("Ви не є власником цього альбому");
+            //if (actorRole != UserRole.Admin && albumOwner.OwnerId != actorId)
+            //    throw new UnauthorizedAccessException("Ви не є власником цього альбому");
 
             var entity = new TrackEntity
             {
                 Title = dto.Title.Trim(),
-                Url = dto.Url,
+                //Url = dto.Url,
                 Duration = dto.Duration,
                 AlbumId = dto.AlbumId,
                 IsHidden = false,

@@ -29,6 +29,17 @@ namespace SoundCloudWebApi.Controllers
             var tracks = await _trackService.GetAllTracksAsync();
             return Ok(tracks);
         }
+
+        [HttpPost("create")]
+        [SwaggerOperation(
+            OperationId = "Create Track By local file",
+            Summary = "Створити трек по локальному файлу wwwroot/uploads/tracks")]
+        public async Task<IActionResult> CreateTrackFile(CreateTrackDto dto)
+        {
+            var track = await _trackService.CreateAsyncFile(dto);
+            return Ok(track);
+        }
+
         [HttpGet]
         [SwaggerOperation(
             OperationId = "GetTracks",
