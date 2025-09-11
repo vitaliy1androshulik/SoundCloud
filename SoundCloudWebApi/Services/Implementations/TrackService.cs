@@ -56,7 +56,26 @@ namespace SoundCloudWebApi.Services.Implementations
 
             return list;
         }
+        public async Task<IEnumerable<TrackDto>> GetAllTracksAsync()
+        {
 
+            var list = await _db.Tracks
+                .AsNoTracking()
+                //.Where(t => t.Album.OwnerId == actorId && !t.IsHidden) //  фільтр по власнику
+                .Select(t => new TrackDto
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Url = t.Url,
+                    Duration = t.Duration,
+                    AlbumId = t.AlbumId,
+                    ImageUrl = t.ImageUrl,
+                    IsHidden = t.IsHidden
+                })
+                .ToListAsync();
+
+            return list;
+        }
         public async Task<TrackDto?> GetByIdAsync(int id)
         {
             var (actorId, actorRole) = GetActor();

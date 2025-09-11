@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SoundCloudWebApi.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("api/[controller]")]
     public class TrackController : ControllerBase
@@ -19,7 +19,16 @@ namespace SoundCloudWebApi.Controllers
         {
             _trackService = trackService;
         }
-
+        [AllowAnonymous]
+        [HttpGet("krot")]
+        [SwaggerOperation(
+            OperationId = "GetAllTracksForAll",
+            Summary = "Отримати всі видимі треки")]
+        public async Task<IActionResult> GetAllTracks()
+        {
+            var tracks = await _trackService.GetAllTracksAsync();
+            return Ok(tracks);
+        }
         [HttpGet]
         [SwaggerOperation(
             OperationId = "GetTracks",
