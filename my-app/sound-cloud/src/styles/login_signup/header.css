@@ -1,0 +1,101 @@
+
+
+.header_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 772px;
+
+    position: absolute;
+    width: 1568px;
+    height: 44px;
+    left: 176px;
+    top: 50px;
+}
+.header_logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 12px;
+
+    width: 398px;
+    height: 32px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.header_buttons{
+    /* Header */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 398px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+.header_button_sign_up{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 124px;
+    height: 44px;
+
+    background: #101010;
+    border-radius: 50px;
+
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.header_button_sign_up:hover{
+    background: #4231a0;
+    cursor: pointer;
+}
+.header_button_create_account{
+    /* Frame 13 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 200px;
+    height: 44px;
+
+    background: #5241B3;
+    border-radius: 50px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.header_button_create_account:hover{
+    background: #4231a0;
+    cursor: pointer;
+}
+
