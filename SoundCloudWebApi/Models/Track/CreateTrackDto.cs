@@ -9,8 +9,9 @@ namespace SoundCloudWebApi.Models.Track
         [MaxLength(200)]
         public required string Title { get; set; }
 
+        //public string? Url { get; set; } = default!;
         [Required]
-        public string Url { get; set; } = default!;
+        public IFormFile File { get; set; }
 
         [Required]
         public TimeSpan Duration { get; set; }

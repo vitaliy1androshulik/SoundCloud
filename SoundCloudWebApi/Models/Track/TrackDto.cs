@@ -11,7 +11,7 @@ namespace SoundCloudWebApi.Models.Track
 
         // нові поля
         public int AlbumId { get; set; }
-        public string Url { get; set; } = default!;
+        public string? Url { get; set; } = default!;
         public string? ImageUrl { get; set; }
     }
 

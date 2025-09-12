@@ -1,5 +1,5 @@
 // src/services/adminApi.ts
-import axios from "axios";
+
 import api from "../utilities/axiosInstance.ts";
 
 const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000/api";
@@ -15,7 +15,8 @@ export const adminApi = {
     unblockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/unblock`),
 
     // Tracks
-    getTracks: () => api.get(`${API_URL}/Track`),
+
+    getTracks: () => api.get(`${API_URL}/Track/krot`),
     getTrackById: (id: number) => api.get(`${API_URL}/Track/${id}`),
     createTrack: (data: any) => api.post(`${API_URL}/Track`, data),
     updateTrack: (id: number, data: any) => api.put(`${API_URL}/Track/${id}`, data),

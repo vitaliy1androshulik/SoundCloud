@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
             setCurrentTrackId(null);
         } else {
             if (audioRef.current) {
-                audioRef.current.src = track.url;
+                audioRef.current.src = `http://localhost:5122${track.url}`;
                 audioRef.current.play();
             }
             setCurrentTrackId(track.id);
