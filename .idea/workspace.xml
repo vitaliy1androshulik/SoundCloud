@@ -4,25 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba53858b-63f2-49da-8fc2-ab9c430f25af" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/footer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/background.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/header.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/layout.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/login_signup_form.css" afterDir="false" />
+    <list default="true" id="360e9589-d4f6-4317-b3bf-f20c6e2bb7ea" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AdminAlbumController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/GoogleAuthenticationController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/AdminPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/AlbumsPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/CategoriesPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/PlaylistsPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/login_signup_components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/login_signup_components/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/login_signup_components/Layout_login_page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/login_signup_components/Layout_login_page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/images/footer/vector_ahead.png" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/images/footer/vector_ahead.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/images/home_page/search_bar/people.png" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/images/search_bar/people.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/images/home_page/search_bar/search.png" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/images/search_bar/search.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/AlbumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/AlbumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IAlbumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IAlbumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/SoundCloudWebApi.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/SoundCloudWebApi.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/AdminLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/AdminLayout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/UsersPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/UsersPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/Login_Sіgnup.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/adminApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/adminApi.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,32 +35,27 @@
   </component>
 
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
+  &quot;associatedIndex&quot;: 0
 }</component>
-  <component name="ProjectId" id="32YH4MQLCAA935eshXj5aT7Sml3" />
+  <component name="ProjectId" id="32YQIz022tOT9xQE8y5yTSIISSJ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;track__playing&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;пÑgoogle__login&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Mykola\\WebstormProjects\\SoundCloud\\my-app\\sound-cloud\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="H:\SoundColud\my-app\sound-cloud\src\images" />
-    </key>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -75,10 +71,10 @@
       <created>1757590394260</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1757590394260</updated>
-      <workItem from="1757590395664" duration="1794000" />
-
-      <workItem from="1757678810746" duration="18890000" />
+      <updated>1757594964624</updated>
+      <workItem from="1757594978665" duration="11417000" />
+      <workItem from="1757679401985" duration="2769000" />
+      <workItem from="1757690420911" duration="4544000" />
 
     </task>
     <servers />

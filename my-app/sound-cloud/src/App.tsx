@@ -17,6 +17,10 @@ import {normalizeUser} from "./utilities/normalizeUser.ts";
 import AdminLayout from "./pages/admin/AdminLayout";
 import UsersPage from "./pages/admin/UsersPage";
 import TracksPage from "./pages/admin/TracksPage";
+import AlbumsPage from "./pages/admin/AlbumsPage.tsx";
+import CategoriesPage from "./pages/admin/CategoriesPage.tsx";
+import PlaylistsPage from "./pages/admin/PlaylistsPage.tsx";
+import AdminPage from "./pages/admin/AdminPage.tsx";
 
 
 export default function App() {
@@ -50,6 +54,10 @@ export default function App() {
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="users" element={<UsersPage />} />
                     <Route path="tracks" element={<TracksPage />} />
+                    <Route path="albums" element={<AlbumsPage />} />
+                    <Route path="categories" element={<CategoriesPage />} />
+                    <Route path="playlists" element={<PlaylistsPage />} />
+                    <Route path="admin" element={<AdminPage />} />
                 </Route>
             </Routes>
         </Router>

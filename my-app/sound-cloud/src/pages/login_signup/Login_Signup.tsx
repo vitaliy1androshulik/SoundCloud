@@ -1,3 +1,7 @@
+
+
+
+import { GoogleLogin } from "@react-oauth/google";
 import React, {useState} from "react";
 import "../../styles/login_signup/background.css";
 import {useDispatch} from "react-redux";
@@ -73,6 +77,36 @@ const LoginSignup: React.FC = () => {
             } catch (err) {
                 alert("Помилка реєстрації: " + (err as AxiosError).message);
             }
+        }
+    };
+
+    //--- Додано: обробка Google Login ---
+    const handleGoogleLogin = async (credentialResponse: any) => {
+        if (!credentialResponse.credential) return;
+
+        try {
+            const res = await fetch("http://localhost:5122/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: credentialResponse.credential }),
+            });
+
+            if (!res.ok) {
+                console.error("Google login failed");
+                return;
+            }
+
+            const data = await res.json();
+            console.log("User info from backend:", data);
+
+            // Зберігаємо користувача
+            const user = data; // payload з бекенду
+            localStorage.setItem("token", credentialResponse.credential);
+            dispatch(setUser({ user, token: credentialResponse.credential }));
+            alert("Логін через Google успішний!");
+            navigate("/home");
+        } catch (error) {
+            console.error("Error during Google login:", error);
         }
     };
 
@@ -233,7 +267,6 @@ const LoginSignup: React.FC = () => {
                                                             e.preventDefault();
                                                             setIsLogin(true); // переключаємо на логін
                                                         }}
-
                                                     >
                                                         Sign in
                                                     </button>
