@@ -123,6 +123,20 @@ namespace SoundCloudWebApi.Services.Implementations
             a.UpdatedById = actorId;
             await _db.SaveChangesAsync();
         }
+        public async Task<IEnumerable<AlbumDto>> GetAllAlbumsForAdminAsync()
+        {
+            return await _db.Albums
+                .Include(a => a.Owner)
+                .Include(a => a.Tracks)
+                .Select(a => new AlbumDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    CreatedAt = a.CreatedAt,
+                })
+                .ToListAsync();
+        }
 
     }
 }

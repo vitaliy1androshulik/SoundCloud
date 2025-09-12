@@ -20,10 +20,9 @@ namespace SoundCloudWebApi.Controllers
             _albumService = albumService;
         }
 
+        // ===== Для поточного користувача =====
         [HttpGet]
-        [SwaggerOperation(
-            OperationId = "GetAlbums",
-            Summary = "Отримати всі альбоми поточного користувача")]
+        [SwaggerOperation(OperationId = "GetAlbums", Summary = "Отримати всі альбоми поточного користувача")]
         public async Task<IActionResult> GetAll()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -32,21 +31,16 @@ namespace SoundCloudWebApi.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [SwaggerOperation(
-            OperationId = "GetAlbumById",
-            Summary = "Отримати альбом за ID")]
+        [SwaggerOperation(OperationId = "GetAlbumById", Summary = "Отримати альбом за ID")]
         public async Task<IActionResult> GetById(int id)
         {
             var album = await _albumService.GetByIdAsync(id);
-            if (album == null)
-                return NotFound();
+            if (album == null) return NotFound();
             return Ok(album);
         }
 
         [HttpPost]
-        [SwaggerOperation(
-            OperationId = "CreateAlbum",
-            Summary = "Створити новий альбом")]
+        [SwaggerOperation(OperationId = "CreateAlbum", Summary = "Створити новий альбом")]
         public async Task<IActionResult> Create([FromBody] CreateAlbumDto dto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -55,9 +49,7 @@ namespace SoundCloudWebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        [SwaggerOperation(
-            OperationId = "UpdateAlbum",
-            Summary = "Оновити альбом за ID")]
+        [SwaggerOperation(OperationId = "UpdateAlbum", Summary = "Оновити альбом за ID")]
         public async Task<IActionResult> Update(int id, [FromBody] AlbumDto dto)
         {
             await _albumService.UpdateAsync(id, dto);
@@ -65,9 +57,7 @@ namespace SoundCloudWebApi.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [SwaggerOperation(
-            OperationId = "DeleteAlbum",
-            Summary = "Видалити альбом за ID")]
+        [SwaggerOperation(OperationId = "DeleteAlbum", Summary = "Видалити альбом за ID")]
         public async Task<IActionResult> Delete(int id)
         {
             await _albumService.DeleteAsync(id);
@@ -85,5 +75,14 @@ namespace SoundCloudWebApi.Controllers
             return Ok(new { coverUrl = url });
         }
 
+        // ===== Для адміна: отримати всі альбоми =====
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin/all")]
+        [SwaggerOperation(OperationId = "GetAllAlbumsForAdmin", Summary = "Отримати всі альбоми для адміна")]
+        public async Task<IActionResult> GetAllForAdmin()
+        {
+            var albums = await _albumService.GetAllAlbumsForAdminAsync();
+            return Ok(albums);
+        }
     }
 }

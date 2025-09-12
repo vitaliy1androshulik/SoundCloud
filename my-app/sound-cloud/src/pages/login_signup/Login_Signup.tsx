@@ -9,6 +9,9 @@ import { normalizeUser } from "../../utilities/normalizeUser.ts";
 import { AxiosError } from "axios";
 import { login, register } from "../../services/authApi.ts";
 
+
+import { GoogleLogin } from "@react-oauth/google";
+
 const LoginSignup: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -56,14 +59,43 @@ const LoginSignup: React.FC = () => {
         }
     };
 
+    //--- Додано: обробка Google Login ---
+    const handleGoogleLogin = async (credentialResponse: any) => {
+        if (!credentialResponse.credential) return;
+
+        try {
+            const res = await fetch("http://localhost:5122/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: credentialResponse.credential }),
+            });
+
+            if (!res.ok) {
+                console.error("Google login failed");
+                return;
+            }
+
+            const data = await res.json();
+            console.log("User info from backend:", data);
+
+            // Зберігаємо користувача
+            const user = data; // payload з бекенду
+            localStorage.setItem("token", credentialResponse.credential);
+            dispatch(setUser({ user, token: credentialResponse.credential }));
+            alert("Логін через Google успішний!");
+            navigate("/home");
+        } catch (error) {
+            console.error("Error during Google login:", error);
+        }
+    };
+
     return (
-        <div  className="flex justify-center items-center h-screen
+        <div className="flex justify-center items-center h-screen
         bg-[url(images/login_signup_page/background.jpg)] bg-cover bg-center bg-no-repeat text-white">
             <div className="flex justify-center items-center h-screen bg-color-pink text-white w-full">
                 {!showForm && (
                     <header className="flex-none mx-auto full-xl:max-w-screen-center-xl">
                         <div className="flex justify-between items-center full-xl:px-[60px] xl:px-[50px]">
-
                             <div>
                                 <Button
                                     type="primary"
@@ -94,6 +126,8 @@ const LoginSignup: React.FC = () => {
                         <h1 className="text-3xl mb-6 text-center text-black">
                             {isLogin ? "Login" : "Register"}
                         </h1>
+
+                        {/* Форма логіну / реєстрації */}
                         <Form
                             name={isLogin ? "login" : "register"}
                             labelCol={{ span: 8 }}
@@ -143,6 +177,14 @@ const LoginSignup: React.FC = () => {
                                 </Button>
                             </Form.Item>
                         </Form>
+
+                        {/* --- Google Login кнопка --- */}
+                        <div className="flex justify-center mt-4">
+                            <GoogleLogin
+                                onSuccess={handleGoogleLogin}
+                                onError={() => console.log("Google Login Failed")}
+                            />
+                        </div>
                     </div>
                 )}
             </div>
