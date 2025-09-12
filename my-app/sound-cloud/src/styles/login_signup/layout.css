@@ -1,0 +1,284 @@
+.first_container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    position: absolute;
+    width: 772px;
+    height: 104px;
+    left: 574px;
+    top: 167px;
+}
+.first_first_text{
+    /* Don’t miss out! */
+
+    width: 772px;
+    height: 64px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 64px;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.first_second_text{
+    width: 772px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+
+/*************************************************************/
+
+
+
+.second_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+    position: absolute;
+    width: 772px;
+    height: 189px;
+    left: 574px;
+    top: 458px;
+}
+
+.second_first_text{
+
+
+    /* Connect with a community that shares your taste */
+
+    width: 772px;
+    height: 32px;
+
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    /* identical to box height, or 100% */
+
+    text-align: center;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+}
+
+.second_second_button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 209px;
+    height: 69px;
+
+    background: #5241B3;
+    border-radius: 50px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.second_second_button:hover{
+    background: #4231a0;
+}
+
+.second_second_button_text{
+    /* Get Started */
+
+    width: 145px;
+    height: 45px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.second_third_text{
+    /* Create your free account and start listening your way. */
+
+    width: 772px;
+    height: 24px;
+
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;   /* тепер працює */
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+
+
+}
+
+
+/*************************************************************/
+
+
+
+.third_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+
+    position: absolute;
+    width: 1038px;
+    height: 124px;
+    left: 441px;
+    top: 830px;
+
+}
+.third_first_search_bar{
+    /* Search */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    gap: 10px;
+
+    width: 772px;
+    height: 44px;
+
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.search_logo{
+    width: 20px;
+    height: 20px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.search_input{
+    width: 352px;
+    height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #C9D4FF;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.third_second_text{
+
+    width: 1038px;
+    height: 48px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 24px;
+    /* or 100% */
+    text-align: center;
+
+    color: #FFFFFF;
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+/*************************************************************/
+
+input {
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 5px;
+    width: 772px;
+    height: 56px;
+
+    border-radius: 50px;
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    background: transparent !important;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 29px;
+
+    color: #C9D4FF !important;
+    text-align: left !important;
+    z-index:0;
+    outline: none;
+}
+input:focus {
+    border-color: transparent;
+}

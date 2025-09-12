@@ -13,8 +13,9 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task<IEnumerable<TrackDto>> GetAllAsync();
         Task<TrackDto?> GetByIdAsync(int id);
         //Task<TrackDto> CreateAsync(CreateTrackDto dto, int userId);
+        Task<IEnumerable<TrackDto>> GetAllTracksAsync();
         Task<TrackDto> CreateAsync(CreateTrackDto dto);
-
+        Task<TrackDto> CreateAsyncFile(CreateTrackDto dto);
         Task UpdateAsync(int trackId, UpdateTrackDto dto);
 
         Task DeleteAsync(int trackId);

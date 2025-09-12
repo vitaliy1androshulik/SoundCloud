@@ -9,14 +9,14 @@ const Layout: React.FC = () => {
 
     return(
         <>
-            <div className="gap-4 p-4 flex flex-col min-h-screen">
-                <div className={"p-4 "}>
+            <div className="page-container">
+                <div className="p-4 ">
                     <Header/>
                 </div>
-                <div className={"flex-1"}>
+                <div className="content">
                     <Outlet/>
                 </div>
-                <div className={"p-1"}>
+                <div className="footer">
                     <Footer/>
                 </div>
             </div>

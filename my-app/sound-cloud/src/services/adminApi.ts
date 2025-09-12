@@ -13,9 +13,7 @@ export const adminApi = {
     changeUserRole: (id: number, role: string) => api.put(`${API_URL}/Admin/users/${id}/role`, { role }),
     blockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/block`),
     unblockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/unblock`),
-
-    // ================= TRACKS =================
-    getTracks: () => api.get(`${API_URL}/Track`),
+    getTracks: () => api.get(`${API_URL}/Track/krot`),
     getTrackById: (id: number) => api.get(`${API_URL}/Track/${id}`),
     createTrack: (data: any) => api.post(`${API_URL}/Track`, data),
     updateTrack: (id: number, data: any) => api.put(`${API_URL}/Track/${id}`, data),

@@ -7,7 +7,7 @@ import api from "../utilities/axiosInstance";
 export const trackService = {
     async getAll(): Promise<ITrack[]> {
         try {
-            const res = await api.get("/Track");
+            const res = await api.get("/Track/krot");
             return res.data;
         } catch (error) {
             console.error("Failed to fetch tracks", error);
