@@ -1,0 +1,478 @@
+.background {
+    position: fixed;
+    width: 1920px;
+    height: 1080px;
+    left: 0px;
+    top: 0px;
+
+    background: rgba(82, 65, 179, 0.3);
+    z-index: 9990;
+}
+.login_form_container{
+    /* Create account */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 36px;
+    gap: 24px;
+
+    position: absolute;
+    width: 554px;
+    height: 811px;
+    left: 683px;
+    top: 134px;
+
+    background: #101010;
+    border-radius: 32px;
+    z-index: 9999;
+}
+.login_first_close_container{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 0px;
+
+    width: 506px;
+    height: 48px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.login_first_close_button{
+    box-sizing: border-box;
+    width: 48px;
+    height: 48px;
+    border: 2px solid #5241B3;
+    border-radius: 100px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    background: url("../../images/icons/close_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.login_first_close_button:hover{
+    border: 2px solid #937fda;
+    cursor: pointer;
+}
+.login_second_container_text{
+    width: 482px;
+    height: 51px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 51px;
+    text-align: center;
+    color: #FFFFFF;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.login_third_google_facebook_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 482px;
+    height: 136px;
+
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.login_third_google_button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 94px;
+    gap: 16px;
+
+    width: 482px;
+    height: 56px;
+
+    background: #5241B3;
+    border-radius: 100px;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    /* label-text */
+
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    /* identical to box height */
+
+    color: #FFFFFF;
+
+}
+.login_third_google_button:hover{
+    background: #4231a0;
+    cursor: pointer;
+}
+.login_fourth_login_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+
+    width: 482px;
+    height: 242px;
+
+    flex: none;
+    order: 3;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.login_fourth_text_or{
+    width: 482px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.login_fourth_form_container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    width: 482px;
+    height: 212px;
+
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.login_fourth_emailLogin_container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 4px;
+
+    width: 482px;
+    height: 98px;
+
+    border-radius: 5px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.login_fourth_emailLogin_container_text{
+
+    width: 177px;
+    height: 38px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 38px;
+
+    color: #FFFFFF;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+/*****************************INPUT********************************/
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: #C9D4FF !important;
+    background: transparent;
+    caret-color: #C9D4FF !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+    text-align: left !important;
+}
+.login_fourth_emailLogin_input{
+    /* Enter */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 20px;
+    width: 482px;
+    height: 56px;
+
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    background: transparent !important;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 29px;
+
+    color: #C9D4FF !important;
+    text-align: left !important;
+    z-index:0;
+}
+.eye_icon_position{
+    position: absolute;
+    left:468px;
+    top:531px;
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    z-index:100;
+
+}
+.eye_icon_position:hover{
+    cursor: pointer;
+}
+.login_fourth_emailLogin_input:-webkit-autofill {
+    background-color: transparent !important; /* твій фон */
+    -webkit-box-shadow: 0 0 0 1000px #101010 inset;
+    -webkit-text-fill-color:  #C9D4FF; /* колір тексту */
+    font-family:"Baloo 2", sans-serif;
+    font-size: 18px !important;
+    font-style: normal !important;
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+}
+.login_fourth_emailLogin_input:-webkit-autofill:focus {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 1000px #101010 inset ;
+    font-family:"Baloo 2", sans-serif;
+    font-size: 18px !important;
+    font-style: normal !important;
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+}
+.login_fourth_emailLogin_input:-webkit-autofill:focus-within {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 1000px #101010 inset ;
+    font-family:"Baloo 2", sans-serif;
+    font-size: 18px !important;
+    font-style: normal !important;
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+}
+.login_fourth_emailLogin_input::placeholder{
+
+    width: 250px;
+    height: 29px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 29px;
+    /* identical to box height */
+
+    color: #C9D4FF!important;
+    background: transparent!important;
+    flex: none!important;
+    order: 1;
+    flex-grow: 0;
+    outline: none;
+
+}
+.login_fourth_emailLogin_input:hover{
+    background: transparent;
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+}
+.login_fourth_emailLogin_input:focus-within{
+    background: transparent;
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+}
+
+
+
+
+/*************************************************************/
+
+
+.login_fifth_forgot_password_container{
+
+    width: 100%;
+    height: auto;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    /* identical to box height */
+    text-align: center;
+    text-decoration-line: underline;
+
+    color: #9354FF;
+
+    margin-top:24px;
+    margin-bottom: 24px;
+
+}
+
+.login_sixth_button_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px;
+    gap: 442px;
+
+    width: 100%;
+    height: auto;
+    flex: none;
+    order: 5;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.login_sixth_button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    gap: 8px;
+
+    width: 242px;
+    height: 62px;
+    margin-bottom: 5px;
+
+    background: #5241B3;
+    border-radius: 100px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 38px;
+    text-align: center;
+
+    color: #FFFFFF;
+
+}
+.login_sixth_button:hover{
+    background: #4231a0;
+    cursor: pointer;
+}
+.login_seventh_container{
+    /* Don’t have an account? Sign up */
+
+    width: 482px;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    /* identical to box height */
+    text-align: center;
+
+    color: #FFFFFF;
+    flex: none;
+    order: 6;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+
+.signin_form_container{
+    /* Sign up */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 36px;
+    gap: 24px;
+
+    position: absolute;
+    width: 554px;
+    height: 936px;
+    left: 683px;
+    top: 80px;
+
+    background: #101010;
+    border-radius: 32px;
+
+}
+.eye_icon_position_signin{
+    position: absolute;
+    left:468px;
+    top:641px;
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    z-index:100;
+
+}
+.eye_icon_position_signin:hover{
+    cursor: pointer;
+}
+.eye_icon_position_signin_confirm{
+    position: absolute;
+    left:468px;
+    top:744px;
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    z-index:100;
+
+}
+.eye_icon_position_signin_confirm:hover{
+    cursor: pointer;
+}
+.login_signup_button:hover{
+    cursor: pointer;
+}

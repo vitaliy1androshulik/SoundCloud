@@ -121,28 +121,21 @@ namespace SoundCloudWebApi.Services.Implementations
         {
             if (dto.File == null || dto.File.Length == 0)
                 throw new ArgumentException("Файл не надано");
-
-            // Папка для збереження треків
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tracks");
 
-            // Створюємо папку, якщо її немає
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
 
-            // Генеруємо унікальне ім'я файлу
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.File.FileName);
             var filePath = Path.Combine(uploadsFolder, fileName);
 
-            // Зберігаємо файл
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await dto.File.CopyToAsync(stream);
             }
 
-            // Формуємо URL для клієнта (без wwwroot)
             var url = $"/uploads/tracks/{fileName}";
 
-            // Створюємо запис у БД
             var track = new TrackEntity
             {
                 Title = dto.Title.Trim(),
@@ -156,8 +149,6 @@ namespace SoundCloudWebApi.Services.Implementations
 
             _db.Tracks.Add(track);
             await _db.SaveChangesAsync();
-
-            // Повертаємо DTO
             return new TrackDto
             {
                 Id = track.Id,

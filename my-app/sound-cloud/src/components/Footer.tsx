@@ -1,29 +1,42 @@
 import React from 'react';
+import "../styles/footer.css"
 
 const Footer: React.FC = () => {
     return (
         <>
-            <footer className="flex w-auto h-[306px] text-white baloo2">
-                <img src="src/images/footer/vector_behind.png"
-                     alt={"behind"} className={"absolute left-0 w-full z-1 left-0 right-0 bottom-0"}/>
-                <img src="src/images/footer/vector_ahead.png"
-                     alt={"ahead"} className={"absolute left-0 w-full z-2 left-0 right-0 bottom-0"}/>
-                {/* Контент зверху */}
-                <div className="lg:w-[1920px] z-3 flex justify-between mt-[238px] ml-[50px]
-                text-black text-[24px]">
-                    <div className="flex space-x-4 lg:w-[639px] lg:h-[24px] justify-between">
-                        <a href="#">Directory</a>
-                        <a href="#">About us&#183;</a>
-                        <a href="#">Artist Resources</a>
-                        <a href="#">Blog</a>
-                        <a href="#">Help</a>
-                        <a href="#">Privacy</a>
-                    </div>
-                    <div className="mr-[20px] lg:w-[241px] lg:h-[24px]">
-                        Language: English⌄
+            <footer className="relative w-full text-white font-baloo2 bg-color-black overflow-hidden">
+                {/* Контейнер для картинок */}
+                <div className="relative w-full h-[306px]">
+                    {/* Задній шар */}
+                    <img
+                        src="src/images/footer/vector_behind.png"
+                        alt="behind"
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                    />
+                    {/* Передній шар */}
+                    <img
+                        src="src/images/footer/vector_ahead.png"
+                        alt="ahead"
+                        className="absolute inset-0 w-full h-full object-cover z-10"
+                    />
+
+                    {/* Текстовий контент */}
+                    <div
+                        className={"relative left-0 w-full px-12 flex justify-between text-[24px] z-20"}>
+
+                        <div className="footer_text_first">
+                            <a href="#">Directory</a>
+                            <a href="#">About us</a>
+                            <a href="#">Artist Resources</a>
+                            <a href="#">Blog</a>
+                            <a href="#">Help</a>
+                            <a href="#">Privacy</a>
+                        </div>
+                        <div className="footer_text_second ">Language: English ⌄</div>
                     </div>
                 </div>
             </footer>
+
         </>
     );
 };
