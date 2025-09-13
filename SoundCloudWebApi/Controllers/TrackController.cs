@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Models.Track;
 using SoundCloudWebApi.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -169,7 +171,6 @@ namespace SoundCloudWebApi.Controllers
                 return Conflict(new { trackId = id, error = "already-liked" });
             }
         }
-
         [HttpDelete("{id:int}/like")]
         [SwaggerOperation(
             OperationId = "UnlikeTrack",

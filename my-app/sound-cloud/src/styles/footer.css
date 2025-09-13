@@ -21,10 +21,10 @@
     flex-direction: row;
     align-items: flex-end;
     padding: 0px;
-    gap: 24px;
+    gap: 0px;
 
     position: absolute;
-    width: 241px;
+    width: 240px;
     height: 24px;
     left: 1503px;
     top: 232px;
