@@ -4,21 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="360e9589-d4f6-4317-b3bf-f20c6e2bb7ea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/home_page/layout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/footer.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/layout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/login_signup_form.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/login_signup_form.css" afterDir="false" />
-    </list>
+
+    <list default="true" id="360e9589-d4f6-4317-b3bf-f20c6e2bb7ea" name="Changes" comment="" />
+
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,13 +27,17 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "home-page-design",
+
+    "git-widget-placeholder": "admin__panel2",
+
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib",
+
+    "ts.external.directory.path": "C:\\Users\\Mykola\\WebstormProjects\\SoundCloud\\my-app\\sound-cloud\\node_modules\\typescript\\lib",
+
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -59,7 +51,9 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="360e9589-d4f6-4317-b3bf-f20c6e2bb7ea" name="Changes" comment="" />
+
+      <changelist id="ba53858b-63f2-49da-8fc2-ab9c430f25af" name="Changes" comment="" />
+
       <created>1757590394260</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -67,7 +61,7 @@
       <workItem from="1757594978665" duration="11417000" />
       <workItem from="1757679401985" duration="2769000" />
       <workItem from="1757690420911" duration="4544000" />
-      <workItem from="1757771613341" duration="7295000" />
+
     </task>
     <servers />
   </component>
