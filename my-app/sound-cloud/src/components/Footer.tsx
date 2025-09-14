@@ -26,13 +26,18 @@ const Footer: React.FC = () => {
 
                         <div className="footer_text_first">
                             <a href="#">Directory</a>
+                            <label>&#160;&#x2022;&#160;</label>
                             <a href="#">About us</a>
+                            <label>&#160;&#x2022;&#160;</label>
                             <a href="#">Artist Resources</a>
+                            <label>&#160;&#x2022;&#160;</label>
                             <a href="#">Blog</a>
+                            <label>&#160;&#x2022;&#160;</label>
                             <a href="#">Help</a>
+                            <label>&#160;&#x2022;&#160;</label>
                             <a href="#">Privacy</a>
                         </div>
-                        <div className="footer_text_second ">Language: English ⌄</div>
+                        <div className="footer_text_second ">Language:&#160;&#160;&#160; English<img src="src/images/icons/arrow_down.png"/></div>
                     </div>
                 </div>
             </footer>

@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
 
-.button_hover:hover{
-    background-color: #5241B3;
+.button_hover_signup:hover{
+    background-color: #abbcff;
 }
-
+.button_hover_create_account:hover{
+    background-color: #6f5ddd;
+}
 .navigation-text-color
 {
     color:#909a9b
