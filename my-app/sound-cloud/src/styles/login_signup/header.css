@@ -32,7 +32,7 @@
 .header_buttons{
     /* Header */
 
-    /* Auto layout */
+    /* Auto layout.css */
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -44,7 +44,7 @@
     height: 44px;
 
 
-    /* Inside auto layout */
+    /* Inside auto layout.css */
     flex: none;
     order: 1;
     flex-grow: 0;
@@ -76,7 +76,7 @@
 .header_button_create_account{
     /* Frame 13 */
 
-    /* Auto layout */
+    /* Auto layout.css */
     display: flex;
     flex-direction: row;
     justify-content: center;

@@ -1,7 +1,8 @@
 ﻿using SoundCloudWebApi.Models.Auth;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SoundCloudWebApi.Data.Entities;  
+using SoundCloudWebApi.Data.Entities;
+using Google.Apis.Auth;
 
 namespace SoundCloudWebApi.Services.Interfaces
 {
@@ -15,6 +16,7 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task UnblockAsync(int id);
         Task ChangeRoleAsync(int userId, UserRole newRole);
         Task SetAvatarAsync(int userId, string url);
+        Task<UserEntity> FindOrCreateFromGoogleAsync(GoogleJsonWebSignature.Payload payload);
 
     }
 }

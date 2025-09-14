@@ -86,7 +86,7 @@
     color: #C9D4FF;
 
 
-    /* Inside auto layout */
+    /* Inside auto layout.css */
     flex: none;
     order: 0;
     align-self: stretch;
@@ -151,7 +151,7 @@
     color: #C9D4FF;
 
 
-    /* Inside auto layout */
+    /* Inside auto layout.css */
     flex: none;
     order: 2;
     align-self: stretch;
@@ -184,7 +184,7 @@
 
     box-sizing: border-box;
 
-    /* Auto layout */
+    /* Auto layout.css */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -197,7 +197,7 @@
     border: 2px solid #5241B3;
     border-radius: 50px;
 
-    /* Inside auto layout */
+    /* Inside auto layout.css */
     flex: none;
     order: 0;
     flex-grow: 0;
@@ -212,7 +212,7 @@
     flex-grow: 0;
 }
 .search_input{
-    width: 352px;
+    width: 600px;
     height: 20px;
     font-style: normal;
     font-weight: 500;
@@ -253,7 +253,7 @@ input {
 
     box-sizing: border-box;
 
-    /* Auto layout */
+    /* Auto layout.css */
     display: flex !important;
     flex-direction: row;
     align-items: center;
