@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 using SoundCloudWebApi.Middleware;
 using Swashbuckle.AspNetCore.Annotations;
 using SoundCloudWebApi.Services.Implementations;
+using SoundCloudWebApi.Options;
+using SoundCloudWebApi.Services.Abstractions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +31,13 @@ builder.Logging.AddDebug();
 builder.Services.AddDbContext<SoundCloudDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.Configure<GoogleAuthOptions>(
+    builder.Configuration.GetSection("GoogleAuth"));
+
+builder.Services.AddTransient<IGoogleTokenValidator, GoogleTokenValidator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>(); 
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Нові сервіси для медіа-контенту
@@ -37,7 +45,6 @@ builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<ITrackService, TrackService>();
 builder.Services.AddScoped<IImageStorage, FileSystemImageStorage>();
-
 
 builder.Services.AddHttpContextAccessor();
 
