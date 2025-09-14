@@ -5,13 +5,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store/store.ts";
 import {logout} from "../store/slices/userSlice.ts";
 
-
 const Header: React.FC = () => {
     const [active, setActive] = useState<string>("home");
     const user = useSelector((state: RootState) => state.user.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const isLogin = !!user;
     const Logout = ()=>
     {
         dispatch(logout());
@@ -60,7 +59,7 @@ const Header: React.FC = () => {
                                 Library
                             </Link>
                         </div>
-                        {user ? (
+                        {isLogin ? (
                             <div>
                                 <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
                          bg-purple rounded-[50px] font-bold button_hover">{user.username}
@@ -72,10 +71,14 @@ const Header: React.FC = () => {
                         ) : (
                             <div className="flex w-[348px] h-[56px] items-center justify-between">
                                 <button className="baloo2 w-[124px] h-[56px]
-                        bg-lightpurple rounded-[50px] text-[20px] font-bold button_hover text-black">Sign in
+                        bg-lightpurple rounded-[50px] text-[20px] font-bold button_hover_signup text-black"
+                                onClick={()=>navigate("/")}
+                                >Sign in
                                 </button>
                                 <button className="baloo2 w-[200px] h-[56px] text-white text-[20px]
-                         bg-purple rounded-[50px] font-bold button_hover">Create account
+                         bg-purple rounded-[50px] font-bold button_hover_create_account"
+                                onClick={()=>navigate("/")}
+                                >Create account
                                 </button>
                             </div>
                         )}

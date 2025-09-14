@@ -1,61 +1,56 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ITrack} from "../../types/track";
-import {trackService} from "../../services/trackApi.ts";
-import {TokenService} from "../../utilities/tokenService.ts";
+import React, {useEffect, useState} from 'react';
 
+import "../../styles/home_page/layout.css"
 const HomePage: React.FC = () => {
-    const [tracks, setTracks] = useState<ITrack[]>([]);
-    const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    console.log(tracks);
-    useEffect(() => {
-        trackService.getAll()
-            .then((data) => setTracks(data))
-            .catch((err) => console.error(err));
-    }, []);
-    console.log("Token Service "+TokenService.getAccessToken());
-    const handlePlayPause = (track: ITrack) => {
-        if (currentTrackId === track.id) {
-            audioRef.current?.pause();
-            setCurrentTrackId(null);
-        } else {
-            if (audioRef.current) {
-                audioRef.current.src = `http://localhost:5122${track.url}`;
-                audioRef.current.play();
-            }
-            setCurrentTrackId(track.id);
-        }
+    const [isLogin, setIsLogin] = useState(false); // створюємо state
 
-    };
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLogin(!!token); // оновлюємо state
+    }, []);
+
 
     return (
-        <div className="text-white mx-auto lg:max-w-[904px] xl:max-w-[1382px]">
-            <h2 className="text-xl font-bold mb-4">Tracks</h2>
-            <ul className="space-y-4 text-white">
-                {tracks.map((track) => (
+        <div className="">
 
-                    <li key={track.id} className="flex items-center gap-4">
-                        {track.imageUrl && (
-                            <img
-                                src={track.imageUrl}
-                                alt={track.title}
-                                className="w-12 h-12 rounded-lg"
-                            />
-                        )}
-                        <div className="flex-1">
-                            <p className="font-semibold">{track.title}</p>
-                            <span className="text-sm text-gray-400">{track.duration}</span>
+                {!isLogin ? (
+                    <div className="search_container_home_page">
+                        <div className="people_container">
+                            <img className="image_container" src="src/images/search_bar/people.png" alt="people"/>
                         </div>
-                        <button
-                            onClick={() => handlePlayPause(track)}
-                            className="px-3 py-1 rounded bg-lightpurple text-white"
-                        >
-                            {currentTrackId === track.id ? "⏸ Pause" : "▶ Play"}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            <audio ref={audioRef} />
+                        <div className="search_bar_home_page">
+                            <div>
+                                <img src="src/images/search_bar/search.png" className="search_logo_home_page"
+                                     alt="search"/>
+                            </div>
+                            <div>
+                                <input type="text" placeholder="Search for artists, bands, tracks or music"
+                                       className="search_input_home_page baloo2"/>
+                            </div>
+
+                        </div>
+                    </div>
+                ) : (
+                    <div className="search_container_home_page">
+                        <div className="search_bar_home_page">
+                            <div>
+                                <img src="src/images/search_bar/search.png" className="search_logo_home_page"
+                                     alt="search"/>
+                            </div>
+                            <div>
+                                <input type="text" placeholder="Search for artists, bands, tracks or music"
+                                       className="search_input_home_page baloo2"/>
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+
+
+            <div>
+
+            </div>
+
         </div>
     );
 };

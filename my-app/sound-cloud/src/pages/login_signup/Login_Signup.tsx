@@ -1,7 +1,5 @@
 
-
-
-import { GoogleLogin } from "@react-oauth/google";
+import {useGoogleLogin} from "@react-oauth/google";
 import React, {useState} from "react";
 import "../../styles/login_signup/background.css";
 import {useDispatch} from "react-redux";
@@ -47,7 +45,6 @@ const LoginSignup: React.FC = () => {
                         dispatch(setUser({ user, token: data.token }));
                     }
                 }
-                alert("Логін успішний!");
                 navigate("/home");
             } catch (err) {
                 alert("Помилка логіну: " + (err as AxiosError).message);
@@ -72,7 +69,6 @@ const LoginSignup: React.FC = () => {
                         dispatch(setUser({ user, token: data.token }));
                     }
                 }
-                alert("Реєстрація успішна!");
                 navigate("/home");
             } catch (err) {
                 alert("Помилка реєстрації: " + (err as AxiosError).message);
@@ -109,7 +105,10 @@ const LoginSignup: React.FC = () => {
             console.error("Error during Google login:", error);
         }
     };
-
+    const googleLogin = useGoogleLogin({
+        onSuccess: handleGoogleLogin,
+        onError: () => console.log("Google Login Failed"),
+    });
     return (
         <>
             <div className="first_container">
@@ -154,9 +153,18 @@ const LoginSignup: React.FC = () => {
                                         <h1>{isLogin ? "Sign into your account" : "Sign Up"}</h1>
                                     </div>
                                     <div className="login_third_google_facebook_container">
-                                        <button className="login_third_google_button baloo2"><img
-                                            src="src/images/icons/google_icon.png" alt="google_icon"/> Sign in with
-                                            Google
+
+                                        <button
+                                            type="button"
+                                             // запускає Google OAuth
+                                            className="login_third_google_button baloo2"
+                                        >
+                                            <img
+                                                src="src/images/icons/google_icon.png"
+                                                alt="google_icon"
+                                                className="w-5 h-5 mr-2"
+                                            />
+                                            Sign in with Google
                                         </button>
                                         <button className="login_third_google_button baloo2"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
@@ -168,7 +176,7 @@ const LoginSignup: React.FC = () => {
                                         className="login_fourth_login_container"
                                         noValidate
                                     >
-                                        <div className="login_fourth_text_or baloo2">
+                                    <div className="login_fourth_text_or baloo2">
                                             <label>OR</label>
                                         </div>
                                         {!isLogin && (
@@ -308,10 +316,18 @@ const LoginSignup: React.FC = () => {
                                         <h1>{isLogin ? "Sign into your account" : "Sign Up"}</h1>
                                     </div>
                                     <div className="login_third_google_facebook_container">
-                                        <button className="login_third_google_button baloo2"><img
-                                            src="src/images/icons/google_icon.png" alt="google_icon"/> Sign in with
-                                            Google
-                                        </button>
+
+                                                <button
+                                                    onClick={()=>googleLogin()}
+                                                    className="login_third_google_button baloo2"
+                                                >
+                                                    <img
+                                                        src="src/images/icons/google_icon.png"
+                                                        alt="google_icon"
+                                                        className="w-5 h-5"
+                                                    />
+                                                    Sign in with Google
+                                                </button>
                                         <button className="login_third_google_button baloo2"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
                                             Facebook
@@ -323,7 +339,7 @@ const LoginSignup: React.FC = () => {
                                         noValidate
                                         autoComplete="off"
                                     >
-                                        <div className="login_fourth_text_or baloo2">
+                                    <div className="login_fourth_text_or baloo2">
                                             <label>OR</label>
                                         </div>
                                         {!isLogin && (
