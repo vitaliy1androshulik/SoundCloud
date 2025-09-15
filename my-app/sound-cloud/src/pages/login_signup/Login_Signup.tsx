@@ -78,13 +78,13 @@ const LoginSignup: React.FC = () => {
 
     //--- Додано: обробка Google Login ---
     const handleGoogleLogin = async (credentialResponse: any) => {
-        if (!credentialResponse.credential) return;
 
+        console.log("Google login response:", credentialResponse.access_token);
         try {
             const res = await fetch("http://localhost:5122/auth/google", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: credentialResponse.credential }),
+                body: JSON.stringify({ token: credentialResponse.access_token }),
             });
 
             if (!res.ok) {
@@ -156,6 +156,7 @@ const LoginSignup: React.FC = () => {
 
                                         <button
                                             type="button"
+                                            onClick={()=>googleLogin()}
                                              // запускає Google OAuth
                                             className="login_third_google_button baloo2"
                                         >

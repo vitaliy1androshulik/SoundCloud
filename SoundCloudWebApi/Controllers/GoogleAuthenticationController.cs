@@ -1,14 +1,17 @@
 ﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Data.Entities;
-using System;
-using System.Threading.Tasks;
-using SoundCloudWebApi.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using SoundCloudWebApi.Services.Abstractions;
 using SoundCloudWebApi.Models.Auth;
+using SoundCloudWebApi.Services.Abstractions;
+using SoundCloudWebApi.Services.Interfaces;
+using System;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 //namespace SoundCloudWebApi.Controllers
 //{
@@ -120,8 +123,27 @@ namespace SoundCloudWebApi.Controllers
             if (string.IsNullOrWhiteSpace(req?.Token))
                 return BadRequest(new { error = "Token is required" });
 
+
+            using var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", req.Token);
+
+            //configuration
+            string userInfo = "https://www.googleapis.com/oauth2/v2/userinfo";
+            var response = await httpClient.GetAsync(userInfo);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var googleUser = JsonSerializer.Deserialize<GoogleAccountModel>(json);
+
+
             var payload = await _google.ValidateAsync(req.Token);
             var user = await _users.FindOrCreateFromGoogleAsync(payload);
+
 
             var jwt = _auth.IssueJwtForUser(user);
 
