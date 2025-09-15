@@ -146,6 +146,7 @@ namespace SoundCloudWebApi.Services
                    u.Id,
                    u.Username,
                    u.Email,
+                   u.AvatarUrl,
                    u.CreatedAt,
                    u.Role,
                    u.IsBlocked,
@@ -164,6 +165,7 @@ namespace SoundCloudWebApi.Services
                 Id = user.Id.ToString(),
                 Username = user.Username,
                 Email = user.Email,
+                AvatarUrl=user.AvatarUrl,
                 CreatedAt = user.CreatedAt,
                 Role = user.Role,
                 UpdatedAt   = user.UpdatedAt

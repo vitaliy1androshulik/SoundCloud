@@ -318,7 +318,10 @@ const LoginSignup: React.FC = () => {
                                     <div className="login_third_google_facebook_container">
 
                                                 <button
-                                                    onClick={()=>googleLogin()}
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        googleLogin();
+                                                    }}
                                                     className="login_third_google_button baloo2"
                                                 >
                                                     <img

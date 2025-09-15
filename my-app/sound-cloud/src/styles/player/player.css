@@ -1,0 +1,311 @@
+
+
+.player_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    padding: 12px 32px;
+    gap: 50px;
+
+    position: absolute;
+    width: 1568px;
+    height: 79px;
+    left: 176px;
+    bottom: 50px;
+
+    background: #344289;
+    border-radius: 100px;
+}
+.track_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 12px;
+
+    width: 182.72px;
+    height: 53.77px;
+
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.track_image{
+    width: 52.72px;
+    height: 53.77px;
+
+    border-radius: 10.5441px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.track_title_container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 6.33px;
+    width: 118px;
+    height: 42.33px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.track_title{
+    /* Take the Lead */
+
+    width: 220px;
+    height: 19px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.9794px;
+    line-height: 19px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.track_author{
+
+    width: 220px;
+    height: 17px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: rgba(255, 255, 255, 0.6);
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.track_control_container{
+
+    margin-left:50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 26px;
+
+    width: 252.68px;
+    height: 33.74px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.track_control_repeat_container{
+
+    width: 33.74px;
+    height: 33.74px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.track_control_track_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 16px;
+
+    width: 133.21px;
+    height: 33.74px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+.track_control_queue_container{
+    width: 33.74px;
+    height: 33.74px;
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+.track_time_skip_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    gap: 12px;
+
+    width: 748px;
+    height: 22px;
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+.track_duration_input {
+    -webkit-appearance: none; /* відключає стандартний стиль */
+    width: 600px;
+    padding: 0 12px;
+    height: 8px; /* висота треку */
+    background: transparent; /* фон задаємо через псевдоелемент */
+    cursor: pointer;
+}
+
+.track_duration_input::-webkit-slider-runnable-track {
+    height: 5px;
+    border-radius: 4px;
+    background: linear-gradient(
+            to right,
+            #00e1ff 1%,
+            #00e1ff var(--val, 0%),
+            #ffffff var(--val, 0%),
+            #ffffff 100%
+    );
+    transition: background 2s linear;
+}
+
+.track_duration_input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 11px; /* розмір кружечка */
+    width: 11px;
+    border-radius: 50%; /* щоб був круглий */
+    background: #00e1ff;
+    border: none;
+
+    cursor: pointer;
+    margin-top: -3px; /* щоб центрувати по треку */
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* тінь для кращого вигляду */
+}
+.track_loudness_container{
+    /* Volume */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    margin-left:50px;
+    width: 168.74px;
+    height: 33.74px;
+
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+
+}
+.track_loudness_image_container{
+    /* ic:round-volume-up */
+
+    width: 33.74px;
+    height: 33.74px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+
+.track_duration_first_time_container{
+    /* 0:00 */
+
+    width: 44px;
+    height: 22px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21.0882px;
+    line-height: 21px;
+    /* or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.track_duration_second_time_container{
+    /* 2:05 */
+
+    width: 40px;
+    height: 22px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21.0882px;
+    line-height: 21px;
+    /* or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+
+}
+.volume_input {
+    -webkit-appearance: none; /* відключає стандартний стиль */
+    width: 123px;
+    padding: 0 12px;
+    height: 8px; /* висота треку */
+    background: transparent; /* фон задаємо через псевдоелемент */
+    cursor: pointer;
+}
+
+.volume_input::-webkit-slider-runnable-track {
+    height: 5px;
+    border-radius: 4px;
+    background: linear-gradient(
+            to right,
+            #00e1ff 1%,
+            #00e1ff var(--val, 0%),
+            #ffffff var(--val, 0%),
+            #ffffff 100%
+    );
+    transition: background 2s linear;
+}
+
+.volume_input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 11px; /* розмір кружечка */
+    width: 11px;
+    border-radius: 50%; /* щоб був круглий */
+    background: #00e1ff;
+    border: none;
+
+    cursor: pointer;
+    margin-top: -3px; /* щоб центрувати по треку */
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* тінь для кращого вигляду */
+}

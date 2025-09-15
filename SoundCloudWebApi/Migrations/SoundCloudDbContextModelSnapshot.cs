@@ -52,15 +52,16 @@ namespace SoundCloudWebApi.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<int>("OwnerId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -91,6 +92,9 @@ namespace SoundCloudWebApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<int>("PlayCount")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -113,6 +117,9 @@ namespace SoundCloudWebApi.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int>("PlayCount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -164,6 +171,9 @@ namespace SoundCloudWebApi.Migrations
                     b.Property<int>("AlbumId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -178,6 +188,9 @@ namespace SoundCloudWebApi.Migrations
 
                     b.Property<bool>("IsHidden")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("PlayCount")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -197,6 +210,8 @@ namespace SoundCloudWebApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("GenreId");
 
@@ -357,11 +372,19 @@ namespace SoundCloudWebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "Author")
+                        .WithMany("Tracks")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("SoundCloudWebApi.Data.Entities.GenreEntity", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
 
                     b.Navigation("Album");
+
+                    b.Navigation("Author");
 
                     b.Navigation("Genre");
                 });
@@ -414,6 +437,8 @@ namespace SoundCloudWebApi.Migrations
                     b.Navigation("Albums");
 
                     b.Navigation("Playlists");
+
+                    b.Navigation("Tracks");
                 });
 #pragma warning restore 612, 618
         }

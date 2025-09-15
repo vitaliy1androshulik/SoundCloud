@@ -1,0 +1,200 @@
+.header_container_main{
+    /* Header */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 125px;
+
+    position: absolute;
+    width: 1568px;
+    height: 44px;
+    left: 176px;
+    top: 25px;
+
+}
+
+.header_logo_main {
+    /* Logo */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    padding: 0px;
+
+    width: 398px;
+    height: 32px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.header_buttons_main {
+    /* Frame 26080043 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding: 0px;
+    gap: 38px;
+    width: 290px;
+    height: 32px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+.header_profile_container_main {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+    width: 398px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.header_profile_image_container{
+    /* Frame 26080085 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 108px;
+    height: 32px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.user_avatar{
+    width: 32px;
+    height: 32px;
+
+    background: #C9D4FF;
+    border-radius: 50%; /* робимо круглим */
+    overflow: hidden;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.image_container_user{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* картинка заповнює контейнер і обрізається */
+    display: block;
+}
+
+.button_hover_signup:hover{
+    background-color: #abbcff;
+}
+.button_hover_create_account:hover{
+    background-color: #6f5ddd;
+}
+.search_container_home_page{
+    /* Frame 26080051 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    position: absolute;
+    width: 1382px;
+    height: 56px;
+    left: 75px;
+    top: 82px;
+
+}
+.people_container{
+    width: 56px;
+    height: 56px;
+
+    background: #C9D4FF;
+    border-radius: 60px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.image_container{
+    position: relative;
+    left: 9px;
+    right: 16.67%;
+    top: 16.67%;
+    bottom: 16.67%;
+}
+.search_bar_home_page{
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    gap: 10px;
+
+    width: 1302px;
+    height: 56px;
+
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.search_input_home_page {
+    width: 1200px;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    color: #C9D4FF;
+    box-sizing: border-box;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.search_logo_home_page {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0; /* важливо: не дає flex стискати картинку */
+    object-fit: contain; /* картинка зберігає пропорції */
+    display: block; /* прибирає inline-артефакти */
+}

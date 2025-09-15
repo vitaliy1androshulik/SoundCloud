@@ -24,59 +24,58 @@ public class SoundCloudDbContext : DbContext
 
         // Зберігаємо enum Role як РЯДОК у БД (щоб у колонці бачити 'User'/'Moderator'/'Admin')
         modelBuilder.Entity<UserEntity>()
-            .Property(u => u.Role)
-            .HasConversion<string>()
-            .HasMaxLength(16);
+        .Property(u => u.Role)
+        .HasConversion<string>()
+        .HasMaxLength(16);
 
-        // (опціонально) Check-constraint — гарантія валідних значень у БД
-        //  -- синтаксис під PostgreSQL. Якщо інша СУБД, або прибираємо, або пишемо відповідний SQL.
         modelBuilder.Entity<UserEntity>()
             .ToTable(t => t.HasCheckConstraint(
                 "CK_Users_Role_Enum",
                 "\"Role\" IN ('User','Moderator','Admin')"
             ));
 
-        // Унікальний індекс на Email
+        // Унікальні індекси
         modelBuilder.Entity<UserEntity>()
             .HasIndex(u => u.Email)
             .IsUnique();
 
-        // Унікальний індекс на Username
         modelBuilder.Entity<UserEntity>()
             .HasIndex(u => u.Username)
             .IsUnique();
 
-        //  Забороняємо каскадне видалення власника,
-        //    щоб не знести випадково всі альбоми/плейлисти при Delete(User)
+        // Album → User (Owner)
         modelBuilder.Entity<AlbumEntity>()
-            //.HasOne(a => a.Owner)
-            .HasOne(a => a.Owner).WithMany(u => u.Albums)
-            //.WithMany()
+            .HasOne(a => a.Owner)
+            .WithMany(u => u.Albums)
             .HasForeignKey(a => a.OwnerId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Playlist → User (Owner)
         modelBuilder.Entity<PlaylistEntity>()
-            .HasOne(p => p.Owner).WithMany(u => u.Playlists)
-            //.HasOne(p => p.Owner)
-            //.WithMany()
+            .HasOne(p => p.Owner)
+            .WithMany(u => u.Playlists)
             .HasForeignKey(p => p.OwnerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Track → User (Author)
+        modelBuilder.Entity<TrackEntity>()
+            .HasOne(t => t.Author)          // нова властивість навігації у TrackEntity
+            .WithMany(u => u.Tracks)            // у UserEntity: ICollection<TrackEntity> Tracks
+            .HasForeignKey(t => t.AuthorId)     // обов'язковий
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Track → Album
+        modelBuilder.Entity<TrackEntity>()
+            .HasOne(t => t.Album)
+            .WithMany(a => a.Tracks)
+            .HasForeignKey(t => t.AlbumId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // TrackLike: унікальність лайка від користувача
         modelBuilder.Entity<TrackLikeEntity>()
             .HasIndex(x => new { x.TrackId, x.UserId })
             .IsUnique();
 
-        // Зв'язки + каскади (щоб лайки/прослуховування зносилися при видаленні треку/юзера)
-        modelBuilder.Entity<TrackListenEntity>()
-            .HasOne(l => l.Track).WithMany()
-            .HasForeignKey(l => l.TrackId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<TrackListenEntity>()
-            .HasOne(l => l.User).WithMany()
-            .HasForeignKey(l => l.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<TrackLikeEntity>()
             .HasOne(l => l.Track).WithMany()

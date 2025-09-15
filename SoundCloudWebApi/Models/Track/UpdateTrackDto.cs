@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace SoundCloudWebApi.Models.Track
 {
@@ -9,14 +10,25 @@ namespace SoundCloudWebApi.Models.Track
         [MaxLength(200)]
         public string Title { get; set; }
 
+        // Автор треку обов’язково
         [Required]
-        public string Url { get; set; }
+        public int AuthorId { get; set; }
 
+        // Файл треку можна оновити, опційно
+        public IFormFile? File { get; set; }
+
+        // Обкладинка можна оновити, опційно
+        public IFormFile? Cover { get; set; }
+
+        // Тривалість треку
         [Required]
         public TimeSpan Duration { get; set; }
 
-        // Альтернативно можна дозволити змінювати й AlbumId:
-        // [Required]
-        // public int AlbumId { get; set; }
+        // Альбом, до якого належить трек
+        [Required]
+        public int AlbumId { get; set; }
+
+        // Жанр треку, опційно
+        public int? GenreId { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace SoundCloudWebApi.Services.Implementations
             {
                 Name = model.Name,
                 Slug = model.Slug,
+                PlayCount=model.PlayCount,
                 ImageUrl = model.ImageFile != null
                     ? await _storage.SaveAsync(model.ImageFile, "categories")
                     : null
@@ -40,6 +41,7 @@ namespace SoundCloudWebApi.Services.Implementations
                     Id = c.Id,
                     Name = c.Name,
                     Slug = c.Slug,
+                    PlayCount = c.PlayCount,
                     ImageUrl = c.ImageUrl
                 })
                 .ToListAsync();
@@ -48,7 +50,7 @@ namespace SoundCloudWebApi.Services.Implementations
             await _db.Categories
                 .Where(c => c.Id == id)
                 .Select(c => new CategoryDto
-                { Id = c.Id, Name = c.Name, Slug = c.Slug, ImageUrl = c.ImageUrl })
+                { Id = c.Id, Name = c.Name, Slug = c.Slug,PlayCount=c.PlayCount, ImageUrl = c.ImageUrl })
                 .FirstOrDefaultAsync();
 
         public async Task UpdateAsync(int id, CategoryUpdateModel model)
@@ -58,7 +60,6 @@ namespace SoundCloudWebApi.Services.Implementations
 
             c.Name = model.Name;
             c.Slug = model.Slug;
-
             if (model.ImageFile != null)
                 c.ImageUrl = await _storage.SaveAsync(model.ImageFile, "categories");
 

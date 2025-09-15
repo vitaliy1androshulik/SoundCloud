@@ -8,12 +8,12 @@ namespace SoundCloudWebApi.Validators.Track
         public UpdateTrackValidator()
         {
             RuleFor(x => x.Title)
-                .NotEmpty().MaximumLength(200);
+                .NotEmpty().MaximumLength(200)
+                .WithMessage("Title має бути валідним");
 
-            RuleFor(x => x.Url)
-                .NotEmpty()
-                .Must(u => Uri.IsWellFormedUriString(u, UriKind.Absolute))
-                .WithMessage("URL має бути валідним");
+            RuleFor(x => x.AuthorId)
+                .Null()
+                .WithMessage("Немає автора");
 
             RuleFor(x => x.Duration)
                 .Must(d => d > TimeSpan.Zero)

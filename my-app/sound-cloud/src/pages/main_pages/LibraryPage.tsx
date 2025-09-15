@@ -27,7 +27,7 @@ const LibraryPage: React.FC = () => {
     };
 
     return (
-        <div className="text-white p-6 min-h-screen">
+        <div>
             <div className="flex justify-center space-x-6">
                 {tabs.map((tab) => (
                     <button

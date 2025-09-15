@@ -37,6 +37,7 @@ builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<ITrackService, TrackService>();
 builder.Services.AddScoped<IImageStorage, FileSystemImageStorage>();
+builder.Services.AddScoped<IGenreService, GenreService>();
 
 
 builder.Services.AddHttpContextAccessor();

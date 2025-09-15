@@ -22,7 +22,7 @@
     width: 554px;
     height: 811px;
     left: 683px;
-    top: 134px;
+    top: 85px;
 
     background: #101010;
     border-radius: 32px;
@@ -431,9 +431,9 @@ input:-webkit-autofill:active {
 
     position: absolute;
     width: 554px;
-    height: 936px;
+    height: 920px;
     left: 683px;
-    top: 80px;
+    top: 20px;
 
     background: #101010;
     border-radius: 32px;
