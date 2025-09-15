@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Text;
+using Google.Apis.Auth;
+
 
 namespace SoundCloudWebApi.Services
 {
@@ -198,6 +202,53 @@ namespace SoundCloudWebApi.Services
             user.AvatarUrl = url;
             user.UpdatedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<UserEntity> FindOrCreateFromGoogleAsync(GoogleJsonWebSignature.Payload p)
+        {
+            var email = p.Email.Trim().ToLowerInvariant();
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user != null)
+            {
+                if (user.IsBlocked) throw new UnauthorizedAccessException("User is blocked");
+                return user;
+            }
+
+            // наша модель вимагає PasswordHash/Salt - зробимо рандомний пароль і захешуємо так само, як у AuthService
+            CreatePasswordHash(Guid.NewGuid().ToString("N"), out var hash, out var salt);
+
+            user = new UserEntity
+            {
+                Username = await MakeUniqueUsernameAsync(email.Split('@')[0]),
+                Email = email,
+                PasswordHash = hash,
+                PasswordSalt = salt,
+                Role = UserRole.User,
+                AvatarUrl = p.Picture,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _db.Users.Add(user);
+            await _db.SaveChangesAsync();
+            return user;
+        }
+
+        private async Task<string> MakeUniqueUsernameAsync(string baseName)
+        {
+            var candidate = baseName;
+            var i = 0;
+            while (await _db.Users.AnyAsync(u => u.Username == candidate))
+                candidate = $"{baseName}{++i}";
+            return candidate;
+        }
+
+        // аналогічно  AuthService.CreatePasswordHash
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using var hmac = new HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
 

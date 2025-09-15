@@ -12,6 +12,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
+using SoundCloudWebApi.Services.Abstractions;
+
 namespace SoundCloudWebApi.Services
 {
     public class AuthService : IAuthService
@@ -23,6 +25,11 @@ namespace SoundCloudWebApi.Services
         {
             _db = db;
             _config = config;
+        }
+
+        public string IssueJwtForUser(UserEntity user)
+        {
+            return GenerateJwtToken(user);
         }
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto)

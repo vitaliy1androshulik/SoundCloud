@@ -1,4 +1,3 @@
-// src/services/adminApi.ts
 import api from "../utilities/axiosInstance.ts";
 
 const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5000/api";
@@ -13,7 +12,7 @@ export const adminApi = {
     changeUserRole: (id: number, role: string) => api.put(`${API_URL}/Admin/users/${id}/role`, { role }),
     blockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/block`),
     unblockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/unblock`),
-   //=======================TRACKS===========================
+    // ================= TRACK =================
     getTracks: () => api.get(`${API_URL}/Track/krot`),
     getTrackById: (id: number) => api.get(`${API_URL}/Track/${id}`),
     createTrack: (title: string, duration: string, albumId: number, file: File,cover: File, author:string) => {
@@ -84,7 +83,23 @@ export const adminApi = {
     // ================= CATEGORIES =================
     getCategories: () => api.get(`${API_URL}/Categories`),
     getCategoryById: (id: number) => api.get(`${API_URL}/Categories/${id}`),
-    createCategory: (data: any) => api.post(`${API_URL}/Categories`, data),
-    updateCategory: (id: number, data: any) => api.put(`${API_URL}/Categories/${id}`, data),
+    createCategory: (data: { name: string; slug: string; imageFile?: File }) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("slug", data.slug);
+        if (data.imageFile) formData.append("imageFile", data.imageFile);
+        return api.post(`${API_URL}/Categories`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+    },
+    updateCategory: (id: number, data: { name: string; slug: string; imageFile?: File }) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("slug", data.slug);
+        if (data.imageFile) formData.append("imageFile", data.imageFile);
+        return api.put(`${API_URL}/Categories/${id}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+    },
     deleteCategory: (id: number) => api.delete(`${API_URL}/Categories/${id}`),
 };

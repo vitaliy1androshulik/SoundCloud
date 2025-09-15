@@ -2,6 +2,8 @@
 using SoundCloudWebApi.Models.Auth;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Google.Apis.Auth;
+
 
 namespace SoundCloudWebApi.Services.Interfaces
 {
@@ -26,7 +28,9 @@ namespace SoundCloudWebApi.Services.Interfaces
         // Зміна ролі користувача
         Task ChangeRoleAsync(int userId, UserRole newRole);
 
-        // Оновлення аватара користувача
         Task SetAvatarAsync(int userId, string url);
+        Task<UserEntity> FindOrCreateFromGoogleAsync(GoogleJsonWebSignature.Payload payload);
+
+
     }
 }

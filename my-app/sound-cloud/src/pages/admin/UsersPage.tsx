@@ -47,17 +47,25 @@ const UsersPage = () => {
             const values = await form.validateFields();
 
             if (editingUser) {
-
                 const { password, confirmPassword, ...updateData } = values;
                 await adminApi.updateUser(editingUser.id, updateData);
                 message.success("Користувача оновлено");
             } else {
-                // При створенні користувача обов'язково password і confirmPassword
+                // Створення нового користувача: обов'язково password та confirmPassword
+                if (!values.password || !values.confirmPassword) {
+                    message.error("Введіть пароль та підтвердження");
+                    return;
+                }
                 if (values.password !== values.confirmPassword) {
                     message.error("Паролі не співпадають");
                     return;
                 }
-                await adminApi.createUser(values);
+                await adminApi.createUser({
+                    username: values.username,
+                    email: values.email,
+                    password: values.password,
+                    confirmPassword: values.confirmPassword,
+                });
                 message.success("Користувача створено");
             }
 
@@ -67,6 +75,7 @@ const UsersPage = () => {
             loadUsers();
         } catch (error) {
             message.error("Не вдалося виконати операцію");
+            console.log(error);
         }
     };
 
@@ -140,8 +149,6 @@ const UsersPage = () => {
                             </Form.Item>
                         </>
                     )}
-
-
                 </Form>
             </Modal>
         </>
