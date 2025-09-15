@@ -78,13 +78,13 @@ const LoginSignup: React.FC = () => {
 
     //--- Додано: обробка Google Login ---
     const handleGoogleLogin = async (credentialResponse: any) => {
-        if (!credentialResponse.credential) return;
 
+        console.log("Google login response:", credentialResponse.access_token);
         try {
             const res = await fetch("http://localhost:5122/auth/google", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: credentialResponse.credential }),
+                body: JSON.stringify({ token: credentialResponse.access_token }),
             });
 
             if (!res.ok) {
@@ -97,8 +97,8 @@ const LoginSignup: React.FC = () => {
 
             // Зберігаємо користувача
             const user = data; // payload з бекенду
-            localStorage.setItem("token", credentialResponse.credential);
-            dispatch(setUser({ user, token: credentialResponse.credential }));
+            localStorage.setItem("token", credentialResponse.access_token);
+            dispatch(setUser({ user, token: credentialResponse.access_token }));
             alert("Логін через Google успішний!");
             navigate("/home");
         } catch (error) {
@@ -156,7 +156,8 @@ const LoginSignup: React.FC = () => {
 
                                         <button
                                             type="button"
-                                             // запускає Google OAuth
+                                            onClick={()=>googleLogin()}
+                                            // запускає Google OAuth
                                             className="login_third_google_button baloo2"
                                         >
                                             <img
@@ -176,7 +177,7 @@ const LoginSignup: React.FC = () => {
                                         className="login_fourth_login_container"
                                         noValidate
                                     >
-                                    <div className="login_fourth_text_or baloo2">
+                                        <div className="login_fourth_text_or baloo2">
                                             <label>OR</label>
                                         </div>
                                         {!isLogin && (
@@ -300,7 +301,7 @@ const LoginSignup: React.FC = () => {
 
                                 </div>
                             ): (
- ///////////////////////////////////////////////////////////////////////////////////
+                                ///////////////////////////////////////////////////////////////////////////////////
                                 <div className="signin_form_container">
                                     <div className="login_first_close_container">
                                         <button
@@ -317,17 +318,17 @@ const LoginSignup: React.FC = () => {
                                     </div>
                                     <div className="login_third_google_facebook_container">
 
-                                                <button
-                                                    onClick={()=>googleLogin()}
-                                                    className="login_third_google_button baloo2"
-                                                >
-                                                    <img
-                                                        src="src/images/icons/google_icon.png"
-                                                        alt="google_icon"
-                                                        className="w-5 h-5"
-                                                    />
-                                                    Sign in with Google
-                                                </button>
+                                        <button
+                                            onClick={()=>googleLogin()}
+                                            className="login_third_google_button baloo2"
+                                        >
+                                            <img
+                                                src="src/images/icons/google_icon.png"
+                                                alt="google_icon"
+                                                className="w-5 h-5"
+                                            />
+                                            Sign in with Google
+                                        </button>
                                         <button className="login_third_google_button baloo2"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
                                             Facebook
@@ -339,7 +340,7 @@ const LoginSignup: React.FC = () => {
                                         noValidate
                                         autoComplete="off"
                                     >
-                                    <div className="login_fourth_text_or baloo2">
+                                        <div className="login_fourth_text_or baloo2">
                                             <label>OR</label>
                                         </div>
                                         {!isLogin && (
