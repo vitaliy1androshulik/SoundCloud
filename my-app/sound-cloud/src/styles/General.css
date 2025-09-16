@@ -20,6 +20,7 @@
 }
 
 .content {
-    flex: 2;
+    flex:1;
+    top:20px;
 }
 

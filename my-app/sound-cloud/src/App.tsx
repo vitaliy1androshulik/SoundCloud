@@ -5,6 +5,7 @@ import Layout_login_page from "./components/login_signup_components/Layout_login
 import HomePage from "./pages/main_pages/HomePage";
 import LoginSignup from "./pages/login_signup/Login_Signup";
 import LibraryPage from "./pages/main_pages/LibraryPage.tsx";
+import ProfilePage from "./pages/profile/ProfilePage.tsx";
 import './index.css';
 import FeedPage from "./pages/main_pages/FeedPage.tsx";
 import {useDispatch} from "react-redux";
@@ -48,6 +49,7 @@ export default function App() {
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/feed" element={<FeedPage />} />
                     <Route path="/library" element={<LibraryPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
                 </Route>
 
                 {/*  Адмінка (ОКРЕМО, без Layout) */}

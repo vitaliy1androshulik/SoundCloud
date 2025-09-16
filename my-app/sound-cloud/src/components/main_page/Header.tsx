@@ -5,24 +5,30 @@ import {useDispatch} from "react-redux";
 import {logout} from "../../store/slices/userSlice.ts";
 import '../../styles/main_pages/header.css';
 import {IUser} from "../../types/user.ts";
-import {getCurrentUser} from "../../services/User/UserProfile.tsx";
+import {getCurrentUser} from "../../services/User/user_info.ts";
 const Header: React.FC = () => {
     const [active, setActive] = useState<string>("home");
     const [user, setUser] = useState<IUser | null>(null);
+
+    const [open, setOpen] = useState(false);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [isLogin, setIsLogin] = useState(false); // створюємо state
     useEffect(() => {
         getCurrentUser()
             .then((data) => setUser(data))
             .catch((err) => console.error(err));
     }, []);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
-    const [isLogin, setIsLogin] = useState(false); // створюємо state
     const getUserImageUrl = (user?: IUser | null) => {
         if (!user || !user.avatar) return "/default-cover.png";
-        return `http://localhost:5122${user.avatar}`;
+        return `http://localhost:5122/${user.avatar}`;
     };
     console.log("Avatar "+ user?.avatar);
+
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         setIsLogin(!!token);
@@ -31,7 +37,6 @@ const Header: React.FC = () => {
     {
         dispatch(logout());
         logout();
-        alert("Ви вийшли з аккаунту!");
         navigate("/");
     }
     console.log("header user", user);
@@ -75,19 +80,74 @@ const Header: React.FC = () => {
                         <div className="header_profile_container_main">
                             {isLogin ? (
                                 <div>
-                                    <div className="baloo2 header_profile_image_container">
-                                        <div className="user_avatar">
-                                            {user?.avatar ? (
+                                    <div className="header_profile_container_main">
+                                        <div className="baloo2 header_profile_image_container">
+                                            <div className="user_avatar">
+                                                {user?.avatar ? (
 
-                                                <img className="image_container_user" src={getUserImageUrl(user)}
-                                                     alt="people" width="32" height="32"/>
-                                            ) : (
-                                                <img className="image_container_user"
-                                                     src="src/images/search_bar/people.png"
-                                                     alt="people" width="22" height="22"/>
+                                                    <img className="image_container_user" src={getUserImageUrl(user)}
+                                                         alt="people" width="32" height="32"/>
+                                                ) : (
+                                                    <img className="image_container_user"
+                                                         src="src/images/search_bar/people.png"
+                                                         alt="people" width="22" height="22"/>
+                                                )}
+                                            </div>
+                                            <div
+                                                className="user_drop_bar cursor-pointer"
+                                                onClick={() => setOpen((prev) => !prev)}
+                                            >
+                                                <img
+                                                    src="src/images/icons/white_arrow_down.png"
+                                                    className="search_logo_home_page"
+                                                    alt="arrow"
+                                                />
+                                            </div>
+                                            {open && (
+                                                <div className="absolute right-16 top-full mt-2 w-40 bg-darkpurple rounded-lg shadow-lg z-50">
+                                                    <ul className="flex flex-col text-gray-800">
+                                                        <li className="flex flex-row items-center gap-2 px-4 py-2
+                                                        font-semibold hover:bg-purple cursor-pointer rounded-lg text-lightpurple"
+                                                            onClick={() => {
+                                                                navigate("/profile");
+                                                                setOpen(prev => !prev);
+                                                            }}>
+                                                            <img
+                                                                src="src/images/icons/profile.png"
+                                                                width="20px"
+                                                                height="20px"
+                                                                alt="arrow"
+                                                            />
+                                                            Profile
+                                                        </li>
+                                                        <li className="flex flex-row items-center gap-2 px-4 py-2 px-4 py-2
+                                                        font-semibold hover:bg-purple cursor-pointer rounded-lg text-lightpurple"
+                                                        onClick={() => Logout()}
+                                                        >
+                                                            <img
+                                                                src="src/images/icons/logout.png"
+                                                                width="20px"
+                                                                height="20px"
+                                                                alt="arrow"
+                                                            />
+                                                            Logout
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             )}
                                         </div>
-                                        <button onClick={() => Logout()}></button>
+                                        <div className="message_information_container baloo2">
+                                            <div className="user_drop_bar">
+                                                <img src="src/images/icons/email.png"
+                                                     className="search_logo_home_page"
+                                                     alt="search"/>
+                                            </div>
+                                            <div className="user_drop_bar">
+                                                <img src="src/images/icons/information.png"
+                                                     className="search_logo_home_page"
+                                                     alt="search"/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="search_container_home_page">
                                         <div className="search_bar_home_page">

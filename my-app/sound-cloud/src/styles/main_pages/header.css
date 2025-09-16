@@ -11,7 +11,7 @@
     position: absolute;
     width: 1568px;
     height: 44px;
-    left: 176px;
+    left: 164px;
     top: 25px;
 
 }
@@ -66,7 +66,7 @@
     gap: 24px;
     width: 398px;
     height: 44px;
-
+    margin-left:120px;
 
     /* Inside auto layout */
     flex: none;
@@ -102,7 +102,6 @@
     background: #C9D4FF;
     border-radius: 50%; /* робимо круглим */
     overflow: hidden;
-
     /* Inside auto layout */
     flex: none;
     order: 0;
@@ -114,6 +113,48 @@
     object-fit: cover; /* картинка заповнює контейнер і обрізається */
     display: block;
 }
+.user_drop_bar{
+    /* ic:outline-keyboard-arrow-down */
+
+    width: 32px;
+    height: 32px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.user_drop_bar:hover{
+    cursor: pointer;
+}
+.user_side_bar{
+    flex-direction: row;
+}
+.message_information_container{
+    /* Frame 26080064 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 109px;
+    height: 32px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+
+
 
 .button_hover_signup:hover{
     background-color: #abbcff;
