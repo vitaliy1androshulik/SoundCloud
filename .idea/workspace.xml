@@ -5,15 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa59627e-8d88-4950-ad18-4353f46a4494" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/1a65941e-c075-489e-bbc0-2b20a1a4eab4.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/1d5ef098-5e63-4329-926c-e8f93c6bdeb3.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/39904729-82f6-4c47-a1f5-f991f8146469.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/3db07bcd-f3cb-43d9-a4a6-4b5b4719451d.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/646f6d46-2a5d-4300-bbfc-89ac2d1e5146.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/66c50844-9715-4a07-9d48-3e09349e8767.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/78adfa4c-a351-4c07-ba95-8510e46c2e69.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/95e9227d-a798-4a0d-98cd-dbe9500ae365.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/97b18004-a7be-42b7-9f45-b9f6a3bab684.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/b96d83cf-a50f-4579-9d6d-9e7bf867d277.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/082d4a7f-3dd4-4a87-8023-8ca38250e9bc.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/14948473-bd23-4040-92e6-1dfcf24b18f3.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/192417ae-54d0-435a-a2d3-8d4b395bfde5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/5f5c03fd-23f1-4ad0-9ef0-f53819c1c7d5.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/64943ef6-cd01-480d-b0fe-ea989c74f1d2.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/8be888f9-9e0a-484b-b983-723d5c60d150.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/b05efbe8-eff6-46ab-84cd-b64932ab993a.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/b89f9ada-83b1-4674-b8cc-231d680fcb11.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/e09264bb-f1f3-4b1a-b40c-0c4685bef0fa.jfif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/cover/e84883d2-e21f-46fe-b054-2eb9a57cc328.jfif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/UserEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/UserEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/User/UserProfile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/User/user_info.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/header.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,12 +57,12 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "profile-page",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Users\\Mykola\\WebstormProjects\\SoundCloud\\my-app\\sound-cloud\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -79,5 +94,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

@@ -58,7 +58,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 .Include(t => t.Album).ThenInclude(a => a.Owner)
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
-                .Where(t => t.Album.OwnerId == actorId && !t.IsHidden)
+                .Where(t => t.AuthorId == actorId && !t.IsHidden)
                 .Select(t => new TrackDto
                 {
                     Id = t.Id,
