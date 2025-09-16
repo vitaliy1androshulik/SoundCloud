@@ -41,5 +41,7 @@ namespace SoundCloudWebApi.Data.Entities
 
         public ICollection<AlbumEntity>? Albums { get; set; }
         public ICollection<PlaylistEntity>? Playlists { get; set; }
+
+
     }
 }
