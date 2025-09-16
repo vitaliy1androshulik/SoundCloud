@@ -46,12 +46,12 @@ namespace SoundCloudWebApi.Controllers
 
         [HttpPost]
         [SwaggerOperation(
-            OperationId = "CreatePlaylist",
-            Summary = "Створити новий плейлист")]
+        OperationId = "CreatePlaylist",
+        Summary = "Створити новий плейлист")]
         public async Task<IActionResult> Create([FromBody] CreatePlaylistDto dto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var created = await _playlistService.CreateAsync(dto, userId);
+            var created = await _playlistService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -59,7 +59,7 @@ namespace SoundCloudWebApi.Controllers
         [SwaggerOperation(
             OperationId = "UpdatePlaylist",
             Summary = "Оновити плейлист за ID")]
-        public async Task<IActionResult> Update(int id, [FromBody] PlaylistDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] CreatePlaylistDto dto)
         {
             await _playlistService.UpdateAsync(id, dto);
             return NoContent();

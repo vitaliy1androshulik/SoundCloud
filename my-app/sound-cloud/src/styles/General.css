@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
 
-.button_hover_signup:hover{
-    background-color: #abbcff;
-}
-.button_hover_create_account:hover{
-    background-color: #6f5ddd;
-}
+
 .navigation-text-color
 {
     color:#909a9b
@@ -20,8 +15,11 @@
     flex-direction: column;
     min-height: 100vh;
 }
+.header {
+    flex:1;
+}
 
 .content {
-    flex: 1;
+    flex: 2;
 }
 

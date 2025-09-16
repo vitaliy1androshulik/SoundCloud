@@ -8,6 +8,7 @@ namespace SoundCloudWebApi.Data.Entities
         Moderator,
         Admin
     }
+
     public class UserEntity
     {
         [Key]
@@ -26,12 +27,17 @@ namespace SoundCloudWebApi.Data.Entities
 
         [Required]
         public byte[] PasswordSalt { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public UserRole Role { get; set; } = UserRole.User;
         public bool IsBlocked { get; set; } = false;
         public string? AvatarUrl { get; set; }
-        //нові:
-        public DateTime? UpdatedAt { get; set; }   // ← оновлюємо в сервісах при змінах профілю/аватара
+
+        // нові
+        public DateTime? UpdatedAt { get; set; }
+
+        // зв’язок: один юзер має багато треків
+        public ICollection<TrackEntity>? Tracks { get; set; }
 
         public ICollection<AlbumEntity>? Albums { get; set; }
         public ICollection<PlaylistEntity>? Playlists { get; set; }

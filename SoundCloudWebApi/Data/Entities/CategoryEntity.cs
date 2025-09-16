@@ -11,6 +11,8 @@ namespace SoundCloudWebApi.Data.Entities
 
         [Required, MaxLength(100)]
         public string Slug { get; set; } = string.Empty;
+        public int PlayCount { get; set; } = 0;
+
 
         public string? ImageUrl { get; set; }   // шлях до картинки 
     }

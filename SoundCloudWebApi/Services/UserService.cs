@@ -65,6 +65,7 @@ namespace SoundCloudWebApi.Services
                     Username = u.Username,
                     Email = u.Email,
                     CreatedAt = u.CreatedAt,
+                    AvatarUrl = u.AvatarUrl,
                     Role = u.Role
                 })
                 .FirstOrDefaultAsync()

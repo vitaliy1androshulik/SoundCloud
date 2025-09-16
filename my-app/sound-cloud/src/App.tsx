@@ -1,6 +1,6 @@
 // App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout.tsx";
+import Layout from "./components/main_page/Layout.tsx";
 import Layout_login_page from "./components/login_signup_components/Layout_login_page.tsx";
 import HomePage from "./pages/main_pages/HomePage";
 import LoginSignup from "./pages/login_signup/Login_Signup";

@@ -12,6 +12,6 @@ public class GenreEntity
     [Required]
     [MaxLength(100)]
     public string Name { get; set; } // Назва жанру
-
+    public int PlayCount { get; set; } = 0;
 
 }

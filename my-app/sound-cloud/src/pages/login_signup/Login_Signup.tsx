@@ -317,7 +317,6 @@ const LoginSignup: React.FC = () => {
                                         <h1>{isLogin ? "Sign into your account" : "Sign Up"}</h1>
                                     </div>
                                     <div className="login_third_google_facebook_container">
-
                                         <button
                                             onClick={()=>googleLogin()}
                                             className="login_third_google_button baloo2"

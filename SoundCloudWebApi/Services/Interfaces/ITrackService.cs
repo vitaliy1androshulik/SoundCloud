@@ -9,28 +9,40 @@ namespace SoundCloudWebApi.Services.Interfaces
     /// </summary>
     public interface ITrackService
     {
-        //Task<IEnumerable<TrackDto>> GetAllAsync(int userId);
+        // Отримати всі треки
         Task<IEnumerable<TrackDto>> GetAllAsync();
-        Task<TrackDto?> GetByIdAsync(int id);
-        //Task<TrackDto> CreateAsync(CreateTrackDto dto, int userId);
-        Task<IEnumerable<TrackDto>> GetAllTracksAsync();
-        Task<TrackDto> CreateAsync(CreateTrackDto dto);
-        Task<TrackDto> CreateAsyncFile(CreateTrackDto dto);
-        Task UpdateAsync(int trackId, UpdateTrackDto dto);
 
+        // Отримати трек за ID
+        Task<TrackDto?> GetByIdAsync(int id);
+
+        // Отримати всі треки (для фронтенду)
+        Task<IEnumerable<TrackDto>> GetAllTracksAsync();
+
+        // Створити трек (DTO містить AuthorId)
+        Task<TrackDto> CreateAsync(CreateTrackDto dto);
+
+        // Створення треку з файлом
+        Task<TrackDto> CreateAsyncFile(CreateTrackDto dto);
+
+        // Оновити трек
+        Task<TrackDto> UpdateAsync(int trackId, UpdateTrackDto dto);
+
+        // Видалити трек
         Task DeleteAsync(int trackId);
 
+        // Приховати/показати трек
         Task HideAsync(int id);
         Task UnhideAsync(int id);
+
+        // Оновити обкладинку
         Task SetImageAsync(int trackId, string imageUrl);
 
-        // НОВЕ:
-        Task AddListenAsync(int trackId, int userId);
+        // Лічильник прослуховувань та лайків
         Task LikeAsync(int trackId, int userId);
         Task UnlikeAsync(int trackId, int userId);
-
+        Task AddListenAsync(int trackId);
+        // Статистика
         Task<TrackStatsDto> GetTrackStatsAsync(int trackId);
         Task<AuthorStatsDto> GetAuthorStatsAsync(int authorId);
-
     }
 }

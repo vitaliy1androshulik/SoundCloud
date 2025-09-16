@@ -12,14 +12,35 @@ export const adminApi = {
     changeUserRole: (id: number, role: string) => api.put(`${API_URL}/Admin/users/${id}/role`, { role }),
     blockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/block`),
     unblockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/unblock`),
-
-
     // ================= TRACK =================
-
     getTracks: () => api.get(`${API_URL}/Track/krot`),
     getTrackById: (id: number) => api.get(`${API_URL}/Track/${id}`),
-    createTrack: (data: any) => api.post(`${API_URL}/Track`, data),
-    updateTrack: (id: number, data: any) => api.put(`${API_URL}/Track/${id}`, data),
+    createTrack: (title: string, duration: string, albumId: number, file: File,cover: File, author:string) => {
+        const formData = new FormData();
+        formData.append("Title", title);
+        formData.append("Duration", duration);
+        formData.append("AlbumId", albumId.toString());
+        formData.append("File", file);
+        formData.append("Cover", cover);
+        formData.append("Author", author);
+
+        return api.post(`${API_URL}/Track/create`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+    },
+    updateTrack: (id: number, data: any) => {
+        const formData = new FormData();
+
+        Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+        });
+
+        return api.put(`${API_URL}/Track/update/${id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
     deleteTrack: (id: number) => api.delete(`${API_URL}/Track/${id}`),
     hideTrack: (id: number) => api.patch(`${API_URL}/Track/${id}/hide`),
     unhideTrack: (id: number) => api.patch(`${API_URL}/Track/${id}/unhide`),

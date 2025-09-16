@@ -47,7 +47,6 @@ const UsersPage = () => {
             const values = await form.validateFields();
 
             if (editingUser) {
-                // Редагування без пароля
                 const { password, confirmPassword, ...updateData } = values;
                 await adminApi.updateUser(editingUser.id, updateData);
                 message.success("Користувача оновлено");

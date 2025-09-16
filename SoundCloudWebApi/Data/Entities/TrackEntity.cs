@@ -13,12 +13,21 @@ namespace SoundCloudWebApi.Data.Entities
         [MaxLength(200)]
         public string Title { get; set; }
 
+        // Автор як UserEntity (обов’язковий)
+        [Required]
+        public int AuthorId { get; set; }
+        public UserEntity Author { get; set; }
+
         // Тривалість треку
+        [Required]
         public TimeSpan Duration { get; set; }
 
         // URL або шлях до файлу
         [Required]
         public string Url { get; set; }
+
+        // Лічильник прослуховувань
+        public int PlayCount { get; set; } = 0;
 
         // Для модерації: якщо прихований — не показуємо
         public bool IsHidden { get; set; } = false;
@@ -31,15 +40,11 @@ namespace SoundCloudWebApi.Data.Entities
         public ICollection<PlaylistEntity> Playlists { get; set; }
         public string? ImageUrl { get; set; }
 
-        //нові: 
+        // нові
         public int? GenreId { get; set; }
         public GenreEntity? Genre { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public int? UpdatedById { get; set; }
-
-
-
-
     }
 }

@@ -4,10 +4,78 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1221dcc-436a-4c6b-a691-cd516a9a8596" name="Changes" comment="">
+
+    <list default="true" id="fa59627e-8d88-4950-ad18-4353f46a4494" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/store/player_store.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/header.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/player/player.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/player_context.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/GoogleAuthenticationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/GoogleAuthenticationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/PlaylistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/PlaylistController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/AlbumEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/AlbumEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/CategoryEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/CategoryEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/GenreEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/GenreEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/TrackEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/TrackEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/UserEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/UserEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/SoundCloudDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/SoundCloudDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Migrations/SoundCloudDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Migrations/SoundCloudDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/AlbumDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/AlbumDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/CreateAlbumDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/CreateAlbumDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Category/CategoryCreateModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Category/CategoryCreateModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Category/CategoryDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Category/CategoryDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Category/CategoryUpdateModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Category/CategoryUpdateModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/CreatePlaylistDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/CreatePlaylistDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/PlaylistDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/PlaylistDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/CreateTrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/CreateTrackDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackStatsDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackStatsDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/UpdateTrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/UpdateTrackDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/AlbumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/AlbumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/CategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/CategoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/PlaylistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/PlaylistService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IAlbumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IAlbumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IPlaylistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IPlaylistService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/ITrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/ITrackService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IUserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/SoundCloudWebApi.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/SoundCloudWebApi.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Validators/Track/UpdateTrackValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Validators/Track/UpdateTrackValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/04288a0b-2300-4930-9052-6266b13bd03d.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/19770f04-51d7-494c-be41-8a5297853fb1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/3f6c5486-5185-4465-9ae6-e77db4a4c3e5.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/514709f3-ea3b-4b9a-abc4-f52c80671fd0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/5b2ad1fa-409c-4216-b794-30dc517a09b7.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/6350c4bf-dc59-46cb-9de5-b9a23ada2bd0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/823c0a44-69a6-441a-83a2-2d1b30164ca2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/86eb9296-e601-4970-a703-1208cacbe9d6.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/wwwroot/uploads/tracks/d73f698a-e5fc-4f65-9cc7-57e15cb0381a.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/TracksPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/TracksPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/UsersPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/admin/UsersPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/login_signup/Login_Signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/adminApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/adminApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/General.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/footer.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/home_page/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/home_page/layout.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/login_signup_form.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/login_signup/login_signup_form.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/types/track.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/track.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/tailwind.config.js" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,12 +83,20 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
+
+  "customColor": "",
+  "associatedIndex": 6
 }]]></component>
-  <component name="ProjectId" id="32keyIG0Iu4wbVM3scLcyjrM5kJ" />
+  <component name="ProjectId" id="32jU6tg9s5GmvUVNGhLYHIiI6Lk" />
+
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -38,6 +114,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\SoundColud\my-app\sound-cloud\src\styles\main_pages" />
+      <recent name="H:\SoundColud\my-app\sound-cloud\src\components\main_page" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -48,12 +130,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a1221dcc-436a-4c6b-a691-cd516a9a8596" name="Changes" comment="" />
-      <created>1757969265177</created>
+      <changelist id="fa59627e-8d88-4950-ad18-4353f46a4494" name="Changes" comment="" />
+      <created>1757933307172</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1757969265177</updated>
-      <workItem from="1757969276902" duration="2698000" />
+      <updated>1757933307172</updated>
+      <workItem from="1757933309262" duration="26488000" />
     </task>
     <servers />
   </component>

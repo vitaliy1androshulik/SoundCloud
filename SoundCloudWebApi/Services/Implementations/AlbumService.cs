@@ -65,16 +65,22 @@ namespace SoundCloudWebApi.Services.Implementations
             };
         }
 
-        public async Task<AlbumDto> CreateAsync(CreateAlbumDto dto, int userId)
+        public async Task<AlbumDto> CreateAsync(CreateAlbumDto dto)
         {
+            var (actorId, _) = GetActor();  // отримуємо поточного користувача
+
+            var owner = await _db.Users.FindAsync(actorId)
+                        ?? throw new KeyNotFoundException($"User {actorId} не знайдено");
 
             var entity = new AlbumEntity
             {
                 Title = dto.Title,
                 Description = dto.Description,
                 CreatedAt = DateTime.UtcNow,
-                OwnerId = userId
+                OwnerId = actorId,
+                Owner = owner
             };
+
             _db.Albums.Add(entity);
             await _db.SaveChangesAsync();
 
@@ -83,20 +89,26 @@ namespace SoundCloudWebApi.Services.Implementations
                 Id = entity.Id,
                 Title = entity.Title,
                 Description = entity.Description,
-                CreatedAt = entity.CreatedAt
+                CreatedAt = entity.CreatedAt,
+                OwnerName = owner.Username
             };
         }
 
-        public async Task UpdateAsync(int id, AlbumDto dto)
+        public async Task UpdateAsync(int albumId, CreateAlbumDto dto)
         {
             var (actorId, actorRole) = GetActor();
-            var a = await _db.Albums.FindAsync(id)
-                    ?? throw new KeyNotFoundException($"Album {id} не знайдено");
-            if (actorRole != UserRole.Admin && a.OwnerId != actorId)
+
+            var album = await _db.Albums.FindAsync(albumId)
+                ?? throw new KeyNotFoundException($"Album {albumId} не знайдено");
+
+            if (actorRole != UserRole.Admin && album.OwnerId != actorId)
                 throw new UnauthorizedAccessException("You are not owner of this album");
-            a.Title = dto.Title;
-            a.Description = dto.Description;
-            // CreatedAt це як парвило не змінюєм
+
+            album.Title = dto.Title;
+            album.Description = dto.Description;
+            album.UpdatedAt = DateTime.UtcNow;
+            album.UpdatedById = actorId;
+
             await _db.SaveChangesAsync();
         }
 
