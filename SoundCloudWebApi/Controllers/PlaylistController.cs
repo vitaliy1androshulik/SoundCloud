@@ -44,11 +44,37 @@ namespace SoundCloudWebApi.Controllers
             return Ok(playlist);
         }
 
+        //
+
+
+        [HttpPost("{id:int}/tracks/{trackId:int}")]
+        [SwaggerOperation(
+        OperationId = "AddTrackToPlaylist",
+        Summary = "Додати трек у плейліст")]
+        public async Task<IActionResult> AddTrack(int id, int trackId)
+        {
+            await _playlistService.AddTrackAsync(id, trackId);
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}/tracks/{trackId:int}")]
+        [SwaggerOperation(
+            OperationId = "RemoveTrackFromPlaylist",
+            Summary = "Видалити трек з плейліста")]
+        public async Task<IActionResult> RemoveTrack(int id, int trackId)
+        {
+            await _playlistService.RemoveTrackAsync(id, trackId);
+            return NoContent();
+        }
+
+
+        //
+
         [HttpPost]
         [SwaggerOperation(
         OperationId = "CreatePlaylist",
         Summary = "Створити новий плейлист")]
-        public async Task<IActionResult> Create([FromBody] CreatePlaylistDto dto)
+        public async Task<IActionResult> Create([FromForm] CreatePlaylistDto dto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var created = await _playlistService.CreateAsync(dto);
@@ -59,7 +85,7 @@ namespace SoundCloudWebApi.Controllers
         [SwaggerOperation(
             OperationId = "UpdatePlaylist",
             Summary = "Оновити плейлист за ID")]
-        public async Task<IActionResult> Update(int id, [FromBody] CreatePlaylistDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] CreatePlaylistDto dto)
         {
             await _playlistService.UpdateAsync(id, dto);
             return NoContent();
@@ -93,10 +119,24 @@ namespace SoundCloudWebApi.Controllers
             var url = await storage.SaveAsync(file, "playlists"); // збережеться у /wwwroot/uploads/playlists/...
 
             // Оновити в БД обкладинку цього плейлиста (перевірка власника всередині сервісу)
-            await _playlistService.SetCoverAsync(id, url);
+            await _playlistService.SetCoverAsync(id, file );
 
             return Ok(new { coverUrl = url });
         }
+
+        [HttpGet("{playlistId:int}/tracks")]
+        [SwaggerOperation(
+        OperationId = "GetTracksByPlaylist",
+        Summary = "Отримати всі треки певного плейлиста")]
+        public async Task<IActionResult> GetTracksByPlaylist(int playlistId)
+        {
+            var tracks = await _playlistService.GetTracksByPlaylistAsync(playlistId);
+            if (tracks == null || !tracks.Any())
+                return NotFound("Tracks not found for this playlist");
+
+            return Ok(tracks);
+        }
+
 
 
 

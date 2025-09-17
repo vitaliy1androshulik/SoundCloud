@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
-namespace SoundCloudWebApi.Models.Playlist
+public class CreatePlaylistDto
 {
-    public class CreatePlaylistDto
-    {
-        [Required]
-        [MaxLength(200)]
-        public string Name { get; set; }
+    [Required]
+    [MaxLength(200)]
+    public string Name { get; set; }
 
-        // Власник (обов'язковий)
-        [Required]
-        public int OwnerId { get; set; }
-    }
+    // Власник
+    [Required]
+    public int OwnerId { get; set; }
+
+    // Файл обкладинки
+    public IFormFile? Cover { get; set; }
 }
