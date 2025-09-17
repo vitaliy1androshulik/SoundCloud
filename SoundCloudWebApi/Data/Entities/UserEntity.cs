@@ -32,12 +32,13 @@ namespace SoundCloudWebApi.Data.Entities
         public UserRole Role { get; set; } = UserRole.User;
         public bool IsBlocked { get; set; } = false;
         public string? AvatarUrl { get; set; }
-
+           
         // нові
         public DateTime? UpdatedAt { get; set; }
 
         // зв’язок: один юзер має багато треків
         public ICollection<TrackEntity>? Tracks { get; set; }
+        public ICollection<TrackListenEntity>? TrackPlays { get; set; }
 
         public ICollection<AlbumEntity>? Albums { get; set; }
         public ICollection<PlaylistEntity>? Playlists { get; set; }

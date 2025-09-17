@@ -1,14 +1,13 @@
-
-
-.player_container{
+.player_player_container{
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: start;
     padding: 12px 32px;
     gap: 50px;
 
     position: absolute;
+
     width: 1568px;
     height: 79px;
     left: 176px;
@@ -17,7 +16,7 @@
     background: #344289;
     border-radius: 100px;
 }
-.track_container{
+.player_track_container{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -33,7 +32,7 @@
     flex-grow: 0;
 
 }
-.track_image{
+.player_track_image{
     width: 52.72px;
     height: 53.77px;
 
@@ -43,7 +42,7 @@
     order: 0;
     flex-grow: 0;
 }
-.track_title_container{
+.player_track_title_container{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -56,7 +55,7 @@
     order: 1;
     flex-grow: 0;
 }
-.track_title{
+.player_track_title{
     /* Take the Lead */
 
     width: 220px;
@@ -76,7 +75,7 @@
     flex-grow: 0;
 
 }
-.track_author{
+.player_track_author{
 
     width: 220px;
     height: 17px;
@@ -308,4 +307,8 @@
     cursor: pointer;
     margin-top: -3px; /* щоб центрувати по треку */
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* тінь для кращого вигляду */
+}
+
+#hover_cursor_player:hover {
+    cursor: pointer;
 }

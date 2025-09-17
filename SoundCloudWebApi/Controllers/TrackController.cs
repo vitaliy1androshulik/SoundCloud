@@ -65,12 +65,7 @@ namespace SoundCloudWebApi.Controllers
             var track = await _trackService.CreateAsyncFile(dto);
             return Ok(track);
         }
-        [HttpPost("{id:int}/listen")]
-        public async Task<IActionResult> Listen(int id)
-        {
-            await _trackService.AddListenAsync(id);
-            return Ok(new { trackId = id, status = "listen-registered" });
-        }
+
         // ===== Оновлення треку =====
         [HttpPut("{id:int}")]
         [SwaggerOperation(OperationId = "UpdateTrack", Summary = "Оновити трек за ID")]
@@ -149,6 +144,15 @@ namespace SoundCloudWebApi.Controllers
             var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
             await _trackService.UnlikeAsync(id, userId);
             return Ok(new { trackId = id, status = "unliked" });
+        }
+
+
+        [HttpPost("{trackId}/play")]
+        public async Task<IActionResult> PlayTrack(int trackId)
+        {
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value); // витягуєш з JWT
+            await _trackService.AddPlayAsync(trackId);
+            return Ok();
         }
 
         // ===== Статистика =====

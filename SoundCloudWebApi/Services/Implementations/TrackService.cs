@@ -35,14 +35,38 @@ namespace SoundCloudWebApi.Services.Implementations
 
 
 
-        public async Task AddListenAsync(int trackId)
+        public async Task AddPlayAsync(int trackId)
         {
-            var track = await _db.Tracks.FindAsync(trackId);
-            if (track == null)
-                throw new KeyNotFoundException("Track not found");
+            // Знаходимо трек у базі
+            var track = await _db.Tracks
+                .FirstOrDefaultAsync(t => t.Id == trackId);
 
-            // Збільшуємо лічильник
+            if (track == null)
+                throw new Exception("Track not found");
+
+            var ownerId = track.AuthorId; // id користувача, який створив трек
+
+            // Додаємо одне прослуховування до самого треку
             track.PlayCount += 1;
+
+            // Шукаємо існуючий запис TrackListen для власника
+            var listen = await _db.TrackListens
+                .FirstOrDefaultAsync(x => x.TrackId == trackId && x.UserId == ownerId);
+
+            if (listen != null)
+            {
+                listen.PlayCount = track.PlayCount;
+            }
+            else
+            {
+                listen = new TrackListenEntity
+                {
+                    TrackId = trackId,
+                    UserId = ownerId,
+                    PlayCount = 1
+                };
+                await _db.TrackListens.AddAsync(listen);
+            }
 
             await _db.SaveChangesAsync();
         }
@@ -511,30 +535,42 @@ namespace SoundCloudWebApi.Services.Implementations
 
         public async Task<TrackStatsDto> GetTrackStatsAsync(int trackId)
         {
+            // Підвантажуємо трек разом з автором
             var track = await _db.Tracks
-                .Include(t => t.PlayCount)
+                .Include(t => t.Author) // навігаційна властивість
                 .FirstOrDefaultAsync(t => t.Id == trackId);
 
-            if (track == null) throw new KeyNotFoundException($"Track {trackId} not found");
+            if (track == null)
+                throw new KeyNotFoundException($"Track {trackId} not found");
 
             return new TrackStatsDto
             {
-                TrackId = trackId,
+                TrackId = track.Id,
+                Title = track.Title,
+                AuthorId = track.AuthorId,
+                AuthorName = track.Author?.Username,
+                AuthorAvatarUrl = track.Author?.AvatarUrl,
                 PlayCount = track.PlayCount
             };
         }
 
         public async Task<AuthorStatsDto> GetAuthorStatsAsync(int authorId)
         {
-            var tracks = await _db.Tracks
-                .Include(t => t.PlayCount)
+            var author = await _db.Users
+                .FirstOrDefaultAsync(u => u.Id == authorId);
+
+            if (author == null) throw new KeyNotFoundException($"Author {authorId} not found");
+
+            var totalPlays = await _db.Tracks
                 .Where(t => t.AuthorId == authorId)
-                .ToListAsync();
+                .SumAsync(t => t.PlayCount);
 
             return new AuthorStatsDto
             {
-                AuthorId = authorId,
-                Listens = tracks.Sum(t => t.PlayCount),
+                UserId = author.Id,
+                Username = author.Username,
+                AvatarUrl = author.AvatarUrl,
+                TotalPlays = totalPlays
             };
         }
     }

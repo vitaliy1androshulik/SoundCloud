@@ -1,0 +1,268 @@
+.container{
+    /* Feed_songs */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 32px;
+
+    position: absolute;
+    width: 1170px;
+    height: 1879px;
+    left: 176px;
+    top: 226px;
+}
+
+.track_container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 0px;
+    gap: 24px;
+
+    width: 1170px;
+    height: 241px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.track_image{
+    /* Rectangle 55 */
+
+    width: 241px;
+    height: 241px;
+
+    border-radius: 10px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.track_controls_container{
+    /* Frame 26080115 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 40px;
+
+    width: 905px;
+    height: 241px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.play_info_track_container{
+    /* Frame 26080116 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 0px;
+    gap: 10px;
+
+    width: auto;
+    height: 48px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.play_pause_track_container{
+    width: 43px;
+    height: 43px;
+
+    background: #5241B3;
+    border-radius: 100px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.track_title_author_container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding: 0px;
+    gap: 4px;
+    margin-top:15px;
+    width: auto;
+    height: auto;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.track_author_container{
+    /* Doechii */
+
+    width: auto;
+    height: 40px;
+    flex-direction: column;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 20px;
+    margin-top:20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: start;
+    justify-content: start;
+
+    color: #C9D4FF;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.track_genre_container{
+    width: auto;
+    height: 20px;
+    flex-direction: column;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    margin-top:15px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: start;
+    justify-content: start;
+
+    color: #C9D4FF;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.track_title_container{
+    /* Anxiety */
+
+    width: 700px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 35px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: start;
+    justify-content: start;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.track_duration_range_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 16px;
+
+    width: 905px;
+    height: 22px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+
+
+
+.track_more_controls_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 441px;
+    height: 43px;
+    margin-top:0px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.track_more_controls_style{
+    /* Frame 26080123 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+    width: 43px;
+    height: 43px;
+
+    background: #5241B3;
+    border-radius: 10px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.pagination_container_feed_page{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 20px;
+    margin-top:20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    flex-direction: row;
+    padding: 12px 32px;
+    gap: 50px;
+
+    position: absolute;
+    width: 1568px;
+    height: 79px;
+    left: 160px;
+    top: 2000px;
+}
+.pagination_prev_container{
+    display: flex;
+    width:30px;
+}

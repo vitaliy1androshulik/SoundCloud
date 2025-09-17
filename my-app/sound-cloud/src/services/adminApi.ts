@@ -13,18 +13,18 @@ export const adminApi = {
     blockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/block`),
     unblockUser: (id: number) => api.patch(`${API_URL}/Admin/users/${id}/unblock`),
     // ================= TRACK =================
-    getTracks: () => api.get(`${API_URL}/Track/krot`),
+    getTracks: () => api.get(`${API_URL}/Track/all`),
     getTrackById: (id: number) => api.get(`${API_URL}/Track/${id}`),
-    createTrack: (title: string, duration: string, albumId: number, file: File,cover: File, author:string) => {
+    createTrack: (title: string, duration: string, albumId: number, file: File,cover: File, genreId: number) => {
         const formData = new FormData();
         formData.append("Title", title);
         formData.append("Duration", duration);
         formData.append("AlbumId", albumId.toString());
         formData.append("File", file);
         formData.append("Cover", cover);
-        formData.append("Author", author);
+        formData.append("GenreId", genreId.toString());
 
-        return api.post(`${API_URL}/Track/create`, formData, {
+        return api.post(`${API_URL}/Track/create-file`, formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
     },

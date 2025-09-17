@@ -278,6 +278,9 @@ namespace SoundCloudWebApi.Migrations
                     b.Property<DateTime>("ListenedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("PlayCount")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TrackId")
                         .HasColumnType("integer");
 
@@ -444,13 +447,13 @@ namespace SoundCloudWebApi.Migrations
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackListenEntity", b =>
                 {
                     b.HasOne("SoundCloudWebApi.Data.Entities.TrackEntity", "Track")
-                        .WithMany()
+                        .WithMany("UserPlays")
                         .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "User")
-                        .WithMany()
+                        .WithMany("TrackPlays")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -470,11 +473,18 @@ namespace SoundCloudWebApi.Migrations
                     b.Navigation("AlbumTracks");
                 });
 
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
+                {
+                    b.Navigation("UserPlays");
+                });
+
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.UserEntity", b =>
                 {
                     b.Navigation("Albums");
 
                     b.Navigation("Playlists");
+
+                    b.Navigation("TrackPlays");
 
                     b.Navigation("Tracks");
                 });
