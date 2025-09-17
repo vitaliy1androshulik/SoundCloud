@@ -64,12 +64,6 @@ public class SoundCloudDbContext : DbContext
             .HasForeignKey(t => t.AuthorId)     // обов'язковий
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Track → Album
-        modelBuilder.Entity<TrackEntity>()
-            .HasOne(t => t.Album)
-            .WithMany(a => a.Tracks)
-            .HasForeignKey(t => t.AlbumId)
-            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<TrackListenEntity>()
        .HasOne(p => p.User)
