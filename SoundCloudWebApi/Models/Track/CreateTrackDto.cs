@@ -30,5 +30,8 @@ namespace SoundCloudWebApi.Models.Track
 
         // Опційно: жанр
         public int? GenreId { get; set; }
+
+        // Тут додаємо список ID альбомів
+        public List<int>? AlbumIds { get; set; }
     }
 }

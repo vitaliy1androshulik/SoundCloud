@@ -3,6 +3,10 @@ import { trackService } from "../../services/trackApi";
 import { playlistService} from "../../services/playlistApi";
 import { ITrack } from "../../types/track";
 import { IPlaylist } from "../../types/playlist";
+import {IAlbum} from "../../types/album";
+import { albumService} from "../../services/albumAPI.ts";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store.ts";
 
 
 const tabs = ["Tracks", "Playlists", "Albums", "Reposts"];
@@ -10,6 +14,7 @@ const tabs = ["Tracks", "Playlists", "Albums", "Reposts"];
 const ProfilePage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>("Tracks");
     const [tracks, setTracks] = useState<ITrack[]>([]);
+    const user = useSelector((state: RootState) => state.user.user); // поточний юзер
 
     // Tracks
 
@@ -23,9 +28,6 @@ const ProfilePage: React.FC = () => {
 
 
 
-
-
-
     // Playlists
     const [playlists, setPlaylists] = useState<IPlaylist[]>([]);
     const [playlistModalOpen, setPlaylistModalOpen] = useState(false);
@@ -33,6 +35,26 @@ const ProfilePage: React.FC = () => {
     const [playlistCoverFile, setPlaylistCoverFile] = useState<File | undefined>();
     //const [playlistTracks, setPlaylistTracks] = useState<ITrack[]>([]);
     const [playlistTracks, setPlaylistTracks] = useState<{ [playlistId: number]: ITrack[] }>({});
+
+
+
+    // Albums
+    const [albums, setAlbums] = useState<IAlbum[]>([]);
+    const [albumModalOpen, setAlbumModalOpen] = useState(false);
+    const [albumTitle, setAlbumTitle] = useState("");
+    const [albumCoverFile, setAlbumCoverFile] = useState<File | undefined>();
+
+    const [albumDescription, setAlbumDescription] = useState("");
+    const [albumIsPublic, setAlbumIsPublic] = useState(true);
+
+
+    const [albumTracks, setAlbumTracks] = useState<{ [albumId: number]: ITrack[] }>({});
+
+    const [addToAlbumModalOpen, setAddToAlbumModalOpen] = useState(false);
+    const [selectedTrackToAddToAlbum, setSelectedTrackToAddToAlbum] = useState<number | null>(null);
+    const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
+
+
 
     // Add to playlist modal
     const [addToPlaylistModalOpen, setAddToPlaylistModalOpen] = useState(false);
@@ -43,6 +65,7 @@ const ProfilePage: React.FC = () => {
     useEffect(() => {
         trackService.getMyTracks().then(setTracks).catch(console.error);
         playlistService.getAll().then(setPlaylists).catch(console.error);
+        albumService.getMyAlbums().then(setAlbums).catch(console.error);
     }, []);
 
     const getPlaylistImageUrl = (Playlist?: IPlaylist | null) => {
@@ -78,6 +101,8 @@ const ProfilePage: React.FC = () => {
             alert("Failed to upload track. Check console for details.");
         }
     };
+
+
     // Playlist creation
     const handlePlaylistCreate = async () => {
         if (!playlistName) {
@@ -152,6 +177,88 @@ const ProfilePage: React.FC = () => {
         }
     };
 
+
+
+    //Для альбомів
+
+    const handleViewAlbumTracks = async (albumId: number) => {
+        try {
+            const tracks = await albumService.getTracks(albumId);
+            setAlbumTracks((prev) => ({ ...prev, [albumId]: tracks }));
+        } catch (err) {
+            console.error(err);
+            alert("Failed to load tracks");
+        }
+    };
+
+    const handleAddToAlbumClick = (trackId: number) => {
+        if (!albums.length) {
+            alert("You have no albums yet!");
+            return;
+        }
+        setSelectedTrackToAddToAlbum(trackId);
+        setSelectedAlbumId(albums[0].id); // вибір першого альбому по-замовчуванню
+        setAddToAlbumModalOpen(true);
+    };
+
+
+    const handleConfirmAddToAlbum = async () => {
+        if (!selectedAlbumId || !selectedTrackToAddToAlbum) {
+            alert("Choose an album");
+            return;
+        }
+
+        try {
+            await albumService.addTrack(selectedAlbumId, selectedTrackToAddToAlbum);
+            alert("Track added to album!");
+            setAddToAlbumModalOpen(false);
+            setSelectedTrackToAddToAlbum(null);
+            setSelectedAlbumId(null);
+            handleViewAlbumTracks(selectedAlbumId); // оновлюємо треки альбому
+        } catch (err) {
+            console.error(err);
+            alert("Failed to add track to album.");
+        }
+    };
+
+    //творення альбому
+
+    const handleAlbumCreate = async () => {
+        if (!albumTitle) {
+            alert("Enter album title");
+            return;
+        }
+
+        if (!user) {
+            alert("You must be logged in to create an album");
+            return;
+        }
+
+        try {
+            // Викликаємо метод сервісу напряму, він сам формує FormData
+            const newAlbum = await albumService.create({
+                title: albumTitle,
+                description: albumDescription, // необов’язково
+                isPublic: albumIsPublic,
+                cover: albumCoverFile,         // файл обкладинки
+                ownerId: user.id               // автоматично підтягуємо
+            });
+
+            // Додаємо новий альбом у локальний стан
+            setAlbums([...albums, newAlbum]);
+
+            // Очистка полів та закриття модалки
+            setAlbumTitle("");
+            setAlbumDescription("");
+            setAlbumCoverFile(undefined);
+            setAlbumIsPublic(true);
+            setAlbumModalOpen(false);
+        } catch (err) {
+            console.error("Failed to create album:", err);
+            alert("Failed to create album. Check console for details.");
+        }
+    };
+
     return (
         <div className="p-6 text-white">
             {/* Tabs */}
@@ -200,6 +307,14 @@ const ProfilePage: React.FC = () => {
                                             >
                                                 Add to Playlist
                                             </button>
+                                            {/* кнопка додати до альбома */}
+                                            <button
+                                                onClick={() => handleAddToAlbumClick(t.id)}
+                                                className="px-2 py-1 bg-indigo-500 text-xs rounded hover:bg-indigo-400"
+                                            >
+                                                Add to Album
+                                            </button>
+
                                         </div>
                                     </li>
                                 ))}
@@ -261,6 +376,54 @@ const ProfilePage: React.FC = () => {
                         </button>
                     </>
                 )}
+
+                {/* Albums Tab */}
+                {activeTab === "Albums" && (
+                    <>
+                        {albums.length ? (
+                            <ul className="space-y-2">
+                                {albums.map((a) => (
+                                    <li key={a.id} className="flex flex-col gap-2 bg-gray-800 p-3 rounded">
+                                        <div className="flex items-center gap-4">
+                                            <img
+                                                src={a.coverUrl ? `http://localhost:5122/${a.coverUrl}` : "/default-cover.png"}
+                                                alt={a.title}
+                                                className="w-16 h-16 object-cover rounded"
+                                            />
+                                            <p className="flex-1">{a.title}</p>
+                                            <button
+                                                onClick={() => handleViewAlbumTracks(a.id)}
+                                                className="px-3 py-1 bg-indigo-600 rounded hover:bg-indigo-500 text-sm"
+                                            >
+                                                View Tracks
+                                            </button>
+                                        </div>
+
+                                        {/* Tracks у конкретному альбомі */}
+                                        <ul className="mt-2 space-y-1">
+                                            {(albumTracks[a.id] || []).map((t) => (
+                                                <li key={t.id} className="flex items-center gap-2">
+                                                    <img src={getTrackImageUrl(t)} alt={t.title} className="w-10 h-10 object-cover rounded" />
+                                                    <span>{t.title}</span>
+
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-400 py-4">No albums yet</p>
+                        )}
+                        <button
+                            className="mt-4 px-6 py-2 bg-indigo-600 rounded hover:bg-indigo-500"
+                            onClick={() => setAlbumModalOpen(true)}
+                        >
+                            Create Album
+                        </button>
+                    </>
+                )}
+
 
                 {/* Other tabs */}
                 {activeTab !== "Tracks" && activeTab !== "Playlists" && (
@@ -395,6 +558,105 @@ const ProfilePage: React.FC = () => {
                     </div>
                 </div>
             )}
+            {/* Add to Album Modal */}
+            {addToAlbumModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-gray-900 p-6 rounded w-full max-w-sm">
+                        <h3 className="text-lg mb-3">Add track to album</h3>
+                        <select
+                            value={selectedAlbumId ?? ""}
+                            onChange={(e) => setSelectedAlbumId(Number(e.target.value))}
+                            className="w-full mb-4 p-2 rounded bg-gray-800"
+                        >
+                            <option value="" disabled>Choose album</option>
+                            {albums.map((a) => (
+                                <option key={a.id} value={a.id}>{a.title}</option>
+                            ))}
+                        </select>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => {
+                                    setAddToAlbumModalOpen(false);
+                                    setSelectedTrackToAddToAlbum(null);
+                                    setSelectedAlbumId(null);
+                                }}
+                                className="px-4 py-2 bg-gray-700 rounded"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleConfirmAddToAlbum} // <-- тут викликаємо функцію
+                                className="px-4 py-2 bg-indigo-600 rounded"
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Модалка для створення альбому */}
+            {albumModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-gray-900 p-6 rounded w-full max-w-md">
+                        <h2 className="text-xl mb-4 text-white">Create Album</h2>
+
+                        {/* Album Title */}
+                        <input
+                            type="text"
+                            placeholder="Album Title"
+                            value={albumTitle}
+                            onChange={(e) => setAlbumTitle(e.target.value)}
+                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
+                        />
+
+                        {/* Album Description */}
+                        <textarea
+                            placeholder="Description (optional)"
+                            value={albumDescription}
+                            onChange={(e) => setAlbumDescription(e.target.value)}
+                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
+                        />
+
+                        {/* Album Public */}
+                        <div className="flex items-center mb-2">
+                            <input
+                                type="checkbox"
+                                checked={albumIsPublic}
+                                onChange={(e) => setAlbumIsPublic(e.target.checked)}
+                                id="albumPublic"
+                                className="mr-2"
+                            />
+                            <label htmlFor="albumPublic" className="text-gray-200">
+                                Public
+                            </label>
+                        </div>
+
+                        {/* Album Cover */}
+                        <input
+                            type="file"
+                            onChange={(e) => setAlbumCoverFile(e.target.files?.[0])}
+                            className="w-full mb-4 text-white"
+                        />
+
+                        {/* Buttons */}
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setAlbumModalOpen(false)}
+                                className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleAlbumCreate}
+                                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
+                            >
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

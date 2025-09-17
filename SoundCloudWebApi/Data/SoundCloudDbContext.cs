@@ -17,6 +17,7 @@ public class SoundCloudDbContext : DbContext
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<TrackListenEntity> TrackListens { get; set; }
     public DbSet<TrackLikeEntity> TrackLikes { get; set; }
+    public DbSet<AlbumTrackEntity> AlbumTracks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,13 +65,6 @@ public class SoundCloudDbContext : DbContext
             .HasForeignKey(t => t.AuthorId)     // обов'язковий
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Track → Album
-        modelBuilder.Entity<TrackEntity>()
-            .HasOne(t => t.Album)
-            .WithMany(a => a.Tracks)
-            .HasForeignKey(t => t.AlbumId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         // TrackLike: унікальність лайка від користувача
         modelBuilder.Entity<TrackLikeEntity>()
             .HasIndex(x => new { x.TrackId, x.UserId })
@@ -86,6 +80,22 @@ public class SoundCloudDbContext : DbContext
             .HasOne(l => l.User).WithMany()
             .HasForeignKey(l => l.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // 🔹 AlbumTrack (many-to-many: Album ↔ Track)
+        modelBuilder.Entity<AlbumTrackEntity>()
+            .HasKey(at => new { at.AlbumId, at.TrackId });
+
+        modelBuilder.Entity<AlbumTrackEntity>()
+            .HasOne(at => at.Album)
+            .WithMany(a => a.AlbumTracks)
+            .HasForeignKey(at => at.AlbumId);
+
+        modelBuilder.Entity<AlbumTrackEntity>()
+            .HasOne(at => at.Track)
+            .WithMany(t => t.AlbumTracks)
+            .HasForeignKey(at => at.TrackId);
+
+
     }
 
 }

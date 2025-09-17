@@ -5,17 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa59627e-8d88-4950-ad18-4353f46a4494" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/playlistApi.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/uploadApi.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/playlist.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/album.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/PlaylistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/PlaylistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/CreatePlaylistDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/CreatePlaylistDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/PlaylistDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Playlist/PlaylistDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/PlaylistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/PlaylistService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IPlaylistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IPlaylistService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/AlbumEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/AlbumEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/TrackEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/TrackEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/SoundCloudDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/SoundCloudDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Migrations/SoundCloudDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Migrations/SoundCloudDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/AlbumDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/AlbumDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/CreateAlbumDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Album/CreateAlbumDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/CreateTrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/CreateTrackDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/UpdateTrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/UpdateTrackDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/AlbumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/AlbumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IAlbumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IAlbumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/UserService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +90,7 @@
       <option name="presentableId" value="Default" />
       <updated>1757933307172</updated>
       <workItem from="1757933309262" duration="26488000" />
-      <workItem from="1758098172000" duration="11102000" />
+      <workItem from="1758098172000" duration="23840000" />
     </task>
     <servers />
   </component>
