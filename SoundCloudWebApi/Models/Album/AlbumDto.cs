@@ -15,5 +15,10 @@
 
         // Опційно: ім'я власника для відображення на фронтенді
         public string OwnerName { get; set; }
+
+        public string? CoverUrl { get; set; }
+
+        // Нове поле: публічність альбому
+        public bool IsPublic { get; set; }
     }
 }
