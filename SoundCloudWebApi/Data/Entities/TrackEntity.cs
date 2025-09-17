@@ -34,12 +34,12 @@ namespace SoundCloudWebApi.Data.Entities
         // Для модерації: якщо прихований — не показуємо
         public bool IsHidden { get; set; } = false;
 
-        // Зв’язок «багато треків — один альбом»
-        public int AlbumId { get; set; }
-        public AlbumEntity Album { get; set; }
+        // Зв’язок «один трек — багато альбомів» (many-to-many)
+        public ICollection<AlbumTrackEntity> AlbumTracks { get; set; } = new List<AlbumTrackEntity>();
 
         // Зв’язок «один трек — багато плейлистів»
         public ICollection<PlaylistEntity> Playlists { get; set; }
+
         public string? ImageUrl { get; set; }
 
         // нові

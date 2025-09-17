@@ -154,7 +154,9 @@ namespace SoundCloudWebApi.Services
             // Перевіряємо залежності, щоб не впасти на FK-обмеженнях
             var hasAlbums = await _db.Albums.AnyAsync(a => a.OwnerId == id);
             var hasPlaylists = await _db.Playlists.AnyAsync(p => p.OwnerId == id);
-            var hasTracks = await _db.Tracks.AnyAsync(t => t.Album.OwnerId == id);
+            var hasTracks = await _db.AlbumTracks
+                .Include(at => at.Album)
+                .AnyAsync(at => at.Album.OwnerId == id);
 
             if (hasAlbums || hasPlaylists || hasTracks)
                 throw new InvalidOperationException(
