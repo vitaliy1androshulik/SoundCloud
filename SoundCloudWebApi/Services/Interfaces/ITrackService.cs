@@ -40,8 +40,8 @@ namespace SoundCloudWebApi.Services.Interfaces
         // Лічильник прослуховувань та лайків
         Task LikeAsync(int trackId, int userId);
         Task UnlikeAsync(int trackId, int userId);
-        Task AddListenAsync(int trackId);
-        // Статистика
+        Task AddPlayAsync( int trackId);
+
         Task<TrackStatsDto> GetTrackStatsAsync(int trackId);
         Task<AuthorStatsDto> GetAuthorStatsAsync(int authorId);
     }

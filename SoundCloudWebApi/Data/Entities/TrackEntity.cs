@@ -25,9 +25,11 @@ namespace SoundCloudWebApi.Data.Entities
         // URL або шлях до файлу
         [Required]
         public string Url { get; set; }
+        public int PlayCount { get; set; } = 0;
+
 
         // Лічильник прослуховувань
-        public int PlayCount { get; set; } = 0;
+        public ICollection<TrackListenEntity>? UserPlays { get; set; }
 
         // Для модерації: якщо прихований — не показуємо
         public bool IsHidden { get; set; } = false;

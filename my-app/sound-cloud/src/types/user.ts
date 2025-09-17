@@ -9,6 +9,7 @@ export interface IUser {
     isBlocked?: boolean;
     password?:string;
     role?:string;
+    totalPlays:number;
 }
 
 export interface IAuthResponse {

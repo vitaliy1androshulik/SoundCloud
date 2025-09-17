@@ -3,22 +3,23 @@ import { Outlet } from "react-router-dom";
 import Header from "./Header.tsx";
 import Footer from "./Footer.tsx";
 import Player from "../player/Player.tsx";
-
+import "../../styles/General.css";
 
 const Layout: React.FC = () => {
 
     return(
         <>
-            <div className="page-container relative min-h-screen flex flex-col">
-                <div className="header">
+            <div className="page-container">
+                <div>
                     <Header/>
                 </div>
 
-                <main className="content ">
+                <div>
                     <Outlet/>
 
                     <Player footerSelector=".footer_container" />
-                </main>
+
+                </div>
                 <div className="footer_container">
                     <Footer/>
                 </div>

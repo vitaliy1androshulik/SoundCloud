@@ -22,6 +22,7 @@ import AlbumsPage from "./pages/admin/AlbumsPage.tsx";
 import CategoriesPage from "./pages/admin/CategoriesPage.tsx";
 import PlaylistsPage from "./pages/admin/PlaylistsPage.tsx";
 import AdminPage from "./pages/admin/AdminPage.tsx";
+import SearchPage from "./pages/main_pages/SearchPage.tsx";
 
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
                     <Route path="/feed" element={<FeedPage />} />
                     <Route path="/library" element={<LibraryPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/search-page" element={<SearchPage/>}/>
                 </Route>
 
                 {/*  Адмінка (ОКРЕМО, без Layout) */}

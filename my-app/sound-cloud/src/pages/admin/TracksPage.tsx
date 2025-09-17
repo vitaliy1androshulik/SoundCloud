@@ -1,6 +1,6 @@
 // src/pages/admin/TracksPage.tsx
 import { useEffect, useState } from "react";
-import { Table, Button, Space, message, Upload, Form, Input, Modal } from "antd";
+import {Table, Button, Space, message, Upload, Form, Input, Modal, InputNumber} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { adminApi } from "../../services/adminApi";
 
@@ -19,39 +19,54 @@ const TracksPage = () => {
             title: track.title,
             duration: track.duration,
             albumId: track.albumId,
+            genreId: track.genreId,
             // файли не встановлюємо, їх потрібно заново вибрати
         });
     };
     const handleSave = async (values: any) => {
         try {
-            const { title, duration, albumId, file, cover, author} = values;
+            const { title, duration, albumId, file, cover, genreId } = values;
 
-            const data: any = {
-                title,
-                duration,
-                albumId,
-                cover,
-                author
-            };
+            // Перетворюємо genreId і albumId на числа
+            const genreIdNumber = Number(genreId);
+            const albumIdNumber = Number(albumId);
 
-            if (file?.length) data.file = file[0].originFileObj;
-            if (cover?.length) data.cover = cover[0].originFileObj;
+            if (!genreIdNumber) {
+                message.error("Всі обов'язкові поля повинні бути заповнені");
+                return;
+            }
 
             if (editingTrack) {
-                // Редагування
-                await adminApi.updateTrack(editingTrack.id, data);
+                // Редагування треку
+                await adminApi.updateTrack(editingTrack.id, {
+                    title,
+                    duration,
+                    albumId: albumIdNumber,
+                    file: file?.[0]?.originFileObj,
+                    cover: cover?.[0]?.originFileObj,
+                    genreId: genreIdNumber
+                });
                 message.success("Трек оновлено");
             } else {
-                // Створення
-                await adminApi.createTrack(title, duration, albumId, file[0].originFileObj,cover[0].originFileObj, author);
+                // Створення треку
+                await adminApi.createTrack(
+                    title,
+                    duration,
+                    albumIdNumber,
+                    file[0].originFileObj,
+                    cover[0].originFileObj,
+                    genreIdNumber
+                );
                 message.success("Трек створено");
             }
 
+            // Закриваємо модалку і очищаємо форму
             setIsModalVisible(false);
             setEditingTrack(null);
             form.resetFields();
             loadTracks();
-        } catch {
+        } catch (error) {
+            console.error("Failed to save track", error);
             message.error("Не вдалося зберегти трек");
         }
     };
@@ -126,6 +141,7 @@ const TracksPage = () => {
         { title: "ID", dataIndex: "id" },
         { title: "Title", dataIndex: "title" },
         { title: "Author", dataIndex: "author" },
+        { title: "Genre", dataIndex: "genreId" },
         {
             title: "Status",
             render: (_: any, record: any) => (record.hidden ? "Hidden" : "Visible"),
@@ -201,10 +217,10 @@ const TracksPage = () => {
                             <Input type="number" placeholder="AlbumId" />
                         </Form.Item>
                         <Form.Item
-                            name="author"
-                            rules={[{ required: true, message: "Вкажіть Author" }]}
+                            name="genreId"
+                            rules={[{ required: true, message: "Вкажіть GenreId" }]}
                         >
-                            <Input type="text" placeholder="Author" />
+                            <InputNumber placeholder="GenreId" />
                         </Form.Item>
                         <Form.Item
                             name="file"

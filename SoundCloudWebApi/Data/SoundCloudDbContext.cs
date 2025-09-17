@@ -71,6 +71,16 @@ public class SoundCloudDbContext : DbContext
             .HasForeignKey(t => t.AlbumId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<TrackListenEntity>()
+       .HasOne(p => p.User)
+       .WithMany(u => u.TrackPlays)
+       .HasForeignKey(p => p.UserId);
+
+        modelBuilder.Entity<TrackListenEntity>()
+            .HasOne(p => p.Track)
+            .WithMany(t => t.UserPlays)
+            .HasForeignKey(p => p.TrackId);
+
         // TrackLike: унікальність лайка від користувача
         modelBuilder.Entity<TrackLikeEntity>()
             .HasIndex(x => new { x.TrackId, x.UserId })

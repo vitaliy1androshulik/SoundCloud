@@ -8,6 +8,7 @@
 
         public int UserId { get; set; }   // хто слухав
         public UserEntity User { get; set; } = default!;
+        public int PlayCount { get; set; } = 0;
 
         public DateTime ListenedAt { get; set; } = DateTime.UtcNow;
     }

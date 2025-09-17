@@ -6,6 +6,7 @@ import {logout} from "../../store/slices/userSlice.ts";
 import '../../styles/main_pages/header.css';
 import {IUser} from "../../types/user.ts";
 import {getCurrentUser} from "../../services/User/user_info.ts";
+
 const Header: React.FC = () => {
     const [active, setActive] = useState<string>("home");
     const [user, setUser] = useState<IUser | null>(null);

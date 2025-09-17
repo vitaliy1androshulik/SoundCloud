@@ -3,6 +3,7 @@ using SoundCloudWebApi.Models.Auth;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google.Apis.Auth;
+using SoundCloudWebApi.Models.Track;
 
 
 namespace SoundCloudWebApi.Services.Interfaces
@@ -30,7 +31,7 @@ namespace SoundCloudWebApi.Services.Interfaces
 
         Task SetAvatarAsync(int userId, string url);
         Task<UserEntity> FindOrCreateFromGoogleAsync(GoogleJsonWebSignature.Payload payload);
-
+        Task<IEnumerable<AuthorStatsDto>> GetTopUsersAsync(int take);
 
     }
 }
