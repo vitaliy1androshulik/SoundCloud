@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using SoundCloudWebApi.Models.Playlist;
+using SoundCloudWebApi.Models.Track;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using SoundCloudWebApi.Models.Playlist;
 
 namespace SoundCloudWebApi.Services.Interfaces
 {
@@ -22,6 +23,18 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task DeleteAsync(int playlistId);
 
         // Оновити обкладинку плейлиста
-        Task SetCoverAsync(int playlistId, string url);
+        Task SetCoverAsync(int playlistId, IFormFile url);
+
+
+        //
+        Task AddTrackAsync(int playlistId, int trackId);
+        Task RemoveTrackAsync(int playlistId, int trackId);
+
+        Task<IEnumerable<TrackDto>> GetTracksByPlaylistAsync(int playlistId);
+
+
+        //Task<IEnumerable<TrackDto>> GetTracksByPlaylistAsync(int playlistId);
+
+
     }
 }

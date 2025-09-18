@@ -4,7 +4,7 @@ import React from 'react';
 const LibraryPage: React.FC = () => {
 
     return (
-        <div>
+        <div className="layout_container">
 
         </div>
     );

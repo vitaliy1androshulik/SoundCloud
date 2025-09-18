@@ -24,12 +24,14 @@ namespace SoundCloudWebApi.Data.Entities
         public UserEntity Owner { get; set; }
 
         // Треки в альбомі
-        public ICollection<TrackEntity> Tracks { get; set; } = new List<TrackEntity>();
+        public ICollection<AlbumTrackEntity> AlbumTracks { get; set; } = new List<AlbumTrackEntity>();
 
         public string? CoverUrl { get; set; }
 
         // нові
         public DateTime? UpdatedAt { get; set; }
         public int? UpdatedById { get; set; }
+
+        public bool IsPublic { get; set; } = true; // за замовчуванням публічний
     }
 }

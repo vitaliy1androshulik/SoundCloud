@@ -125,6 +125,13 @@ public class UserController : ControllerBase
         return Ok(updated);
     }
 
+    [HttpGet("top")]
+    public async Task<IActionResult> GetTopUsers(int take)
+    {
+        var result = await _userService.GetTopUsersAsync(take);
+        return Ok(result);
+    }
+
     [Authorize]
     [HttpPost("profile/avatar")]
     [Consumes("multipart/form-data")]

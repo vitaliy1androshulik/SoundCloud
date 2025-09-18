@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Data.Entities;
+using SoundCloudWebApi.Models.Album;
 using SoundCloudWebApi.Models.Track;
 using SoundCloudWebApi.Services.Interfaces;
 using System.Security.Claims;
@@ -34,14 +35,38 @@ namespace SoundCloudWebApi.Services.Implementations
 
 
 
-        public async Task AddListenAsync(int trackId)
+        public async Task AddPlayAsync(int trackId)
         {
-            var track = await _db.Tracks.FindAsync(trackId);
-            if (track == null)
-                throw new KeyNotFoundException("Track not found");
+            // Знаходимо трек у базі
+            var track = await _db.Tracks
+                .FirstOrDefaultAsync(t => t.Id == trackId);
 
-            // Збільшуємо лічильник
+            if (track == null)
+                throw new Exception("Track not found");
+
+            var ownerId = track.AuthorId; // id користувача, який створив трек
+
+            // Додаємо одне прослуховування до самого треку
             track.PlayCount += 1;
+
+            // Шукаємо існуючий запис TrackListen для власника
+            var listen = await _db.TrackListens
+                .FirstOrDefaultAsync(x => x.TrackId == trackId && x.UserId == ownerId);
+
+            if (listen != null)
+            {
+                listen.PlayCount = track.PlayCount;
+            }
+            else
+            {
+                listen = new TrackListenEntity
+                {
+                    TrackId = trackId,
+                    UserId = ownerId,
+                    PlayCount = 1
+                };
+                await _db.TrackListens.AddAsync(listen);
+            }
 
             await _db.SaveChangesAsync();
         }
@@ -51,14 +76,13 @@ namespace SoundCloudWebApi.Services.Implementations
 
         public async Task<IEnumerable<TrackDto>> GetAllAsync()
         {
-            var (actorId, _) = GetActor();
-
             return await _db.Tracks
                 .AsNoTracking()
-                .Include(t => t.Album).ThenInclude(a => a.Owner)
+                .Include(t => t.AlbumTracks)
+                    .ThenInclude(at => at.Album)
+                        .ThenInclude(a => a.Owner)
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
-                .Where(t => t.Album.OwnerId == actorId && !t.IsHidden)
                 .Select(t => new TrackDto
                 {
                     Id = t.Id,
@@ -66,24 +90,38 @@ namespace SoundCloudWebApi.Services.Implementations
                     AuthorId = t.AuthorId,
                     Author = t.Author.Username,
                     Duration = t.Duration,
-                    //AlbumId = t.AlbumId,
                     Url = t.Url,
                     ImageUrl = t.ImageUrl,
                     IsHidden = t.IsHidden,
                     PlayCount = t.PlayCount,
-                    GenreId = (int)t.GenreId,
-                    Genre = t.Genre.Name
+                    GenreId = t.GenreId.HasValue ? (int)t.GenreId.Value : 0,
+                    Genre = t.Genre != null ? t.Genre.Name : null,
+                    Albums = t.AlbumTracks
+                        .Select(at => new AlbumDto
+                        {
+                            Id = at.Album.Id,
+                            Title = at.Album.Title,
+                            OwnerId = at.Album.OwnerId,
+                            OwnerName = at.Album.Owner.Username,
+                            CoverUrl = at.Album.CoverUrl,
+                            CreatedAt = at.Album.CreatedAt,
+                            IsPublic = at.Album.IsPublic
+                        })
+                        .ToList()
                 })
                 .ToListAsync();
         }
+
 
         public async Task<IEnumerable<TrackDto>> GetAllTracksAsync()
         {
             return await _db.Tracks
                 .AsNoTracking()
-                .Include(t => t.Album).ThenInclude(a => a.Owner)
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
+                .Include(t => t.AlbumTracks)
+                    .ThenInclude(at => at.Album)
+                        .ThenInclude(a => a.Owner)
                 .Select(t => new TrackDto
                 {
                     Id = t.Id,
@@ -91,13 +129,24 @@ namespace SoundCloudWebApi.Services.Implementations
                     AuthorId = t.AuthorId,
                     Author = t.Author.Username,
                     Duration = t.Duration,
-                    //AlbumId = t.AlbumId,
                     Url = t.Url,
                     ImageUrl = t.ImageUrl,
                     IsHidden = t.IsHidden,
                     PlayCount = t.PlayCount,
-                    GenreId = (int)t.GenreId,
-                    Genre = t.Genre != null ? t.Genre.Name : null
+                    GenreId = t.GenreId.HasValue ? (int)t.GenreId.Value : 0,
+                    Genre = t.Genre != null ? t.Genre.Name : null,
+
+                    // Тут можемо повертати список альбомів для треку
+                    Albums = t.AlbumTracks.Select(at => new AlbumDto
+                    {
+                        Id = at.Album.Id,
+                        Title = at.Album.Title,
+                        OwnerId = at.Album.OwnerId,
+                        OwnerName = at.Album.Owner.Username,
+                        CoverUrl = at.Album.CoverUrl,
+                        CreatedAt = at.Album.CreatedAt,
+                        IsPublic = at.Album.IsPublic
+                    }).ToList()
                 })
                 .ToListAsync();
         }
@@ -106,53 +155,70 @@ namespace SoundCloudWebApi.Services.Implementations
         {
             var (actorId, actorRole) = GetActor();
 
-            var t = await _db.Tracks
-                .Include(x => x.Album).ThenInclude(a => a.Owner)
+            var track = await _db.Tracks
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .Include(t => t.AlbumTracks)               // many-to-many зв'язки
+                    .ThenInclude(at => at.Album)          // самі альбоми
+                .ThenInclude(a => a.Owner)                // власник альбому
+                .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (t == null) return null;
+            if (track == null) return null;
 
-            if (actorRole != UserRole.Admin && t.Album.OwnerId != actorId)
+            // Перевірка доступу: якщо не адмін, трек повинен належати публічному альбому або твоєму альбому
+            var allowed = actorRole == UserRole.Admin ||
+                          track.AlbumTracks.Any(at => at.Album.IsPublic || at.Album.OwnerId == actorId);
+
+            if (!allowed)
                 throw new UnauthorizedAccessException("You are not allowed to view this track.");
 
             return new TrackDto
             {
-                Id = t.Id,
-                Title = t.Title,
-                AuthorId = t.AuthorId,
-                Author = t.Author.Username,
-                Duration = t.Duration,
-                //AlbumId = t.AlbumId,
-                Url = t.Url,
-                ImageUrl = t.ImageUrl,
-                IsHidden = t.IsHidden,
-                PlayCount = t.PlayCount,
-                GenreId = (int)t.GenreId,
-                Genre = t.Genre != null ? t.Genre.Name : null
+                Id = track.Id,
+                Title = track.Title,
+                AuthorId = track.AuthorId,
+                Author = track.Author.Username,
+                Duration = track.Duration,
+                Url = track.Url,
+                ImageUrl = track.ImageUrl,
+                IsHidden = track.IsHidden,
+                PlayCount = track.PlayCount,
+                GenreId = track.GenreId ?? 0,
+                Genre = track.Genre?.Name,
+                Albums = track.AlbumTracks.Select(at => new AlbumDto
+                {
+                    Id = at.Album.Id,
+                    Title = at.Album.Title,
+                    OwnerName = at.Album.Owner.Username,
+                    CoverUrl = at.Album.CoverUrl,
+                    IsPublic = at.Album.IsPublic
+                }).ToList()
+
             };
         }
+
 
         public async Task<TrackDto> CreateAsync(CreateTrackDto dto)
         {
             var (actorId, actorRole) = GetActor();
 
-            //var album = await _db.Albums.Include(a => a.Owner)
-            //    .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
-            //    ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
+            // Перевіряємо, чи існує альбом і його власника
+            var album = await _db.Albums.Include(a => a.Owner)
+                .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
+                ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
 
             //if (actorRole != UserRole.Admin && album.OwnerId != actorId)
             //    throw new UnauthorizedAccessException("You are not owner of this album");
 
+            // Перевіряємо користувача-автора
             var author = await _db.Users.FindAsync(actorId)
                 ?? throw new KeyNotFoundException($"Author {actorId} not found");
 
+            // Створюємо трек
             var track = new TrackEntity
             {
                 Title = dto.Title.Trim(),
                 AuthorId = actorId,
-                //AlbumId = dto.AlbumId,
                 Duration = dto.Duration,
                 GenreId = dto.GenreId,
                 IsHidden = false,
@@ -163,6 +229,14 @@ namespace SoundCloudWebApi.Services.Implementations
             _db.Tracks.Add(track);
             await _db.SaveChangesAsync();
 
+            // Додаємо зв'язок трек → альбом
+            _db.AlbumTracks.Add(new AlbumTrackEntity
+            {
+                AlbumId = dto.AlbumId,
+                TrackId = track.Id
+            });
+            await _db.SaveChangesAsync();
+
             return new TrackDto
             {
                 Id = track.Id,
@@ -170,15 +244,29 @@ namespace SoundCloudWebApi.Services.Implementations
                 AuthorId = track.AuthorId,
                 Author = author.Username,
                 Duration = track.Duration,
-                //AlbumId = track.AlbumId,
                 Url = track.Url,
                 ImageUrl = track.ImageUrl,
                 IsHidden = track.IsHidden,
                 PlayCount = 0,
                 GenreId = (int)track.GenreId,
-                Genre = track.Genre != null ? track.Genre.Name : null
+                Genre = track.Genre != null ? track.Genre.Name : null,
+                // Альбоми, до яких належить трек
+                Albums = new List<AlbumDto>
+        {
+            new AlbumDto
+            {
+                Id = album.Id,
+                Title = album.Title,
+                Description = album.Description,
+                OwnerId = album.OwnerId,
+                OwnerName = album.Owner.Username,
+                CoverUrl = album.CoverUrl,
+                CreatedAt = album.CreatedAt
+            }
+        }
             };
         }
+
 
         public async Task<TrackDto> CreateAsyncFile(CreateTrackDto dto)
         {
@@ -192,6 +280,7 @@ namespace SoundCloudWebApi.Services.Implementations
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.File.FileName);
             var filePath = Path.Combine(uploadsFolder, fileName);
             var (actorId, actorRole) = GetActor();
+
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await dto.File.CopyToAsync(stream);
@@ -199,6 +288,7 @@ namespace SoundCloudWebApi.Services.Implementations
 
             var url = $"/uploads/tracks/{fileName}";
 
+            // ===== Обробка обкладинки =====
             string? imageUrl = null;
             if (dto.Cover != null && dto.Cover.Length > 0)
             {
@@ -217,21 +307,42 @@ namespace SoundCloudWebApi.Services.Implementations
                 imageUrl = $"/uploads/tracks/cover/{coverFileName}";
             }
 
+            // ===== Створення треку =====
             var track = new TrackEntity
             {
                 Title = dto.Title.Trim(),
                 Url = url,
                 Duration = dto.Duration,
-                //AlbumId = dto.AlbumId,
                 AuthorId = actorId,
-                GenreId = dto.GenreId,   // жанр з DTO
+                GenreId = dto.GenreId,
                 IsHidden = false,
                 ImageUrl = imageUrl,
                 CreatedAt = DateTime.UtcNow
             };
 
             _db.Tracks.Add(track);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(); // зберігаємо трек, щоб отримати Id
+
+            // ===== Прив'язка альбомів (many-to-many) =====
+            List<AlbumEntity> albums = new List<AlbumEntity>();
+            if (dto.AlbumIds != null && dto.AlbumIds.Any())
+            {
+                albums = await _db.Albums
+                    .Include(a => a.Owner)
+                    .Where(a => dto.AlbumIds.Contains(a.Id))
+                    .ToListAsync();
+
+                foreach (var album in albums)
+                {
+                    _db.AlbumTracks.Add(new AlbumTrackEntity
+                    {
+                        TrackId = track.Id,
+                        AlbumId = album.Id
+                    });
+                }
+
+                await _db.SaveChangesAsync();
+            }
 
             // ===== Отримання назви жанру =====
             string? genreName = null;
@@ -241,39 +352,76 @@ namespace SoundCloudWebApi.Services.Implementations
                 genreName = genre?.Name;
             }
 
+            // ===== Мапимо альбоми у AlbumDto =====
+            var albumDtos = albums.Select(a => new AlbumDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                OwnerId = a.OwnerId,
+                OwnerName = a.Owner.Username,
+                CoverUrl = a.CoverUrl,
+                IsPublic = a.IsPublic
+            }).ToList();
+
+            // ===== Повертаємо TrackDto =====
             return new TrackDto
             {
                 Id = track.Id,
                 Title = track.Title,
                 Url = track.Url,
                 Duration = track.Duration,
-                //AlbumId = track.AlbumId,
                 AuthorId = track.AuthorId,
-                Author= (await _db.Users.FindAsync(track.AuthorId))!.Username,
+                Author = (await _db.Users.FindAsync(track.AuthorId))!.Username,
                 ImageUrl = track.ImageUrl,
                 IsHidden = track.IsHidden,
                 GenreId = (int)track.GenreId,
-                Genre = genreName
+                Genre = genreName,
+                Albums = albumDtos
             };
         }
 
+
+
         public async Task<TrackDto> UpdateAsync(int id, UpdateTrackDto dto)
         {
-            var track = await _db.Tracks.Include(t => t.Album).ThenInclude(a => a.Owner)
+            var track = await _db.Tracks
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
+                .Include(t => t.AlbumTracks)
+                    .ThenInclude(at => at.Album)
+                        .ThenInclude(a => a.Owner)
                 .FirstOrDefaultAsync(t => t.Id == id)
                 ?? throw new KeyNotFoundException($"Track {id} not found");
 
             var (actorId, actorRole) = GetActor();
-            if (actorRole != UserRole.Admin && track.Album.OwnerId != actorId)
-                throw new UnauthorizedAccessException("You are not owner of this album");
+
+            // Перевіряємо, чи є хоча б один альбом треку, власником якого є поточний користувач
+            if (actorRole != UserRole.Admin && !track.AlbumTracks.Any(at => at.Album.OwnerId == actorId))
+                throw new UnauthorizedAccessException("You are not allowed to update this track.");
 
             track.Title = dto.Title.Trim();
             track.AuthorId = dto.AuthorId;
             track.Duration = dto.Duration;
-            //track.AlbumId = dto.AlbumId;
-            track.GenreId = dto.GenreId; // нове поле для жанру
+            track.GenreId = dto.GenreId;
+
+            // Оновлюємо альбоми треку
+            if (dto.AlbumIds != null)
+            {
+                // Видаляємо старі зв’язки
+                var oldAlbumTracks = track.AlbumTracks.ToList();
+                _db.AlbumTracks.RemoveRange(oldAlbumTracks);
+
+                // Додаємо нові зв’язки
+                foreach (var albumId in dto.AlbumIds)
+                {
+                    _db.AlbumTracks.Add(new AlbumTrackEntity
+                    {
+                        TrackId = track.Id,
+                        AlbumId = albumId
+                    });
+                }
+            }
 
             await _db.SaveChangesAsync();
 
@@ -284,25 +432,37 @@ namespace SoundCloudWebApi.Services.Implementations
                 AuthorId = track.AuthorId,
                 Author = track.Author.Username,
                 Duration = track.Duration,
-                //AlbumId = track.AlbumId,
                 Url = track.Url,
                 ImageUrl = track.ImageUrl,
                 IsHidden = track.IsHidden,
                 PlayCount = track.PlayCount,
                 GenreId = (int)track.GenreId,
-                Genre = track.Genre != null ? track.Genre.Name : null
+                Genre = track.Genre?.Name,
+                Albums = track.AlbumTracks.Select(at => new AlbumDto
+                {
+                    Id = at.Album.Id,
+                    Title = at.Album.Title,
+                    OwnerId = at.Album.OwnerId,
+                    OwnerName = at.Album.Owner.Username,
+                    CoverUrl = at.Album.CoverUrl,
+                    IsPublic = at.Album.IsPublic
+                }).ToList()
             };
         }
 
         public async Task DeleteAsync(int id)
         {
             var (actorId, actorRole) = GetActor();
-            var track = await _db.Tracks.Include(t => t.Album).ThenInclude(a => a.Owner)
+
+            var track = await _db.Tracks
+                .Include(t => t.AlbumTracks)
+                    .ThenInclude(at => at.Album)
                 .FirstOrDefaultAsync(t => t.Id == id)
                 ?? throw new KeyNotFoundException($"Track {id} not found");
 
-            if (actorRole != UserRole.Admin && track.Album.OwnerId != actorId)
-                throw new UnauthorizedAccessException("You are not owner of this album");
+            // Перевірка прав: трек можна видаляти, якщо користувач Admin або власник хоча б одного альбому
+            if (actorRole != UserRole.Admin && !track.AlbumTracks.Any(at => at.Album.OwnerId == actorId))
+                throw new UnauthorizedAccessException("You are not allowed to delete this track.");
 
             _db.Tracks.Remove(track);
             await _db.SaveChangesAsync();
@@ -337,12 +497,16 @@ namespace SoundCloudWebApi.Services.Implementations
         public async Task SetImageAsync(int trackId, string imageUrl)
         {
             var (actorId, actorRole) = GetActor();
-            var track = await _db.Tracks.Include(t => t.Album).ThenInclude(a => a.Owner)
+
+            var track = await _db.Tracks
+                .Include(t => t.AlbumTracks)
+                    .ThenInclude(at => at.Album)
                 .FirstOrDefaultAsync(t => t.Id == trackId)
                 ?? throw new KeyNotFoundException($"Track {trackId} not found");
 
-            if (actorRole != UserRole.Admin && track.Album.OwnerId != actorId)
-                throw new UnauthorizedAccessException("You are not owner of this album");
+            // Перевірка прав: користувач Admin або власник хоча б одного альбому
+            if (actorRole != UserRole.Admin && !track.AlbumTracks.Any(at => at.Album.OwnerId == actorId))
+                throw new UnauthorizedAccessException("You are not allowed to set image for this track.");
 
             track.ImageUrl = imageUrl;
             await _db.SaveChangesAsync();
@@ -372,30 +536,42 @@ namespace SoundCloudWebApi.Services.Implementations
 
         public async Task<TrackStatsDto> GetTrackStatsAsync(int trackId)
         {
+            // Підвантажуємо трек разом з автором
             var track = await _db.Tracks
-                .Include(t => t.PlayCount)
+                .Include(t => t.Author) // навігаційна властивість
                 .FirstOrDefaultAsync(t => t.Id == trackId);
 
-            if (track == null) throw new KeyNotFoundException($"Track {trackId} not found");
+            if (track == null)
+                throw new KeyNotFoundException($"Track {trackId} not found");
 
             return new TrackStatsDto
             {
-                TrackId = trackId,
+                TrackId = track.Id,
+                Title = track.Title,
+                AuthorId = track.AuthorId,
+                AuthorName = track.Author?.Username,
+                AuthorAvatarUrl = track.Author?.AvatarUrl,
                 PlayCount = track.PlayCount
             };
         }
 
         public async Task<AuthorStatsDto> GetAuthorStatsAsync(int authorId)
         {
-            var tracks = await _db.Tracks
-                .Include(t => t.PlayCount)
+            var author = await _db.Users
+                .FirstOrDefaultAsync(u => u.Id == authorId);
+
+            if (author == null) throw new KeyNotFoundException($"Author {authorId} not found");
+
+            var totalPlays = await _db.Tracks
                 .Where(t => t.AuthorId == authorId)
-                .ToListAsync();
+                .SumAsync(t => t.PlayCount);
 
             return new AuthorStatsDto
             {
-                AuthorId = authorId,
-                Listens = tracks.Sum(t => t.PlayCount),
+                UserId = author.Id,
+                Username = author.Username,
+                AvatarUrl = author.AvatarUrl,
+                TotalPlays = totalPlays
             };
         }
     }

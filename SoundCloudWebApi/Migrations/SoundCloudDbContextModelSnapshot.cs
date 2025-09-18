@@ -55,6 +55,9 @@ namespace SoundCloudWebApi.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("OwnerId")
                         .HasColumnType("integer");
 
@@ -74,6 +77,30 @@ namespace SoundCloudWebApi.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.AlbumTrackEntity", b =>
+                {
+                    b.Property<int>("AlbumId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrackId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AlbumId", "TrackId");
+
+                    b.HasIndex("TrackId");
+
+                    b.ToTable("AlbumTracks");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.CategoryEntity", b =>
@@ -168,9 +195,6 @@ namespace SoundCloudWebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
 
@@ -208,8 +232,6 @@ namespace SoundCloudWebApi.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
 
                     b.HasIndex("AuthorId");
 
@@ -255,6 +277,9 @@ namespace SoundCloudWebApi.Migrations
 
                     b.Property<DateTime>("ListenedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PlayCount")
+                        .HasColumnType("integer");
 
                     b.Property<int>("TrackId")
                         .HasColumnType("integer");
@@ -369,6 +394,25 @@ namespace SoundCloudWebApi.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.AlbumTrackEntity", b =>
+                {
+                    b.HasOne("SoundCloudWebApi.Data.Entities.AlbumEntity", "Album")
+                        .WithMany("AlbumTracks")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SoundCloudWebApi.Data.Entities.TrackEntity", "Track")
+                        .WithMany("AlbumTracks")
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Album");
+
+                    b.Navigation("Track");
+                });
+
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.PlaylistEntity", b =>
                 {
                     b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "Owner")
@@ -382,12 +426,6 @@ namespace SoundCloudWebApi.Migrations
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
                 {
-                    b.HasOne("SoundCloudWebApi.Data.Entities.AlbumEntity", "Album")
-                        .WithMany("Tracks")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "Author")
                         .WithMany("Tracks")
                         .HasForeignKey("AuthorId")
@@ -397,8 +435,6 @@ namespace SoundCloudWebApi.Migrations
                     b.HasOne("SoundCloudWebApi.Data.Entities.GenreEntity", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
-
-                    b.Navigation("Album");
 
                     b.Navigation("Author");
 
@@ -427,13 +463,13 @@ namespace SoundCloudWebApi.Migrations
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackListenEntity", b =>
                 {
                     b.HasOne("SoundCloudWebApi.Data.Entities.TrackEntity", "Track")
-                        .WithMany()
+                        .WithMany("UserPlays")
                         .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "User")
-                        .WithMany()
+                        .WithMany("TrackPlays")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -445,7 +481,17 @@ namespace SoundCloudWebApi.Migrations
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.AlbumEntity", b =>
                 {
-                    b.Navigation("Tracks");
+                    b.Navigation("AlbumTracks");
+                });
+
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
+                {
+                    b.Navigation("AlbumTracks");
+                });
+
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
+                {
+                    b.Navigation("UserPlays");
                 });
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.UserEntity", b =>
@@ -453,6 +499,8 @@ namespace SoundCloudWebApi.Migrations
                     b.Navigation("Albums");
 
                     b.Navigation("Playlists");
+
+                    b.Navigation("TrackPlays");
 
                     b.Navigation("Tracks");
                 });

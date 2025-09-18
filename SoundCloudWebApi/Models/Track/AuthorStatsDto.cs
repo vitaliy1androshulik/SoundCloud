@@ -2,9 +2,9 @@
 {
     public class AuthorStatsDto
     {
-        public int AuthorId { get; set; }
-        public int Tracks { get; set; }
-        public int Listens { get; set; }
-        public int Likes { get; set; }
+        public int UserId { get; set; }
+        public string Username { get; set; }
+        public string? AvatarUrl { get; set; }
+        public int TotalPlays { get; set; }
     }
 }

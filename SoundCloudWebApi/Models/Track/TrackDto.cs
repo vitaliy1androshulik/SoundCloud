@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoundCloudWebApi.Models.Album;
+using System;
 
 namespace SoundCloudWebApi.Models.Track
 {
@@ -31,5 +32,7 @@ namespace SoundCloudWebApi.Models.Track
 
         // Нове поле: кількість прослуховувань
         public int PlayCount { get; set; }
+
+        public List<AlbumDto> Albums { get; set; } = new List<AlbumDto>();
     }
 }

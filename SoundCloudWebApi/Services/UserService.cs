@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
 using Google.Apis.Auth;
+using SoundCloudWebApi.Models.Track;
 
 
 namespace SoundCloudWebApi.Services
@@ -66,7 +67,7 @@ namespace SoundCloudWebApi.Services
                     Email = u.Email,
                     CreatedAt = u.CreatedAt,
                     AvatarUrl = u.AvatarUrl,
-                    Role = u.Role
+                    Role = u.Role,
                 })
                 .FirstOrDefaultAsync()
                 ?? throw new KeyNotFoundException($"User with id={id} not found");
@@ -153,7 +154,9 @@ namespace SoundCloudWebApi.Services
             // Перевіряємо залежності, щоб не впасти на FK-обмеженнях
             var hasAlbums = await _db.Albums.AnyAsync(a => a.OwnerId == id);
             var hasPlaylists = await _db.Playlists.AnyAsync(p => p.OwnerId == id);
-            var hasTracks = await _db.Tracks.AnyAsync(t => t.Album.OwnerId == id);
+            var hasTracks = await _db.AlbumTracks
+                .Include(at => at.Album)
+                .AnyAsync(at => at.Album.OwnerId == id);
 
             if (hasAlbums || hasPlaylists || hasTracks)
                 throw new InvalidOperationException(
@@ -202,6 +205,24 @@ namespace SoundCloudWebApi.Services
             user.AvatarUrl = url;
             user.UpdatedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<AuthorStatsDto>> GetTopUsersAsync(int take)
+        {
+            var topUsers = await _db.TrackListens
+                    .Include(x => x.User) 
+                    .GroupBy(x => x.UserId)
+                    .Select(g => new AuthorStatsDto
+                    {
+                        UserId = g.Key,
+                        Username = g.First().User.Username,
+                        AvatarUrl = g.First().User.AvatarUrl,
+                        TotalPlays = g.Sum(x => x.PlayCount)
+                    })
+                    .OrderByDescending(x => x.TotalPlays)
+                    .Take(take)
+                    .ToListAsync();
+
+            return topUsers;
         }
 
         public async Task<UserEntity> FindOrCreateFromGoogleAsync(GoogleJsonWebSignature.Payload p)
