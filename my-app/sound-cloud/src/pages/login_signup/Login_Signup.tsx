@@ -24,7 +24,7 @@ const LoginSignup: React.FC = () => {
     const {isLogin, setIsLogin} = useOutletContext<OutletContextType>();
     const {showForm, setShowForm} = useOutletContext<OutletContextType>();
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfrimPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const onFinish = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -191,6 +191,7 @@ const LoginSignup: React.FC = () => {
                 username: data.username!,
                 email: data.email!,
                 avatarUrl: data.avatarUrl,
+                totalPlays: 0, // new
             };
 
         dispatch(setUser({ user, token }));
@@ -296,19 +297,48 @@ const LoginSignup: React.FC = () => {
                                     <div className="login_second_container_text baloo2">
                                         <h1>{isLogin ? "Sign into your account" : "Sign Up"}</h1>
                                     </div>
+
+
                                     <div className="login_third_google_facebook_container">
                                         {/* new */}
+                                        {/*<div className="login_third_google_button baloo2">*/}
+                                        {/*    <GoogleLogin*/}
+                                        {/*        onSuccess={handleGoogleSuccess}*/}
+                                        {/*        onError={handleGoogleError}*/}
+                                        {/*        theme="outline"*/}
+                                        {/*        size="large"*/}
+                                        {/*        text="signin_with"*/}
+                                        {/*        shape="pill"*/}
+                                        {/*        width="100%"*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
+
+                                        {/* new */}
                                         <div className="login_third_google_button baloo2">
-                                            <GoogleLogin
-                                                onSuccess={handleGoogleSuccess}
-                                                onError={handleGoogleError}
-                                                theme="filled_blue"
-                                                size="large"
-                                                text="signin_with"
-                                                shape="rectangular"
-                                                width="100%"
-                                            />
+                                            <div className="oauth-wrap">
+                                                {/* Видима фіолетова кнопка */}
+                                                <button type="button" className="oauth-btn">
+                                                    <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon" />
+                                                    Google login
+                                                </button>
+
+                                                {/* Невидимий реальний GoogleLogin поверх */}
+                                                <div className="oauth-overlay">
+                                                    <GoogleLogin
+                                                        onSuccess={handleGoogleSuccess}
+                                                        onError={handleGoogleError}
+                                                        theme="filled_blue"  // будь-що — елемент все одно невидимий
+                                                        size="large"
+                                                        text="signin_with"
+                                                        shape="pill"
+                                                        width="100%"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
+
+
+                                        {/*old :*/}
 
                                     {/*    <button*/}
                                     {/*    type="button"*/}
@@ -474,17 +504,40 @@ const LoginSignup: React.FC = () => {
                                     </div>
                                     <div className="login_third_google_facebook_container">
 
-                                        {/* new */}
+                                        {/*/!* new *!/*/}
+                                        {/*<div className="login_third_google_button baloo2">*/}
+                                        {/*    <GoogleLogin*/}
+                                        {/*        onSuccess={handleGoogleSuccess}*/}
+                                        {/*        onError={handleGoogleError}*/}
+                                        {/*        theme="filled_blue"*/}
+                                        {/*        size="large"*/}
+                                        {/*        text="signin_with"*/}
+                                        {/*        shape="rectangular"*/}
+                                        {/*        width="100%"*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
+
                                         <div className="login_third_google_button baloo2">
-                                            <GoogleLogin
-                                                onSuccess={handleGoogleSuccess}
-                                                onError={handleGoogleError}
-                                                theme="filled_blue"
-                                                size="large"
-                                                text="signin_with"
-                                                shape="rectangular"
-                                                width="100%"
-                                            />
+                                            <div className="oauth-wrap">
+                                                {/* Видима фіолетова кнопка */}
+                                                <button type="button" className="oauth-btn">
+                                                    <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon" />
+                                                    Google login
+                                                </button>
+
+                                                {/* Невидимий реальний GoogleLogin поверх */}
+                                                <div className="oauth-overlay">
+                                                    <GoogleLogin
+                                                        onSuccess={handleGoogleSuccess}
+                                                        onError={handleGoogleError}
+                                                        theme="filled_blue"  // Елемент невидимий, але зберігаємо конфігурацію
+                                                        size="large"
+                                                        text="signin_with"
+                                                        shape="pill"
+                                                        width="100%"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
 
 
@@ -499,6 +552,8 @@ const LoginSignup: React.FC = () => {
                                         {/*    />*/}
                                         {/*    Sign in with Google*/}
                                         {/*</button>*/}
+
+
                                         <button className="login_third_google_button baloo2"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
                                             Facebook
@@ -604,7 +659,7 @@ const LoginSignup: React.FC = () => {
                                                 <button
                                                     type="button"
                                                     className="eye_icon_position_signin_confirm"
-                                                    onClick={() => setShowConfrimPassword(!showConfirmPassword)}
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                                 >
                                                     <img src="src/images/icons/eye_icon.png" alt="eye_icon"/>
                                                 </button>
