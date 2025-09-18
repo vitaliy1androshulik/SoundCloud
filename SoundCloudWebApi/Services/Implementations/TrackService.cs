@@ -66,7 +66,7 @@ namespace SoundCloudWebApi.Services.Implementations
                     AuthorId = t.AuthorId,
                     Author = t.Author.Username,
                     Duration = t.Duration,
-                    AlbumId = t.AlbumId,
+                    //AlbumId = t.AlbumId,
                     Url = t.Url,
                     ImageUrl = t.ImageUrl,
                     IsHidden = t.IsHidden,
@@ -91,7 +91,7 @@ namespace SoundCloudWebApi.Services.Implementations
                     AuthorId = t.AuthorId,
                     Author = t.Author.Username,
                     Duration = t.Duration,
-                    AlbumId = t.AlbumId,
+                    //AlbumId = t.AlbumId,
                     Url = t.Url,
                     ImageUrl = t.ImageUrl,
                     IsHidden = t.IsHidden,
@@ -124,7 +124,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 AuthorId = t.AuthorId,
                 Author = t.Author.Username,
                 Duration = t.Duration,
-                AlbumId = t.AlbumId,
+                //AlbumId = t.AlbumId,
                 Url = t.Url,
                 ImageUrl = t.ImageUrl,
                 IsHidden = t.IsHidden,
@@ -138,12 +138,12 @@ namespace SoundCloudWebApi.Services.Implementations
         {
             var (actorId, actorRole) = GetActor();
 
-            var album = await _db.Albums.Include(a => a.Owner)
-                .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
-                ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
+            //var album = await _db.Albums.Include(a => a.Owner)
+            //    .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
+            //    ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
 
-            if (actorRole != UserRole.Admin && album.OwnerId != actorId)
-                throw new UnauthorizedAccessException("You are not owner of this album");
+            //if (actorRole != UserRole.Admin && album.OwnerId != actorId)
+            //    throw new UnauthorizedAccessException("You are not owner of this album");
 
             var author = await _db.Users.FindAsync(actorId)
                 ?? throw new KeyNotFoundException($"Author {actorId} not found");
@@ -152,7 +152,7 @@ namespace SoundCloudWebApi.Services.Implementations
             {
                 Title = dto.Title.Trim(),
                 AuthorId = actorId,
-                AlbumId = dto.AlbumId,
+                //AlbumId = dto.AlbumId,
                 Duration = dto.Duration,
                 GenreId = dto.GenreId,
                 IsHidden = false,
@@ -170,7 +170,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 AuthorId = track.AuthorId,
                 Author = author.Username,
                 Duration = track.Duration,
-                AlbumId = track.AlbumId,
+                //AlbumId = track.AlbumId,
                 Url = track.Url,
                 ImageUrl = track.ImageUrl,
                 IsHidden = track.IsHidden,
@@ -222,7 +222,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 Title = dto.Title.Trim(),
                 Url = url,
                 Duration = dto.Duration,
-                AlbumId = dto.AlbumId,
+                //AlbumId = dto.AlbumId,
                 AuthorId = actorId,
                 GenreId = dto.GenreId,   // жанр з DTO
                 IsHidden = false,
@@ -247,7 +247,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 Title = track.Title,
                 Url = track.Url,
                 Duration = track.Duration,
-                AlbumId = track.AlbumId,
+                //AlbumId = track.AlbumId,
                 AuthorId = track.AuthorId,
                 Author= (await _db.Users.FindAsync(track.AuthorId))!.Username,
                 ImageUrl = track.ImageUrl,
@@ -272,7 +272,7 @@ namespace SoundCloudWebApi.Services.Implementations
             track.Title = dto.Title.Trim();
             track.AuthorId = dto.AuthorId;
             track.Duration = dto.Duration;
-            track.AlbumId = dto.AlbumId;
+            //track.AlbumId = dto.AlbumId;
             track.GenreId = dto.GenreId; // нове поле для жанру
 
             await _db.SaveChangesAsync();
@@ -284,7 +284,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 AuthorId = track.AuthorId,
                 Author = track.Author.Username,
                 Duration = track.Duration,
-                AlbumId = track.AlbumId,
+                //AlbumId = track.AlbumId,
                 Url = track.Url,
                 ImageUrl = track.ImageUrl,
                 IsHidden = track.IsHidden,

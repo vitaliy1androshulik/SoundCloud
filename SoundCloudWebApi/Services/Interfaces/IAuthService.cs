@@ -10,5 +10,6 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task<AuthResponseDto> LoginAsync(LoginRequestDto dto);
         Task<UserProfileDto> GetUserProfileAsync(string userId);
         string IssueJwtForUser(UserEntity user);
+        Task SetLocalPasswordAsync(int userId, string newPassword);
     }
 }

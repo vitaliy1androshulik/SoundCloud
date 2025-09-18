@@ -33,7 +33,7 @@ namespace SoundCloudWebApi.Data.Entities
         public bool IsHidden { get; set; } = false;
 
         // Зв’язок «багато треків — один альбом»
-        public int AlbumId { get; set; }
+        //public int AlbumId { get; set; }
         public AlbumEntity Album { get; set; }
 
         // Зв’язок «один трек — багато плейлистів»

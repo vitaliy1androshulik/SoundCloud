@@ -25,8 +25,8 @@ namespace SoundCloudWebApi.Models.Track
         public TimeSpan Duration { get; set; }
 
         // Альбом (обов’язково)
-        [Required]
-        public int AlbumId { get; set; }
+        //[Required]
+        //public int AlbumId { get; set; }
 
         // Опційно: жанр
         public int? GenreId { get; set; }
