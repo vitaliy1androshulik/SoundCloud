@@ -19,8 +19,8 @@ namespace SoundCloudWebApi.Validators.Track
             //    .Must(d => d > TimeSpan.Zero)
             //    .WithMessage("Тривалість має бути більше 0");
 
-            RuleFor(x => x.AlbumId)
-                .GreaterThan(0);
+            //RuleFor(x => x.AlbumId)
+            //    .GreaterThan(0);
         }
     }
 }

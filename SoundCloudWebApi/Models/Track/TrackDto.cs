@@ -24,7 +24,7 @@ namespace SoundCloudWebApi.Models.Track
         public bool IsHidden { get; set; }
 
         // Зв’язок з альбомом
-        public int AlbumId { get; set; }
+        //public int AlbumId { get; set; }
 
         public string? Url { get; set; }
 

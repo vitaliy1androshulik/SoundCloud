@@ -193,6 +193,7 @@ namespace SoundCloudWebApi.Services.Implementations
                     CoverUrl = at.Album.CoverUrl,
                     IsPublic = at.Album.IsPublic
                 }).ToList()
+
             };
         }
 
@@ -201,13 +202,13 @@ namespace SoundCloudWebApi.Services.Implementations
         {
             var (actorId, actorRole) = GetActor();
 
-            // Перевіряємо, чи існує альбом і його власника
-            var album = await _db.Albums.Include(a => a.Owner)
-                .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
-                ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
+            //// Перевіряємо, чи існує альбом і його власника
+            //var album = await _db.Albums.Include(a => a.Owner)
+            //    .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
+            //    ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
 
-            if (actorRole != UserRole.Admin && album.OwnerId != actorId)
-                throw new UnauthorizedAccessException("You are not owner of this album");
+            //if (actorRole != UserRole.Admin && album.OwnerId != actorId)
+            //    throw new UnauthorizedAccessException("You are not owner of this album");
 
             // Перевіряємо користувача-автора
             var author = await _db.Users.FindAsync(actorId)
@@ -231,7 +232,11 @@ namespace SoundCloudWebApi.Services.Implementations
             // Додаємо зв'язок трек → альбом
             _db.AlbumTracks.Add(new AlbumTrackEntity
             {
-                AlbumId = dto.AlbumId,
+                //поки коментуємо (помилка 'CreateTrackDto' does not contain a definition for 'AlbumId' and no accessible
+                //extension method 'AlbumId' accepting a first argument
+                //of type 'CreateTrackDto' could be found (are you missing a using directive or an assembly reference?))
+
+                //AlbumId = dto.AlbumId,
                 TrackId = track.Id
             });
             await _db.SaveChangesAsync();
@@ -252,16 +257,19 @@ namespace SoundCloudWebApi.Services.Implementations
                 // Альбоми, до яких належить трек
                 Albums = new List<AlbumDto>
         {
-            new AlbumDto
-            {
-                Id = album.Id,
-                Title = album.Title,
-                Description = album.Description,
-                OwnerId = album.OwnerId,
-                OwnerName = album.Owner.Username,
-                CoverUrl = album.CoverUrl,
-                CreatedAt = album.CreatedAt
-            }
+                    //поки коментуємо (помилка 'CreateTrackDto' does not contain a definition for 'AlbumId' and no accessible
+                    //extension method 'AlbumId' accepting a first argument
+                    //of type 'CreateTrackDto' could be found (are you missing a using directive or an assembly reference?))
+            //new AlbumDto
+            //{
+            //    Id = album.Id,
+            //    Title = album.Title,
+            //    Description = album.Description,
+            //    OwnerId = album.OwnerId,
+            //    OwnerName = album.Owner.Username,
+            //    CoverUrl = album.CoverUrl,
+            //    CreatedAt = album.CreatedAt
+            //}
         }
             };
         }
