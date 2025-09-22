@@ -34,5 +34,8 @@ namespace SoundCloudWebApi.Models.Track
         public int PlayCount { get; set; }
 
         public List<AlbumDto> Albums { get; set; } = new List<AlbumDto>();
+
+        public int LikesCount { get; set; }              // кількість лайків
+        public bool IsLikedByCurrentUser { get; set; }  // чи лайкнув поточний користувач
     }
 }

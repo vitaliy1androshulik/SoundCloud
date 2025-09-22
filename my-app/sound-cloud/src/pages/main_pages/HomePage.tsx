@@ -36,6 +36,8 @@ const HomePage: React.FC = () => {
     const [showRightDiscover, setShowRightDiscover] = useState(false);
 
 
+
+
     useEffect(() => {
         // функція для оновлення кнопок конкретного контейнера
         const attachScrollListener = (
@@ -80,6 +82,7 @@ const HomePage: React.FC = () => {
         };
     }, [tracks]);
 
+
     const scrollLeft = (ref: React.RefObject<HTMLDivElement | null>) => {
         ref.current?.scrollBy({ left: -200, behavior: "smooth" });
     };
@@ -111,6 +114,8 @@ const HomePage: React.FC = () => {
 
         fetchUsers();
     }, []);
+
+
 
 
 

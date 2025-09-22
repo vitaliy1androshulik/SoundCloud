@@ -27,6 +27,19 @@ const FeedPage: React.FC = ()=> {
 
     const totalPages = Math.ceil(tracks.length / tracksPerPage);
 
+    //для лайків
+    const [likedTracksIds, setLikedTracksIds] = useState<number[]>([]);
+    useEffect(() => {
+        trackService.getAll()
+            .then((data) => {
+                setTracks(data);
+                const likedIds = data.filter(t => t.isLikedByCurrentUser).map(t => t.id);
+                setLikedTracksIds(likedIds);
+            })
+            .catch((err) => console.error(err));
+    }, []);
+
+
     const { track: currentTrack, isPlaying } = usePlayerStore();
     console.log(tracks);
     useEffect(() => {
@@ -54,6 +67,27 @@ const FeedPage: React.FC = ()=> {
         if (!track.imageUrl) return "/default-cover.png"; // запасна картинка
         return `http://localhost:5122${track.imageUrl}`;
     };
+
+
+    const toggleLike = async (track: ITrack) => {
+        try {
+            if (likedTracksIds.includes(track.id)) {
+                // анлайк
+                await trackService.unlike(track.id);
+                setLikedTracksIds(prev => prev.filter(id => id !== track.id));
+                track.isLikedByCurrentUser = false; // оновлюємо локально
+            } else {
+                // лайк
+                await trackService.like(track.id);
+                setLikedTracksIds(prev => [...prev, track.id]);
+                track.isLikedByCurrentUser = true; // оновлюємо локально
+            }
+        } catch (err) {
+            console.error("Error liking track:", err);
+        }
+    };
+
+
     return (
         <main className="layout_container mb-[1200px]">
             <div className="container baloo2">
@@ -99,7 +133,12 @@ const FeedPage: React.FC = ()=> {
                                         </div>
                                         <div className="track_more_controls_container">
                                             <div className="track_more_controls_style">
-                                                <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                <img
+                                                    src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                                                    alt="like"
+                                                    onClick={() => toggleLike(track)}
+                                                    style={{cursor: "pointer"}}
+                                                />
                                             </div>
                                             <div className="track_more_controls_style">
                                                 {!loop ? (
