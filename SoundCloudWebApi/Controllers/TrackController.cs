@@ -32,11 +32,19 @@ namespace SoundCloudWebApi.Controllers
         }
 
         // ===== Треки поточного користувача =====
-        [HttpGet]
-        [SwaggerOperation(OperationId = "GetTracks", Summary = "Отримати всі треки поточного користувача")]
-        public async Task<IActionResult> GetAll()
+        [Authorize]
+        [HttpGet("my")]
+        public async Task<IActionResult> GetMyTracks()
         {
-            var tracks = await _trackService.GetAllAsync();
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            var tracks = await _trackService.GetAllByUserAsync(userId);
             return Ok(tracks);
         }
 

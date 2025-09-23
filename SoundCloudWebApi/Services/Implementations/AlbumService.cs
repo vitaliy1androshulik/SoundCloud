@@ -40,11 +40,13 @@ namespace SoundCloudWebApi.Services.Implementations
 
         // ===== CRUD для альбомів =====
 
+        // ============= Отримати альбоми певного користувача ===========
+
         public async Task<IEnumerable<AlbumDto>> GetAllByUserAsync(int userId)
         {
             return await _db.Albums
                 .Include(a => a.Owner)
-                .Where(a => a.OwnerId == userId || a.IsPublic)
+                .Where(a => a.OwnerId == userId)
                 .Select(a => new AlbumDto
                 {
                     Id = a.Id,
@@ -58,6 +60,25 @@ namespace SoundCloudWebApi.Services.Implementations
                 })
                 .ToListAsync();
         }
+        public async Task<IEnumerable<AlbumDto>> GetAllPublicAlbumsAsync()
+        {
+            return await _db.Albums
+                .Include(a => a.Owner) 
+                .Where(a => a.IsPublic)
+                .Select(a => new AlbumDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    CreatedAt = a.CreatedAt,
+                    OwnerId = a.OwnerId,
+                    OwnerName = a.Owner.Username,
+                    CoverUrl = a.CoverUrl,
+                    IsPublic = a.IsPublic
+                })
+                .ToListAsync();
+        }
+
 
         public async Task<AlbumDto?> GetByIdAsync(int albumId)
         {
@@ -89,6 +110,25 @@ namespace SoundCloudWebApi.Services.Implementations
             var owner = await _db.Users.FindAsync(actorId)
                 ?? throw new KeyNotFoundException($"User {actorId} not found");
 
+            string? imageUrl = null;
+            if (dto.CoverUrl != null && dto.CoverUrl.Length > 0)
+            {
+                var coverFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "albums");
+                if (!Directory.Exists(coverFolder))
+                    Directory.CreateDirectory(coverFolder);
+
+                var coverFileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.CoverUrl.FileName);
+                var coverFilePath = Path.Combine(coverFolder, coverFileName);
+
+                using (var coverStream = new FileStream(coverFilePath, FileMode.Create))
+                {
+                    await dto.CoverUrl.CopyToAsync(coverStream);
+                }
+
+                imageUrl = $"uploads/albums/{coverFileName}";
+            }
+
+
             var entity = new AlbumEntity
             {
                 Title = dto.Title,
@@ -96,6 +136,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 CreatedAt = DateTime.UtcNow,
                 OwnerId = actorId,
                 Owner = owner,
+                CoverUrl = imageUrl,
                 IsPublic = dto.IsPublic
             };
 
@@ -206,6 +247,7 @@ namespace SoundCloudWebApi.Services.Implementations
                     Author = at.Track.Author.Username,
                     Duration = at.Track.Duration,
                     Genre = at.Track.Genre?.Name,
+                    Url = at.Track.Url,
                     PlayCount = at.Track.PlayCount,
                     ImageUrl = at.Track.ImageUrl
                 })

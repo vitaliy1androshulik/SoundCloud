@@ -194,7 +194,9 @@ namespace SoundCloudWebApi.Services
                    u.Email,
                    u.AvatarUrl,
                    u.CreatedAt,
+                   u.Bio,
                    u.Role,
+                   u.BannerUrl,
                    u.IsBlocked,
                    u.UpdatedAt,
                    u.AuthProvider,//new
@@ -215,6 +217,8 @@ namespace SoundCloudWebApi.Services
                 Email = user.Email,
                 AvatarUrl=user.AvatarUrl,
                 CreatedAt = user.CreatedAt,
+                Bio = user.Bio,
+                BannerUrl=user.BannerUrl,
                 Role = user.Role,
                 UpdatedAt   = user.UpdatedAt,
                     // new:

@@ -190,7 +190,7 @@ const HomePage: React.FC = () => {
                             />
                             <div className="track_information_container">
                     <span className="track_name baloo2">
-                        {track.title.length > 20 ? track.title.slice(0, 16) + "…" : track.title}
+                        {track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}
                     </span>
                                 <span className="track_author_home_page baloo2">{track.author}</span>
                             </div>
@@ -234,7 +234,7 @@ const HomePage: React.FC = () => {
                                 />
                                 <div className="track_information_container">
                 <span className="track_name baloo2">
-                    {track.title.length > 20 ? track.title.slice(0, 16) + "…" : track.title}
+                    {track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}
                 </span>
                                     <span className="track_author_home_page baloo2">{track.author}</span>
                                 </div>
@@ -272,8 +272,9 @@ const HomePage: React.FC = () => {
                                  onClick={() => playTrack(track, tracks)}
                             />
                             <div className="track_information_container">
-                                <span className="track_name baloo2">{track.title.length > 20 ?
-                                    track.title.slice(0, 16) + "…" : track.title}</span>
+                                <span className="track_name baloo2">
+                                    {track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}
+                                </span>
                                 <span className="track_author_home_page baloo2">{track.author}</span>
                             </div>
                         </li>
@@ -329,8 +330,9 @@ const HomePage: React.FC = () => {
                                  onClick={() => playTrack(track, tracks)}
                             />
                             <div className="track_information_container">
-                                <span className="track_name baloo2">{track.title.length > 20 ?
-                                    track.title.slice(0, 16) + "…" : track.title}</span>
+                                <span className="track_name baloo2">
+                                    {track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}
+                                </span>
                                 <span className="track_author_home_page baloo2">{track.author}</span>
                             </div>
                         </li>
@@ -366,8 +368,7 @@ const HomePage: React.FC = () => {
                                  onClick={() => playTrack(track, tracks)}
                             />
                             <div className="track_information_container">
-                                <span className="track_name baloo2">{track.title.length > 20 ?
-                                    track.title.slice(0, 16) + "…" : track.title}</span>
+                                <span className="track_name baloo2">{track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}</span>
                                 <span className="track_author_home_page baloo2">{track.author}</span>
                             </div>
                         </li>
@@ -441,8 +442,7 @@ const HomePage: React.FC = () => {
                                         {track.author}
                                     </div>
                                     <div className="history_track_title baloo2">
-                                        {track.title.length > 20 ?
-                                            track.title.slice(0, 15) + "…" : track.title}
+                                        {track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}
                                     </div>
                                 </div>
                                 <div className="history_buttons_container">

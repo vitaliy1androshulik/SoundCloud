@@ -11,8 +11,8 @@ export interface ICreatePlaylist {
 
 export const playlistService = {
     getAll: async (): Promise<IPlaylist[]> => {
-        const { data } = await api.get("/Playlist");
-        return data;
+        const res = await api.get("/Playlist");
+        return res.data;
     },
 
     create: async (dto: ICreatePlaylist): Promise<IPlaylist> => {

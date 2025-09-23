@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import { trackService } from "../../services/trackApi";
-import { playlistService} from "../../services/playlistApi";
 import { ITrack } from "../../types/track";
 import { IPlaylist } from "../../types/playlist";
 import {IAlbum} from "../../types/album";
 import { albumService} from "../../services/albumAPI.ts";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store.ts";
+import "../../styles/profile_page/profile_layout.css"
+import {playlistService} from "../../services/playlistApi.ts";
+import {getCurrentUser, updateUserProfile, uploadUserBanner} from "../../services/User/user_info.ts";
+import {usePlayerStore} from "../../store/player_store.tsx";
+import {IUser} from "../../types/user.ts";
 
-
-const tabs = ["Tracks", "Playlists", "Albums", "Reposts"];
+const tabs = ["All","Tracks", "Albums", "Playlists" ,"Reposts"];
 
 const ProfilePage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<string>("Tracks");
+    const [activeTab, setActiveTab] = useState<string>("All");
     const [tracks, setTracks] = useState<ITrack[]>([]);
-    const user = useSelector((state: RootState) => state.user.user); // поточний юзер
+    const [user, setUser] = useState<IUser | null>(null);
 
-    // Tracks
+    useEffect(() => {
+        getCurrentUser()
+            .then((data) => setUser(data))
+            .catch((err) => console.error(err));
+    }, []);
+
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [title, setTitle] = useState("");
@@ -26,19 +32,19 @@ const ProfilePage: React.FC = () => {
     const [file, setFile] = useState<File | undefined>();
     const [cover, setCover] = useState<File | undefined>();
 
+    const playTrack = usePlayerStore(state => state.playTrack);
+    const pauseTrack = usePlayerStore((state) => state.pauseTrack);
 
 
-    // Playlists
     const [playlists, setPlaylists] = useState<IPlaylist[]>([]);
     const [playlistModalOpen, setPlaylistModalOpen] = useState(false);
     const [playlistName, setPlaylistName] = useState("");
     const [playlistCoverFile, setPlaylistCoverFile] = useState<File | undefined>();
-    //const [playlistTracks, setPlaylistTracks] = useState<ITrack[]>([]);
     const [playlistTracks, setPlaylistTracks] = useState<{ [playlistId: number]: ITrack[] }>({});
 
 
 
-    // Albums
+
     const [albums, setAlbums] = useState<IAlbum[]>([]);
     const [albumModalOpen, setAlbumModalOpen] = useState(false);
     const [albumTitle, setAlbumTitle] = useState("");
@@ -54,12 +60,54 @@ const ProfilePage: React.FC = () => {
     const [selectedTrackToAddToAlbum, setSelectedTrackToAddToAlbum] = useState<number | null>(null);
     const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
 
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [bio, setBio] = useState("");
+    const [avatar, setAvatarFile] = useState<File | null>(null);
 
+
+    const [isUserEditOpen, setUserEditOpen] = useState(false);
+
+    const [bannerModalOpen, setBannerModalOpen] = useState(false);
+    const [bannerFile, setBannerFile] = useState<File | null>(null);
+    const [uploading, setUploading] = useState(false);
 
     // Add to playlist modal
     const [addToPlaylistModalOpen, setAddToPlaylistModalOpen] = useState(false);
     const [selectedTrackToAdd, setSelectedTrackToAdd] = useState<number | null>(null);
     const [selectedPlaylistId, setSelectedPlaylistId] = useState<number | null>(null);
+
+    const { track: currentTrack, isPlaying,currentAlbumId } = usePlayerStore();
+    console.log(tracks);
+    useEffect(() => {
+        trackService.getAll()
+            .then((data) => setTracks(data))
+            .catch((err) => console.error(err));
+    }, []);
+
+    useEffect(() => {
+        if (bannerModalOpen||isUserEditOpen) {
+            // Забороняємо скрол
+            document.body.style.overflow = "hidden";
+        } else {
+            // Повертаємо як було
+            document.body.style.overflow = "";
+        }
+
+        // Cleanup на всяк випадок
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [bannerModalOpen,isUserEditOpen]);
+
+    useEffect(() => {
+        if (isUserEditOpen && user) {
+            setUsername(user.username || "");
+            setEmail(user.email || "");
+            setBio(user.bio || "");
+        }
+    }, [isUserEditOpen, user]);
+
 
     // Fetch tracks and playlists on mount
     useEffect(() => {
@@ -68,16 +116,83 @@ const ProfilePage: React.FC = () => {
         albumService.getMyAlbums().then(setAlbums).catch(console.error);
     }, []);
 
-    const getPlaylistImageUrl = (Playlist?: IPlaylist | null) => {
-        if (!Playlist || !Playlist.coverUrl) return "/default-cover.png";
-        return `http://localhost:5122/${Playlist.coverUrl}`;
+    const handleUserUpdate = async (updateData: {
+        username?: string;
+        email?: string;
+        bio?: string;
+        avatar?: File | null;
+    }) => {
+        if (!user?.id) {
+            alert("User not found!");
+            return;
+        }
+
+        setUploading(true);
+
+        try {
+            const updatedUser = await updateUserProfile(user.id, {
+                username: updateData.username,
+                email: updateData.email,
+                bio: updateData.bio,
+                avatar: updateData.avatar ?? undefined,
+            });
+
+            // Оновлюємо локальний стан користувача
+            setUser(updatedUser);
+
+            // Якщо потрібно, можна скинути файли
+            // updateData.avatarFile = undefined;
+            // updateData.bannerFile = undefined;
+
+        } catch (err) {
+            console.error("Profile update failed", err);
+            alert("Failed to update profile");
+        } finally {
+            setUploading(false);
+        }
     };
+
+
+
+    const handleBannerUpload = async () => {
+        if (!bannerFile || !user?.id) {
+            alert("Please select a file!");
+            return;
+        }
+
+        setUploading(true);
+        try {
+            const data = await uploadUserBanner.updateBanner(user.id, bannerFile);
+            // Оновлюємо локальний стейт юзера
+            setUser({ ...user, banner: data.bannerUrl });
+            setBannerModalOpen(false);
+            setBannerFile(null);
+        } catch (err) {
+            console.error("Banner upload failed", err);
+            alert("Failed to upload banner");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    //const getPlaylistImageUrl = (Playlist?: IPlaylist | null) => {
+    //    if (!Playlist || !Playlist.coverUrl) return "/default-cover.png";
+    //    return `http://localhost:5122/${Playlist.coverUrl}`;
+    //};
     const getTrackImageUrl = (track?: ITrack | null) => {
         if (!track || !track.imageUrl) return "/default-cover.png";
         return `http://localhost:5122/${track.imageUrl}`;
     };
-
-    // Track upload
+    const getUserImageUrl = (user?: IUser | null) => {
+        if (!user || !user.avatar) return "/default-cover.png";
+        console.log(user)
+        return `http://localhost:5122/${user.avatar}`;
+    };
+    const getUserBannerUrl = (user?: IUser | null) => {
+        if (!user || !user.banner) return "src/images/profile/banner.png";
+        console.log(user)
+        return `http://localhost:5122${user.banner}`;
+    };
     const handleUpload = async () => {
         if (!title || !duration || !albumId || !file || !cover || genreId === undefined) {
             alert("Please fill all required fields and select files!");
@@ -103,7 +218,6 @@ const ProfilePage: React.FC = () => {
     };
 
 
-    // Playlist creation
     const handlePlaylistCreate = async () => {
         if (!playlistName) {
             alert("Enter playlist name");
@@ -130,16 +244,15 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    // Add to playlist handlers
-    const handleAddToPlaylistClick = (trackId: number) => {
-        if (!playlists.length) {
-            alert("You have no playlists yet!");
-            return;
-        }
-        setSelectedTrackToAdd(trackId);
-        setSelectedPlaylistId(playlists[0].id); // вибір по-замовчуванню — перший плейлист
-        setAddToPlaylistModalOpen(true);
-    };
+    // const handleAddToPlaylistClick = (trackId: number) => {
+    //     if (!playlists.length) {
+    //         alert("You have no playlists yet!");
+    //         return;
+    //     }
+    //     setSelectedTrackToAdd(trackId);
+    //     setSelectedPlaylistId(playlists[0].id); // вибір по-замовчуванню — перший плейлист
+    //     setAddToPlaylistModalOpen(true);
+    // };
 
     const handleConfirmAddToPlaylist = async () => {
         if (!selectedPlaylistId || !selectedTrackToAdd) {
@@ -148,11 +261,8 @@ const ProfilePage: React.FC = () => {
         }
 
         try {
-            // Виклик API — метод може відрізнятись, підстав під свій сервіс
             await playlistService.addTrack(selectedPlaylistId, selectedTrackToAdd);
 
-            // Можна опціонально оновити локальний стан плейлистів (якщо бекенд повертає оновлений об'єкт — краще використовувати його)
-            // Нижче — простий оповіститель:
             alert("Track added to playlist!");
             setAddToPlaylistModalOpen(false);
             setSelectedTrackToAdd(null);
@@ -163,23 +273,99 @@ const ProfilePage: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (activeTab === "Tracks") {
+                    const userTracks = await trackService.getMyTracks();
+                    setTracks(userTracks);
+                } else if (activeTab === "Playlists") {
+                    const userPlaylists = await playlistService.getAll();
+                    setPlaylists(userPlaylists);
 
-    const handleViewTracks = async (playlistId: number) => {
-        try {
-            const tracks = await playlistService.getTracks(playlistId); // твій API метод
-            setPlaylistTracks((prev) => ({
-                ...prev,
-                [playlistId]: tracks,
-            }));
-        } catch (err) {
-            console.error(err);
-            alert("Failed to load tracks");
+                    // Одразу підтягуємо треки для всіх плейлістів
+                    const tracksByPlaylist: { [playlistId: number]: ITrack[] } = {};
+                    for (const p of userPlaylists) {
+                        tracksByPlaylist[p.id] = await playlistService.getTracks(p.id);
+                    }
+                    setPlaylistTracks(tracksByPlaylist);
+                } else if (activeTab === "Albums") {
+                    const userAlbums = await albumService.getMyAlbums();
+                    setAlbums(userAlbums);
+
+                    // Одразу підтягуємо треки для всіх альбомів
+                    const tracksByAlbum: { [albumId: number]: ITrack[] } = {};
+                    for (const a of userAlbums) {
+                        tracksByAlbum[a.id] = await albumService.getTracks(a.id);
+                        console.log(albumService.getTracks(a.id))
+                    }
+
+                    setAlbumTracks(tracksByAlbum);
+                }
+            } catch (err) {
+                console.error("Failed to fetch data for tab:", activeTab, err);
+            }
+        };
+
+        fetchData();
+    }, [activeTab]);
+
+
+
+    useEffect(() => {
+        const loadAllTracks = async () => {
+            try {
+                const results = await Promise.all(
+                    playlists.map(async (pl) => {
+                        const tracks = await playlistService.getTracks(pl.id);
+                        return { id: pl.id, tracks };
+                    })
+                );
+
+                const tracksByPlaylist = results.reduce(
+                    (acc, { id, tracks }) => ({ ...acc, [id]: tracks }),
+                    {}
+                );
+
+                setPlaylistTracks(tracksByPlaylist);
+            } catch (err) {
+                console.error("Failed to load all tracks", err);
+                alert("Не вдалося завантажити треки для плейлістів");
+            }
+        };
+
+        if (playlists.length > 0) {
+            loadAllTracks();
         }
-    };
-
+    }, [playlists]);
 
 
     //Для альбомів
+    useEffect(() => {
+        const loadAllAlbumTracks = async () => {
+            try {
+                const results = await Promise.all(
+                    albums.map(async (a) => {
+                        const tracks = await albumService.getTracks(a.id);
+                        return { id: a.id, tracks };
+                    })
+                );
+
+                const tracksByAlbum = results.reduce(
+                    (acc, { id, tracks }) => ({ ...acc, [id]: tracks }),
+                    {} as Record<number, ITrack[]>
+                );
+
+                setAlbumTracks(tracksByAlbum);
+            } catch (err) {
+                console.error("Failed to load all album tracks", err);
+            }
+        };
+
+        if (albums.length > 0) {
+            loadAllAlbumTracks();
+        }
+    }, [albums]);
 
     const handleViewAlbumTracks = async (albumId: number) => {
         try {
@@ -191,15 +377,15 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    const handleAddToAlbumClick = (trackId: number) => {
-        if (!albums.length) {
-            alert("You have no albums yet!");
-            return;
-        }
-        setSelectedTrackToAddToAlbum(trackId);
-        setSelectedAlbumId(albums[0].id); // вибір першого альбому по-замовчуванню
-        setAddToAlbumModalOpen(true);
-    };
+    // const handleAddToAlbumClick = (trackId: number) => {
+    //     if (!albums.length) {
+    //         alert("You have no albums yet!");
+    //         return;
+    //     }
+    //     setSelectedTrackToAddToAlbum(trackId);
+    //     setSelectedAlbumId(albums[0].id); // вибір першого альбому по-замовчуванню
+    //     setAddToAlbumModalOpen(true);
+    // };
 
 
     const handleConfirmAddToAlbum = async () => {
@@ -220,34 +406,36 @@ const ProfilePage: React.FC = () => {
             alert("Failed to add track to album.");
         }
     };
-
-    //творення альбому
+    useEffect(() => {
+        console.log("Current user:", user);
+    }, [user]);
 
     const handleAlbumCreate = async () => {
-        if (!albumTitle) {
-            alert("Enter album title");
-            return;
-        }
-
-        if (!user) {
-            alert("You must be logged in to create an album");
-            return;
-        }
-
         try {
-            // Викликаємо метод сервісу напряму, він сам формує FormData
+            const currentUser = await getCurrentUser();
+
+            if (!currentUser || !currentUser.id) {
+                alert("Не вдалося визначити користувача. Будь ласка, увійдіть в систему.");
+                return;
+            }
+
+            if (!albumTitle) {
+                alert("Enter album title");
+                return;
+            }
+
             const newAlbum = await albumService.create({
                 title: albumTitle,
-                description: albumDescription, // необов’язково
+                description: albumDescription,
+                ownerId: currentUser.id,
+                cover: albumCoverFile,
                 isPublic: albumIsPublic,
-                cover: albumCoverFile,         // файл обкладинки
-                ownerId: user.id               // автоматично підтягуємо
+
             });
 
-            // Додаємо новий альбом у локальний стан
+
             setAlbums([...albums, newAlbum]);
 
-            // Очистка полів та закриття модалки
             setAlbumTitle("");
             setAlbumDescription("");
             setAlbumCoverFile(undefined);
@@ -258,72 +446,422 @@ const ProfilePage: React.FC = () => {
             alert("Failed to create album. Check console for details.");
         }
     };
-
     return (
-        <div className="p-6 text-white">
+        <div className="layout_container mb-[2900px] baloo2">
+            <div className="banner_container">
+                <img className="banner_image_style" src={getUserBannerUrl(user)} alt="Banner"/>
+            </div>
+            <button className="profile_page_banner_upload_container baloo2"
+                    onClick={() => setBannerModalOpen(true)}
+            >
+                <span className="profile_page_banner_upload_button_txt_style">
+                    Update image
+                </span>
+            </button>
+            <div className="profile_page_user_avatar_container">
+                <img className="profile_page_user_avatar_style" src={getUserImageUrl(user)} alt="Avatar"/>
+            </div>
+            <div className="profile_page_user_name_container">
+                {user?.username}
+            </div>
+
+            <div className="profile_page_following_tracks_info_container">
+                <div className="followers_container">
+                    <div className="title">
+                        Followers
+                    </div>
+                    <div className="number">
+                        0
+                    </div>
+                </div>
+                <div className="following_container">
+                    <div className="title">
+                        Following
+                    </div>
+                    <div className="number">
+                        0
+                    </div>
+                </div>
+                <div className="tracks_container">
+                    <div className="title">
+                        Tracks
+                    </div>
+                    <div className="number">
+                        {tracks.length}
+                    </div>
+                </div>
+            </div>
+
+            <div className="profile_page_right_sidebar">
+                <div className="profile_page_bio_container">
+                    {user?.bio ? <span>{user.bio}</span> : <span>You don’t have bio :(</span>}
+                </div>
+
+                <div className="profile_page_following_users_container">
+                    <div className="container_title_container">
+                        <span className="header_txt_style">FOLLOWING</span>
+                    </div>
+                    <div className="user_info_container">
+                        <span className="txt_style">You don`t have Followings</span>
+                    </div>
+                </div>
+
+                <div className="profile_page_likes_users_container">
+                    <div className="container_title_container">
+                        <span className="header_txt_style">LIKES</span>
+                    </div>
+                    <div className="user_info_container">
+                        <span className="txt_style">You don`t have Likes</span>
+                    </div>
+                </div>
+            </div>
+
             {/* Tabs */}
-            <div className="flex gap-6 border-b border-gray-700 text-gray-400">
+            <div className="profile_tabs_container">
                 {tabs.map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`pb-2 transition-colors ${
-                            activeTab === tab
-                                ? "text-white border-b-2 border-indigo-500 font-semibold"
-                                : "hover:text-white"
-                        }`}
-                    >
-                        {tab}
-                    </button>
+                    <div className="profile_tab_buttons_container text-white baloo2">
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`${
+                                activeTab === tab
+                                    ? "profile_tab_buttons_container_activated"
+                                    : "profile_tab_buttons_non_active"
+                            }`}
+                        >
+                            {tab}
+                        </button>
+                    </div>
                 ))}
+            </div>
+            <div className="profile_page_user_button_controls">
+                <button className="share_button cursor-pointer">
+                    <img className="img_style" src="src/images/icons/share.png" alt="shareIcon"/>
+                    <span className="txt_style">Share</span>
+                </button>
+                <button className="edit_button cursor-pointer"
+                        onClick={() => setUserEditOpen(true)}
+                >
+                    <img className="img_style" src="src/images/icons/pen_icon.png" alt="penIcon"/>
+                    <span className="txt_style">Edit</span>
+                </button>
             </div>
 
             {/* Content */}
-            <div className="mt-6">
+            <div className="profile_tracks_container">
                 {/* Tracks Tab */}
+                {activeTab === "All" && (
+                    <>
+                        {playlists.length ? (
+                            <ul className="text-white baloo2">
+                                {playlists.map((p) => (
+                                    <li
+                                        key={p.id}
+                                        className="profile_track_container"
+                                    >
+                                        <div className="">
+                                            <img
+                                                src={p.coverUrl ? `http://localhost:5122/${p.coverUrl}` : "/default-cover.png"}
+                                                alt={p.name}
+                                                className="profile_page_playlist_image"
+                                                onClick={() => {
+                                                    // Якщо плейліст вже грає, ставимо паузу
+                                                    if (
+                                                        currentTrack &&
+                                                        playlistTracks[p.id]?.some(t => t.id === currentTrack.id) &&
+                                                        currentAlbumId === p.id &&
+                                                        isPlaying
+                                                    ) {
+                                                        pauseTrack();
+                                                    } else {
+                                                        // Інакше граємо перший трек плейліста
+                                                        playTrack(playlistTracks[p.id][0], playlistTracks[p.id], p.id);
+                                                    }
+                                                }}
+                                            />
+
+                                        </div>
+
+                                        {/* Треки конкретного плейлиста */}
+                                        <ul className="profile_page_track_information_container">
+                                            <div className="profile_page_track_play_button_container">
+                                                <div className="profile_page_play_button_background">
+                                                    {currentTrack &&
+                                                    playlistTracks[p.id]?.some(t => t.id === currentTrack.id) &&
+                                                    currentAlbumId === p.id &&  // використовуємо currentAlbumId для плейліста
+                                                    isPlaying ? (
+                                                        <img
+                                                            src="src/images/player/pause_icon.png"
+                                                            alt="pauseIcon"
+                                                            onClick={() => pauseTrack()}
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src="src/images/player/play_icon.png"
+                                                            alt="playIcon"
+                                                            onClick={() => playTrack(playlistTracks[p.id][0], playlistTracks[p.id], p.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div className="profile_page_track_title_style">
+                                                    {p.name}
+                                                </div>
+                                            </div>
+
+                                            <ul className="profile_page_tracks_in_playlist_container">
+                                                {(playlistTracks[p.id] || []).map((t, index) => (
+                                                    <li key={t.id}>
+                                                        <div className="profile_page_tracks">
+                                                            <img
+                                                                src={getTrackImageUrl(t)}
+                                                                alt={t.title}
+                                                                className="profile_page_tracks_image_style"
+                                                                onClick={() => playTrack(t, playlistTracks[p.id], p.id)}
+                                                            />
+                                                            <div
+                                                                className={`profile_page_track_info_title_style txt_style 
+                                                                    ${currentTrack?.id === t.id && currentAlbumId === p.id
+                                                                    ? "profile_page_track_info_title_style txt_style_is_playing"
+                                                                    : ""}`}
+                                                            >
+                                                                <div>{index + 1}</div>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.author}</span>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.title}</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            <div className="profile_page_track_controls_buttons">
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img
+                                                        src="/src/images/player/repeat_icon.png"
+                                                        alt="repeatIcon"
+                                                        id="hover_cursor_player"// 🔹 увімкнути
+                                                    />
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/download.png" alt="download"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/share.png" alt="share"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/content_copy.png" alt="copy"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </li>
+                                ))}
+                                {albums.map((a) => (
+                                    <li key={a.id} className="profile_track_container">
+                                        <div className="">
+                                            <img
+                                                src={a.coverUrl ? `http://localhost:5122/${a.coverUrl}` : "/default-cover.png"}
+                                                alt={a.title}
+                                                className="profile_page_playlist_image"
+                                                onClick={() => {
+                                                    // Якщо альбом вже грає, ставимо паузу
+                                                    if (
+                                                        currentTrack &&
+                                                        albumTracks[a.id]?.some(t => t.id === currentTrack.id) &&
+                                                        currentAlbumId === a.id &&
+                                                        isPlaying
+                                                    ) {
+                                                        pauseTrack();
+                                                    } else {
+                                                        // Інакше граємо перший трек альбому
+                                                        playTrack(albumTracks[a.id][0], albumTracks[a.id], a.id);
+                                                    }
+                                                }}
+                                            />
+
+                                        </div>
+
+                                        {/* Треки конкретного альбому */}
+                                        <ul className="profile_page_track_information_container">
+                                            <div className="profile_page_track_play_button_container">
+                                                <div className="profile_page_play_button_background">
+                                                    {currentTrack &&
+                                                    albumTracks[a.id]?.some(t => t.id === currentTrack.id) &&
+                                                    currentAlbumId === a.id &&  // <-- додано
+                                                    isPlaying ? (
+                                                        <img
+                                                            src="src/images/player/pause_icon.png"
+                                                            alt="pauseIcon"
+                                                            onClick={() => pauseTrack()}
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src="src/images/player/play_icon.png"
+                                                            alt="playIcon"
+                                                            onClick={() => playTrack(albumTracks[a.id][0], albumTracks[a.id], a.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div className="profile_page_track_title_style">
+                                                    {a.title}
+                                                </div>
+                                            </div>
+
+                                            <ul className="profile_page_tracks_in_playlist_container">
+                                                {(albumTracks[a.id] || []).map((t, index) => (
+                                                    <li key={t.id}>
+                                                        <div className="profile_page_tracks color">
+                                                            <img
+                                                                src={getTrackImageUrl(t)}
+                                                                alt={t.title}
+                                                                className="profile_page_tracks_image_style"
+                                                                onClick={() => playTrack(t, albumTracks[a.id])}
+                                                            />
+                                                            <div
+                                                                className={`profile_page_track_info_title_style txt_style 
+                                                                        ${currentTrack?.id === t.id && currentAlbumId === a.id
+                                                                    ? "profile_page_track_info_title_style txt_style_is_playing"
+                                                                    : ""}`}
+                                                            >
+                                                                <div>{index + 1}</div>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.author}</span>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.title}</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+
+                                            <div className="profile_page_track_controls_buttons">
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img
+                                                        src="/src/images/player/repeat_icon.png"
+                                                        alt="repeatIcon"
+                                                        id="hover_cursor_player"
+                                                    />
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/download.png" alt="download"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/share.png" alt="share"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/content_copy.png" alt="copy"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                </div>
+                                            </div>
+                                        </ul>
+
+                                    </li>
+
+                                ))}
+                            </ul>
+
+                        ) : (
+                            <p className="text-gray-400 py-4">You don't have any playlists or albums</p>
+                        )}
+
+                    </>
+                )}
                 {activeTab === "Tracks" && (
                     <>
                         {tracks.length ? (
-                            <ul className="space-y-2">
+                            <div>
                                 {tracks.map((t) => (
-                                    <li key={t.id} className="flex items-center gap-4 bg-gray-800 p-3 rounded">
-                                        <img
-                                            src={getTrackImageUrl(t)}
-                                            alt={t.title}
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
-                                        <div className="flex-1">
-                                            <p className="font-semibold">{t.title}</p>
-                                            <p className="text-gray-300">{t.author}</p>
-                                            <p className="text-gray-300">{t.genre}</p>
-                                            <span className="text-gray-400 text-sm">{t.duration?.substring(0, 5)}</span>
-                                        </div>
+                                    <li key={t.id}>
+                                        {t.imageUrl && (
+                                            <div className="track_container">
+                                                <img
+                                                    src={getTrackImageUrl(t)}
+                                                    alt={t.title}
+                                                    className="track_image"
+                                                    onClick={() => playTrack(t, tracks)}
+                                                />
+                                                <div className="track_controls_container">
+                                                    <div className="play_info_track_container">
+                                                        <div className="play_pause_track_container">
+                                                            {currentTrack?.id === t.id && isPlaying ? (
+                                                                <img src="src/images/player/pause_icon.png"
+                                                                     alt={"playIcon"}
+                                                                     onClick={() => pauseTrack()}
+                                                                />
+                                                            ) : (
+                                                                <img src="src/images/player/play_icon.png"
+                                                                     alt={"playIcon"}
+                                                                     onClick={() => playTrack(t, tracks)}
+                                                                />
+                                                            )}
 
-                                        {/* кнопка додати у плейлист */}
-                                        <div className="flex flex-col items-end gap-2">
-                                            <button
-                                                onClick={() => handleAddToPlaylistClick(t.id)}
-                                                className="px-3 py-1 bg-indigo-600 rounded hover:bg-indigo-500 text-sm"
-                                            >
-                                                Add to Playlist
-                                            </button>
-                                            {/* кнопка додати до альбома */}
-                                            <button
-                                                onClick={() => handleAddToAlbumClick(t.id)}
-                                                className="px-2 py-1 bg-indigo-500 text-xs rounded hover:bg-indigo-400"
-                                            >
-                                                Add to Album
-                                            </button>
-
-                                        </div>
+                                                        </div>
+                                                        <div className="track_title_author_container">
+                                                            <div className="track_title_container">
+                                                                {t.title.length > 80 ? t.title.slice(0, 50) + "…" : t.title}
+                                                            </div>
+                                                        </div>
+                                                        <div className="track_duration_range_container">
+                                                            <div className="track_author_container">
+                                                                {t.author.length > 80 ? t.author.slice(0, 50) + "…" : t.author}
+                                                            </div>
+                                                        </div>
+                                                        <div className="track_genre_container">
+                                                            {t.genre}
+                                                        </div>
+                                                        <div className="track_more_controls_container">
+                                                            <div className="track_more_controls_style">
+                                                                <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                            </div>
+                                                            <div className="track_more_controls_style">
+                                                                <img
+                                                                    src="/src/images/player/repeat_icon.png"
+                                                                    alt="repeatIcon"
+                                                                    id="hover_cursor_player"
+                                                                />
+                                                            </div>
+                                                            <div className="track_more_controls_style">
+                                                                <img src="src/images/icons/download.png"
+                                                                     alt="download"/>
+                                                            </div>
+                                                            <div className="track_more_controls_style">
+                                                                <img src="src/images/icons/share.png" alt="share"/>
+                                                            </div>
+                                                            <div className="track_more_controls_style">
+                                                                <img src="src/images/icons/content_copy.png"
+                                                                     alt="copy"/>
+                                                            </div>
+                                                            <div className="track_more_controls_style">
+                                                                <img src="src/images/icons/add_playlist.png"
+                                                                     id="add_playlist_icon"
+                                                                     alt="addPlaylist"/>
+                                                            </div>
+                                                            <div className="track_more_controls_style">
+                                                                <img src="src/images/icons/reply.png" alt="reply"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
-                            </ul>
+                            </div>
                         ) : (
                             <p className="text-gray-400 py-4">No tracks yet</p>
                         )}
                         <button
-                            className="mt-4 px-6 py-2 bg-indigo-600 rounded hover:bg-indigo-500"
+                            className=""
                             onClick={() => setIsModalOpen(true)}
                         >
                             Upload Track
@@ -335,32 +873,111 @@ const ProfilePage: React.FC = () => {
                 {activeTab === "Playlists" && (
                     <>
                         {playlists.length ? (
-                            <ul className="space-y-2">
+                            <ul className="text-white baloo2">
                                 {playlists.map((p) => (
-                                    <li key={p.id} className="flex flex-col gap-2 bg-gray-800 p-3 rounded">
-                                        <div className="flex items-center gap-4">
+                                    <li
+                                        key={p.id}
+                                        className="profile_track_container"
+                                    >
+                                        <div className="">
                                             <img
-                                                src={getPlaylistImageUrl(p)}
+                                                src={p.coverUrl ? `http://localhost:5122/${p.coverUrl}` : "/default-cover.png"}
                                                 alt={p.name}
-                                                className="w-16 h-16 object-cover rounded"
+                                                className="profile_page_playlist_image"
+                                                onClick={() => {
+                                                    // Якщо плейліст вже грає, ставимо паузу
+                                                    if (
+                                                        currentTrack &&
+                                                        playlistTracks[p.id]?.some(t => t.id === currentTrack.id) &&
+                                                        currentAlbumId === p.id &&
+                                                        isPlaying
+                                                    ) {
+                                                        pauseTrack();
+                                                    } else {
+                                                        // Інакше граємо перший трек плейліста
+                                                        playTrack(playlistTracks[p.id][0], playlistTracks[p.id], p.id);
+                                                    }
+                                                }}
                                             />
-                                            <p className="flex-1">{p.name}</p>
-                                            <button
-                                                onClick={() => handleViewTracks(p.id)}
-                                                className="px-3 py-1 bg-indigo-600 rounded hover:bg-indigo-500 text-sm"
-                                            >
-                                                View Tracks
-                                            </button>
+
                                         </div>
 
                                         {/* Треки конкретного плейлиста */}
-                                        <ul className="mt-2 space-y-1">
-                                            {(playlistTracks[p.id] || []).map((t) => (
-                                                <li key={t.id} className="flex items-center gap-2">
-                                                    <img src={getTrackImageUrl(t)} alt={t.title} className="w-10 h-10 object-cover rounded" />
-                                                    <span>{t.title}</span>
-                                                </li>
-                                            ))}
+                                        <ul className="profile_page_track_information_container">
+                                            <div className="profile_page_track_play_button_container">
+                                                <div className="profile_page_play_button_background">
+                                                    {currentTrack &&
+                                                    playlistTracks[p.id]?.some(t => t.id === currentTrack.id) &&
+                                                    currentAlbumId === p.id &&  // використовуємо currentAlbumId для плейліста
+                                                    isPlaying ? (
+                                                        <img
+                                                            src="src/images/player/pause_icon.png"
+                                                            alt="pauseIcon"
+                                                            onClick={() => pauseTrack()}
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src="src/images/player/play_icon.png"
+                                                            alt="playIcon"
+                                                            onClick={() => playTrack(playlistTracks[p.id][0], playlistTracks[p.id], p.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div className="profile_page_track_title_style">
+                                                    {p.name}
+                                                </div>
+                                            </div>
+
+                                            <ul className="profile_page_tracks_in_playlist_container">
+                                                {(playlistTracks[p.id] || []).map((t, index) => (
+                                                    <li key={t.id}>
+                                                        <div className="profile_page_tracks">
+                                                            <img
+                                                                src={getTrackImageUrl(t)}
+                                                                alt={t.title}
+                                                                className="profile_page_tracks_image_style"
+                                                                onClick={() => playTrack(t, playlistTracks[p.id], p.id)}
+                                                            />
+                                                            <div
+                                                                className={`profile_page_track_info_title_style txt_style 
+                                                                    ${currentTrack?.id === t.id && currentAlbumId === p.id
+                                                                    ? "profile_page_track_info_title_style txt_style_is_playing"
+                                                                    : ""}`}
+                                                            >
+                                                                <div>{index + 1}</div>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.author}</span>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.title}</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            <div className="profile_page_track_controls_buttons">
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img
+                                                        src="/src/images/player/repeat_icon.png"
+                                                        alt="repeatIcon"
+                                                        id="hover_cursor_player"// 🔹 увімкнути
+                                                    />
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/download.png" alt="download"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/share.png" alt="share"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/content_copy.png" alt="copy"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                </div>
+                                            </div>
                                         </ul>
                                     </li>
                                 ))}
@@ -369,7 +986,7 @@ const ProfilePage: React.FC = () => {
                             <p className="text-gray-400 py-4">No playlists yet</p>
                         )}
                         <button
-                            className="mt-4 px-6 py-2 bg-indigo-600 rounded hover:bg-indigo-500"
+                            className=""
                             onClick={() => setPlaylistModalOpen(true)}
                         >
                             Create Playlist
@@ -381,35 +998,113 @@ const ProfilePage: React.FC = () => {
                 {activeTab === "Albums" && (
                     <>
                         {albums.length ? (
-                            <ul className="space-y-2">
+                            <ul className="text-white baloo2">
                                 {albums.map((a) => (
-                                    <li key={a.id} className="flex flex-col gap-2 bg-gray-800 p-3 rounded">
-                                        <div className="flex items-center gap-4">
+                                    <li key={a.id} className="profile_track_container">
+                                        <div className="">
                                             <img
                                                 src={a.coverUrl ? `http://localhost:5122/${a.coverUrl}` : "/default-cover.png"}
                                                 alt={a.title}
-                                                className="w-16 h-16 object-cover rounded"
+                                                className="profile_page_playlist_image"
+                                                onClick={() => {
+                                                    // Якщо альбом вже грає, ставимо паузу
+                                                    if (
+                                                        currentTrack &&
+                                                        albumTracks[a.id]?.some(t => t.id === currentTrack.id) &&
+                                                        currentAlbumId === a.id &&
+                                                        isPlaying
+                                                    ) {
+                                                        pauseTrack();
+                                                    } else {
+                                                        // Інакше граємо перший трек альбому
+                                                        playTrack(albumTracks[a.id][0], albumTracks[a.id], a.id);
+                                                    }
+                                                }}
                                             />
-                                            <p className="flex-1">{a.title}</p>
-                                            <button
-                                                onClick={() => handleViewAlbumTracks(a.id)}
-                                                className="px-3 py-1 bg-indigo-600 rounded hover:bg-indigo-500 text-sm"
-                                            >
-                                                View Tracks
-                                            </button>
+
                                         </div>
 
-                                        {/* Tracks у конкретному альбомі */}
-                                        <ul className="mt-2 space-y-1">
-                                            {(albumTracks[a.id] || []).map((t) => (
-                                                <li key={t.id} className="flex items-center gap-2">
-                                                    <img src={getTrackImageUrl(t)} alt={t.title} className="w-10 h-10 object-cover rounded" />
-                                                    <span>{t.title}</span>
+                                        {/* Треки конкретного альбому */}
+                                        <ul className="profile_page_track_information_container">
+                                            <div className="profile_page_track_play_button_container">
+                                                <div className="profile_page_play_button_background">
+                                                    {currentTrack &&
+                                                    albumTracks[a.id]?.some(t => t.id === currentTrack.id) &&
+                                                    currentAlbumId === a.id &&  // <-- додано
+                                                    isPlaying ? (
+                                                        <img
+                                                            src="src/images/player/pause_icon.png"
+                                                            alt="pauseIcon"
+                                                            onClick={() => pauseTrack()}
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src="src/images/player/play_icon.png"
+                                                            alt="playIcon"
+                                                            onClick={() => playTrack(albumTracks[a.id][0], albumTracks[a.id], a.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div className="profile_page_track_title_style">
+                                                    {a.title}
+                                                </div>
+                                            </div>
 
-                                                </li>
-                                            ))}
+                                            <ul className="profile_page_tracks_in_playlist_container">
+                                                {(albumTracks[a.id] || []).map((t, index) => (
+                                                    <li key={t.id}>
+                                                        <div className="profile_page_tracks color">
+                                                            <img
+                                                                src={getTrackImageUrl(t)}
+                                                                alt={t.title}
+                                                                className="profile_page_tracks_image_style"
+                                                                onClick={() => playTrack(t, albumTracks[a.id])}
+                                                            />
+                                                            <div
+                                                                className={`profile_page_track_info_title_style txt_style 
+                                                                        ${currentTrack?.id === t.id && currentAlbumId === a.id
+                                                                    ? "profile_page_track_info_title_style txt_style_is_playing"
+                                                                    : ""}`}
+                                                            >
+                                                                <div>{index + 1}</div>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.author}</span>
+                                                                <div>&#160;&#x2022;&#160;</div>
+                                                                <span>{t.title}</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+
+                                            <div className="profile_page_track_controls_buttons">
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img
+                                                        src="/src/images/player/repeat_icon.png"
+                                                        alt="repeatIcon"
+                                                        id="hover_cursor_player"
+                                                    />
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/download.png" alt="download"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/share.png" alt="share"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/content_copy.png" alt="copy"/>
+                                                </div>
+                                                <div className="track_more_controls_style">
+                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                </div>
+                                            </div>
                                         </ul>
+
                                     </li>
+
                                 ))}
                             </ul>
                         ) : (
@@ -424,11 +1119,6 @@ const ProfilePage: React.FC = () => {
                     </>
                 )}
 
-
-                {/* Other tabs */}
-                {activeTab !== "Tracks" && activeTab !== "Playlists" && (
-                    <p className="text-gray-400 py-4">{activeTab} section coming soon...</p>
-                )}
             </div>
 
             {/* Modal */}
@@ -464,15 +1154,11 @@ const ProfilePage: React.FC = () => {
                             onChange={(e) => setGenreId(Number(e.target.value))}
                             className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
                         />
+
                         <input
                             type="file"
-                            onChange={(e) => setFile(e.target.files?.[0])}
-                            className="w-full mb-2 text-white"
-                        />
-                        <input
-                            type="file"
-                            onChange={(e) => setCover(e.target.files?.[0])}
-                            className="w-full mb-4 text-white"
+                            onChange={(e) =>
+                                setAlbumCoverFile(e.target.files?.[0])}
                         />
                         <div className="flex justify-end gap-2">
                             <button
@@ -492,6 +1178,174 @@ const ProfilePage: React.FC = () => {
                 </div>
             )}
 
+            {/*User Edit Modal*/}
+            {isUserEditOpen && (
+                <div className="profile_page_modal_container baloo2">
+                    <div className="profile_page_modal_user_edit_container">
+                        <div className="profile_page_edit_profile_close_container">
+                            <span className="txt_style">Edit Profile</span>
+                            <div className="img_style cursor-pointer"
+                                 onClick={() => setUserEditOpen(false)}
+                            >
+                                <img src="src/images/icons/close_icon.png" alt="close"/>
+                            </div>
+                        </div>
+                        <div className="user_info_container">
+                            <div className="img_container">
+                                {avatar ? (
+                                    <img className="img_style" src={URL.createObjectURL(avatar)} alt="UserImage"/>
+                                ) : (
+                                    <img className="img_style" src={getUserImageUrl(user)} alt="UserImage"/>
+                                )}
+
+                                <button className="button_container cursor-pointer">
+                                    <label className="cursor-pointer txt_style">Edit picture
+                                        <input
+                                            type="file"
+                                            className="cursor-pointer inset-0 opacity-0 absolute txt_style"
+                                            accept="image/*"
+                                            onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+                                        />
+                                    </label>
+                                </button>
+                            </div>
+                            <div className="user_info_tables_container">
+                                <div className="username_container">
+                                    <label className="username_title">Username</label>
+                                    <label className="username_input">
+                                        <input
+                                            type="text"
+                                            placeholder="Username"
+                                            className="ml-[12px]"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                        />
+                                    </label>
+                                </div>
+                                <div className="email_container">
+                                    <label className="username_title">Email address</label>
+                                    <label className="username_input">
+                                        <input
+                                            type="email"
+                                            className="ml-[12px]"
+                                            placeholder="Email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </label>
+                                </div>
+                                <div className="bio_container">
+                                    <label className="username_title">Bio</label>
+                                    <label className="bio_input">
+                                    <textarea
+                                        placeholder="Bio"
+                                        className="bio_input_2 "
+                                        value={bio}
+                                        onChange={(e) => setBio(e.target.value)}
+                                    />
+                                    </label>
+                                </div>
+                                <div className="button_cancel_save_container">
+                                    <button
+                                        className="cancel_button cursor-pointer"
+                                        onClick={() => setUserEditOpen(false)}
+                                        disabled={uploading}
+                                    >
+                                        <span className="txt_style">Cancel</span>
+                                    </button>
+                                    <button
+                                        className="save_button cursor-pointer"
+                                        onClick={async () => {
+                                            await handleUserUpdate({
+                                                username,
+                                                email,
+                                                bio,
+                                                avatar,
+                                            });
+                                            setUserEditOpen(false);
+                                        }}
+                                        disabled={uploading}
+                                    >
+                                        <span className="txt_style">{uploading ? "Saving..." : "Save profile"}</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {/*Banner Modal*/}
+            {bannerModalOpen && (
+                <div className="profile_page_modal_container baloo2">
+                    <div className="profile_page_banner_modal">
+                        <div className="profile_page_title_and_close_button_container text-white">
+                            <h1 className="profile_page_title_modal_style">Upload Banner</h1>
+                            <div className="profile_page_modal_close_icon"
+                                 onClick={() => setBannerModalOpen(false)}>
+                                <img src="src/images/icons/close_icon.png" alt="closeIcon"/>
+                            </div>
+                        </div>
+                        <div className="profile_page_modal_banner_preview">
+                            {bannerFile ? (
+                                <img
+                                    className="profile_page_modal_banner_preview"
+                                    src={URL.createObjectURL(bannerFile)}
+                                    alt="Selected banner preview"
+                                />
+                            ) : (
+                                <img
+                                    className="profile_page_modal_banner_preview"
+                                    src={getUserBannerUrl(user)}
+                                    alt="Selected banner preview"
+                                />
+                            )}
+                            <div className="profile_page_modal_banner_user_avatar">
+                                <img className="img_style" src={getUserImageUrl(user)}
+                                     alt="UserAvatar"/>
+                            </div>
+                            <div className="profile_page_modal_banner_avatar_container">
+                                <span className="txt_style">{user?.username}</span>
+                            </div>
+                        </div>
+
+                        <div className="profile_page_modal_banner_buttons_bottom_container">
+                            <button className="profile_page_modal_upload_button_container cursor-pointer">
+                                <label className="cursor-pointer relative txt_style">Upload
+                                    Image
+                                    <input
+                                        className="cursor-pointer absolute inset-0 opacity-0 txt_style"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) =>
+                                            setBannerFile(e.target.files ? e.target.files[0] : null)
+                                        }
+                                    />
+                                </label>
+                            </button>
+                            <div className="profile_page_modal_banner_cancel_save_button_container">
+                                <button
+                                    className="button_cancel cursor-pointer"
+                                    onClick={() => setBannerModalOpen(false)}
+                                >
+                                    <span className="txt_style">Cancel</span>
+                                </button>
+                                <button
+                                    className="button_save cursor-pointer"
+                                    onClick={handleBannerUpload}
+                                    disabled={uploading}
+                                >
+                                    <span className="txt_style">{uploading ? "Saving..." : "Save"}</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Playlist Modal */}
             {playlistModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -510,7 +1364,8 @@ const ProfilePage: React.FC = () => {
                             className="w-full mb-4"
                         />
                         <div className="flex justify-end gap-2">
-                            <button onClick={() => setPlaylistModalOpen(false)} className="px-4 py-2 bg-gray-700 rounded">
+                            <button onClick={() => setPlaylistModalOpen(false)}
+                                    className="px-4 py-2 bg-gray-700 rounded">
                                 Cancel
                             </button>
                             <button onClick={handlePlaylistCreate} className="px-4 py-2 bg-indigo-600 rounded">
@@ -656,7 +1511,6 @@ const ProfilePage: React.FC = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

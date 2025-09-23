@@ -12,6 +12,9 @@ namespace SoundCloudWebApi.Services.Interfaces
         // Отримати всі публічні альбоми та альбоми поточного користувача
         Task<IEnumerable<AlbumDto>> GetAllByUserAsync(int userId);
 
+        Task<IEnumerable<AlbumDto>> GetAllPublicAlbumsAsync();
+
+
         // Отримати альбом за ID
         Task<AlbumDto?> GetByIdAsync(int albumId);
 

@@ -75,12 +75,12 @@ namespace SoundCloudWebApi.Services.Implementations
 
 
 
-        public async Task<IEnumerable<TrackDto>> GetAllAsync()
+        public async Task<IEnumerable<TrackDto>> GetAllByUserAsync(int userId)
         {
             var (actorId, _) = GetActor(); // id поточного користувача
-
             return await _db.Tracks
                 .AsNoTracking()
+                .Where(t => t.AuthorId == userId) // фільтруємо тільки треки користувача
                 .Include(t => t.AlbumTracks)
                     .ThenInclude(at => at.Album)
                         .ThenInclude(a => a.Owner)
@@ -118,6 +118,31 @@ namespace SoundCloudWebApi.Services.Implementations
                     IsLikedByCurrentUser = t.TrackLikes.Any(l => l.UserId == actorId)
                 })
                 .ToListAsync();
+
+            return tracks.Select(t => new TrackDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                AuthorId = t.AuthorId,
+                Author = t.Author.Username,
+                Duration = t.Duration,
+                Url = t.Url,
+                ImageUrl = t.ImageUrl,
+                IsHidden = t.IsHidden,
+                PlayCount = t.PlayCount,
+                GenreId = t.GenreId ?? 0,
+                Genre = t.Genre != null ? t.Genre.Name : null,
+                Albums = t.AlbumTracks.Select(at => new AlbumDto
+                {
+                    Id = at.Album.Id,
+                    Title = at.Album.Title,
+                    OwnerId = at.Album.OwnerId,
+                    OwnerName = at.Album.Owner.Username,
+                    CoverUrl = at.Album.CoverUrl,
+                    CreatedAt = at.Album.CreatedAt,
+                    IsPublic = at.Album.IsPublic
+                }).ToList()
+            });
         }
 
 

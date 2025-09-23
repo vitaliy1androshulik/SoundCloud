@@ -32,7 +32,12 @@ namespace SoundCloudWebApi.Data.Entities
         public UserRole Role { get; set; } = UserRole.User;
         public bool IsBlocked { get; set; } = false;
         public string? AvatarUrl { get; set; }
-           
+        
+        public string? BannerUrl {  get; set; }
+
+        [MaxLength(500)]
+        public string? Bio { get; set; }
+
         // нові
         public DateTime? UpdatedAt { get; set; }
 

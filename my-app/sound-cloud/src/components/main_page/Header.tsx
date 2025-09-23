@@ -45,8 +45,11 @@ const Header: React.FC = () => {
     return (
         <>
             <div className="max-w-screen-full-xl">
+                <div>
+                    <img className="header_image_behind" src="src/images/header/header_behind.png" alt="HeaderBehind"/>
+                    <img className="header_image_ahead" src="src/images/header/header_ahead.png" alt="HeaderBehind"/>
+                </div>
                 <header className="header_container_main">
-
                         <div className="header_logo">
                             <div className="w-[56px] h-[56px] xl:mr-[12px] lg:mr-[12px]">
                                 <img src="src/images/logo/logo_WaveCloud.png" alt="logo"/>

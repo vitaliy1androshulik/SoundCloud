@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\uploads\banner\" />
     <Folder Include="wwwroot\uploads\tracks\cover\" />
   </ItemGroup>
 
