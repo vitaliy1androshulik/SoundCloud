@@ -108,7 +108,7 @@ const FeedPage: React.FC = ()=> {
                                             {currentTrack?.id === track.id && isPlaying ? (
                                                 <img src="src/images/player/pause_icon.png"
                                                      alt={"playIcon"}
-                                                     onClick={() => pauseTrack(track)}
+                                                     onClick={() => pauseTrack()}
                                                 />
                                             ) : (
                                                 <img src="src/images/player/play_icon.png"
