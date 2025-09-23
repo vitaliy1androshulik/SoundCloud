@@ -25,8 +25,8 @@ namespace SoundCloudWebApi.Models.Track
         public TimeSpan Duration { get; set; }
 
         // Альбом, до якого належить трек
-        [Required]
-        public int AlbumId { get; set; }
+        //[Required]
+        //public int AlbumId { get; set; }
 
         // Жанр треку, опційно
         public int? GenreId { get; set; }

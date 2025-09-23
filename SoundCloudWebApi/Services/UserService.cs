@@ -287,26 +287,81 @@ namespace SoundCloudWebApi.Services
 
         public async Task<UserEntity> FindOrCreateFromGoogleAsync(GoogleJsonWebSignature.Payload p)
         {
-            var email = p.Email.Trim().ToLowerInvariant();
+            if (p == null) throw new ArgumentNullException(nameof(p));
+            //var email = p.Email.Trim().ToLowerInvariant();
+            var email = (p.Email ?? "").Trim().ToLower();
+            var subject = p.Subject ?? "";          // Google "sub" — стабільний ідентифікатор
+            var picture = p.Picture;
 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            // шукаємо по GoogleSubject 
+            var u = await _db.Users.FirstOrDefaultAsync(x => x.GoogleSubject == subject);
+            if (u != null)
+            {
+                if (u.IsBlocked) throw new UnauthorizedAccessException("User is blocked");
+                bool dirty = false;
+                if (!string.IsNullOrEmpty(picture) && u.AvatarUrl != picture)
+                {
+                    u.AvatarUrl = picture;
+                    dirty = true;
+                }
+
+                // FIX для "старих" записів: якщо локального пароля нема — вважаємо google-only
+                if (u.IsLocalPasswordSet == false && u.AuthProvider != AuthProvider.Google)
+                {
+                    u.AuthProvider = AuthProvider.Google;
+                    dirty = true;
+                }
+
+                if (dirty)
+                {
+                    u.UpdatedAt = DateTime.UtcNow;
+                    await _db.SaveChangesAsync();
+                }
+
+                return u;
+            }
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
             if (user != null)
             {
                 if (user.IsBlocked) throw new UnauthorizedAccessException("User is blocked");
+                // Лінкуємо Google до існуючого акаунта
+                if (string.IsNullOrEmpty(user.GoogleSubject))
+                {
+                    user.GoogleSubject = p.Subject;
+                    if (!string.IsNullOrEmpty(picture) && user.AvatarUrl != picture) 
+                        user.AvatarUrl = picture;            
+
+                    // FIX для "старих" записів, створених з Google, але без правильних міток:
+                    // якщо локального пароля нема (IsLocalPasswordSet == false), = google-only
+                    if (user.IsLocalPasswordSet == false)
+                    {
+                        user.AuthProvider = AuthProvider.Google;
+                    }
+
+                    user.UpdatedAt = DateTime.UtcNow;
+                    await _db.SaveChangesAsync();
+                }
+
                 return user;
             }
 
-            // наша модель вимагає PasswordHash/Salt - зробимо рандомний пароль і захешуємо так само, як у AuthService
-            CreatePasswordHash(Guid.NewGuid().ToString("N"), out var hash, out var salt);
+            //// наша модель вимагає PasswordHash/Salt - зробимо рандомний пароль і захешуємо так само, як у AuthService
+            //CreatePasswordHash(Guid.NewGuid().ToString("N"), out var hash, out var salt);
 
             user = new UserEntity
             {
                 Username = await MakeUniqueUsernameAsync(email.Split('@')[0]),
                 Email = email,
-                PasswordHash = hash,
-                PasswordSalt = salt,
+                AuthProvider = AuthProvider.Google, //  ключове
+                GoogleSubject = subject,          //  ключове
+                IsLocalPasswordSet = false,         //  ключове
+                //PasswordHash = hash,
+                //PasswordSalt = salt,
+                PasswordHash = Array.Empty<byte>(),
+                PasswordSalt = Array.Empty<byte>(),
                 Role = UserRole.User,
-                AvatarUrl = p.Picture,
+                AvatarUrl = picture,
                 CreatedAt = DateTime.UtcNow
             };
 

@@ -18,6 +18,7 @@ public class SoundCloudDbContext : DbContext
     public DbSet<TrackListenEntity> TrackListens { get; set; }
     public DbSet<TrackLikeEntity> TrackLikes { get; set; }
     public DbSet<AlbumTrackEntity> AlbumTracks { get; set; }
+    public DbSet<FollowEntity> Follows { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,7 +66,7 @@ public class SoundCloudDbContext : DbContext
             .HasForeignKey(t => t.AuthorId)     // обов'язковий
             .OnDelete(DeleteBehavior.Restrict);
 
-        
+      
 
         modelBuilder.Entity<TrackListenEntity>()
        .HasOne(p => p.User)
@@ -93,6 +94,21 @@ public class SoundCloudDbContext : DbContext
             .HasForeignKey(l => l.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // зберігаємо enum як string + check-constraint
+        modelBuilder.Entity<UserEntity>()
+            .Property(x => x.AuthProvider)
+            .HasConversion<string>();
+
+        // унікальний індекс на GoogleSubject (NULL дозволений, але якщо не NULL — має бути унікальним)
+        modelBuilder.Entity<UserEntity>()
+            .HasIndex(u => u.GoogleSubject)
+            .IsUnique()
+            .HasFilter("\"GoogleSubject\" IS NOT NULL");
+
+        modelBuilder.Entity<UserEntity>()
+         .ToTable(t => t.HasCheckConstraint("CK_Users_AuthProvider",
+            "\"AuthProvider\" in ('Local','Google')"));
+
         // 🔹 AlbumTrack (many-to-many: Album ↔ Track)
         modelBuilder.Entity<AlbumTrackEntity>()
             .HasKey(at => new { at.AlbumId, at.TrackId });
@@ -107,7 +123,22 @@ public class SoundCloudDbContext : DbContext
             .WithMany(t => t.AlbumTracks)
             .HasForeignKey(at => at.TrackId);
 
+        // Follow: унікальність пари (FollowerId, FollowingId)
+        modelBuilder.Entity<FollowEntity>()
+            .HasIndex(f => new { f.FollowerId, f.FollowingId })
+            .IsUnique();
 
+        modelBuilder.Entity<FollowEntity>()
+            .HasOne(f => f.Follower)
+            .WithMany()
+            .HasForeignKey(f => f.FollowerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<FollowEntity>()
+            .HasOne(f => f.Following)
+            .WithMany()
+            .HasForeignKey(f => f.FollowingId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 }

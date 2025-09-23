@@ -13,4 +13,7 @@ public class UserProfileDto
     public DateTime CreatedAt { get; set; }
     public UserRole Role { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    //new
+    public string AuthProvider { get; set; }   // "Local" або "Google"
+    public bool IsLocalPasswordSet { get; set; }
 }

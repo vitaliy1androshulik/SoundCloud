@@ -4,6 +4,7 @@ using SoundCloudWebApi.Models.Auth;
 using SoundCloudWebApi.Services;
 using SoundCloudWebApi.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ public class UserController : ControllerBase
     {
         _authService = authService;
         _userService = userService;
+    }
+    public class SetPasswordRequest
+    {
+        [Required, MinLength(6)]
+        public string NewPassword { get; set; } = string.Empty;
     }
 
     [HttpPost("register")]
@@ -62,7 +68,7 @@ public class UserController : ControllerBase
         //{
         //    return NotFound("User profile not found.");
         //}
-        return Ok(profile); // // винятки перехолювати має  GlobalErrorHandler
+        return Ok(profile); // винятки перехолювати має  GlobalErrorHandler
     }
 
 
@@ -160,6 +166,23 @@ public class UserController : ControllerBase
             Role = User.FindFirst(ClaimTypes.Role)?.Value,
             HeadersAuth = Request.Headers["Authorization"].ToString()
         });
+    }
+
+    [Authorize]
+    [HttpPost("password/set")]
+    [SwaggerOperation(
+    OperationId = "SetOwnPassword",
+    Summary = "Встановити пароль користувача")]
+    public async Task<IActionResult> SetPassword([FromBody] SetPasswordRequest req, [FromServices] IAuthService auth)
+    {
+        if (string.IsNullOrWhiteSpace(req?.NewPassword) || req.NewPassword.Length < 6)
+            return BadRequest(new { error = "Пароль має містити щонайменше 6 символів" });
+
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdStr)) return Unauthorized(new { error = "No user in context" });
+
+        await auth.SetLocalPasswordAsync(int.Parse(userIdStr), req.NewPassword);
+        return Ok(new { ok = true });
     }
 
 

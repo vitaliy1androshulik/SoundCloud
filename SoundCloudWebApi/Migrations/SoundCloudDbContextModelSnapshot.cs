@@ -132,6 +132,33 @@ namespace SoundCloudWebApi.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.FollowEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FollowingId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowingId");
+
+                    b.HasIndex("FollowerId", "FollowingId")
+                        .IsUnique();
+
+                    b.ToTable("Follows");
+                });
+
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.GenreEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -251,6 +278,9 @@ namespace SoundCloudWebApi.Migrations
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("TrackEntityId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TrackId")
                         .HasColumnType("integer");
 
@@ -258,6 +288,8 @@ namespace SoundCloudWebApi.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TrackEntityId");
 
                     b.HasIndex("UserId");
 
@@ -304,6 +336,10 @@ namespace SoundCloudWebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AuthProvider")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("text");
 
@@ -321,7 +357,13 @@ namespace SoundCloudWebApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("GoogleSubject")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsBlocked")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLocalPasswordSet")
                         .HasColumnType("boolean");
 
                     b.Property<byte[]>("PasswordHash")
@@ -350,11 +392,17 @@ namespace SoundCloudWebApi.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("GoogleSubject")
+                        .IsUnique()
+                        .HasFilter("\"GoogleSubject\" IS NOT NULL");
+
                     b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users", t =>
                         {
+                            t.HasCheckConstraint("CK_Users_AuthProvider", "\"AuthProvider\" in ('Local','Google')");
+
                             t.HasCheckConstraint("CK_Users_Role_Enum", "\"Role\" IN ('User','Moderator','Admin')");
                         });
                 });
@@ -404,6 +452,25 @@ namespace SoundCloudWebApi.Migrations
                     b.Navigation("Track");
                 });
 
+            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.FollowEntity", b =>
+                {
+                    b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "Follower")
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "Following")
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Follower");
+
+                    b.Navigation("Following");
+                });
+
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.PlaylistEntity", b =>
                 {
                     b.HasOne("SoundCloudWebApi.Data.Entities.UserEntity", "Owner")
@@ -434,6 +501,10 @@ namespace SoundCloudWebApi.Migrations
 
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackLikeEntity", b =>
                 {
+                    b.HasOne("SoundCloudWebApi.Data.Entities.TrackEntity", null)
+                        .WithMany("TrackLikes")
+                        .HasForeignKey("TrackEntityId");
+
                     b.HasOne("SoundCloudWebApi.Data.Entities.TrackEntity", "Track")
                         .WithMany()
                         .HasForeignKey("TrackId")
@@ -478,6 +549,8 @@ namespace SoundCloudWebApi.Migrations
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
                 {
                     b.Navigation("AlbumTracks");
+
+                    b.Navigation("TrackLikes");
 
                     b.Navigation("UserPlays");
                 });

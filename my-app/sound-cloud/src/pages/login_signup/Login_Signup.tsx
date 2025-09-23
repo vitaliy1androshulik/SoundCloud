@@ -1,5 +1,5 @@
 
-import {useGoogleLogin} from "@react-oauth/google";
+// import {useGoogleLogin} from "@react-oauth/google";
 import React, {useState} from "react";
 import "../../styles/login_signup/background.css";
 import {useDispatch} from "react-redux";
@@ -10,6 +10,8 @@ import {AxiosError} from "axios";
 import {login, register} from "../../services/authApi.ts";
 import "../../styles/login_signup/layout.css"
 import "../../styles/login_signup/login_signup_form.css"
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
+
 type OutletContextType = {
     showForm: boolean;
     setShowForm: (val: boolean) => void;
@@ -22,7 +24,7 @@ const LoginSignup: React.FC = () => {
     const {isLogin, setIsLogin} = useOutletContext<OutletContextType>();
     const {showForm, setShowForm} = useOutletContext<OutletContextType>();
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfrimPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const onFinish = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -35,20 +37,25 @@ const LoginSignup: React.FC = () => {
         };
 
         if (isLogin) {
-            // логіка логіну
+            //  Додати перевірки на data.token і user
             try {
                 const data = await login(values.email, values.password);
-                if (data.token) {
-                    const user = normalizeUser(data.token);
-                    if (user) {
-                        localStorage.setItem("token", data.token);
-                        dispatch(setUser({ user, token: data.token }));
-                    }
+                if (!data.token) {
+                    alert("Помилка: токен не отримано");
+                    return;
                 }
+                const user = normalizeUser(data.token);
+                if (!user) {
+                    alert("Помилка: не вдалося отримати дані користувача");
+                    return;
+                }
+                localStorage.setItem("token", data.token);
+                dispatch(setUser({ user, token: data.token }));
                 navigate("/home");
             } catch (err) {
                 alert("Помилка логіну: " + (err as AxiosError).message);
             }
+
         } else {
             // логіка реєстрації
             if (values.password !== values.confirmPassword) {
@@ -62,53 +69,191 @@ const LoginSignup: React.FC = () => {
                     values.password,
                     values.confirmPassword
                 );
-                if (data.token) {
-                    const user = normalizeUser(data.token);
-                    if (user) {
-                        localStorage.setItem("token", data.token);
-                        dispatch(setUser({ user, token: data.token }));
-                    }
+                if (!data.token) {
+                    alert("Помилка: токен не отримано");
+                    return;
                 }
+                const user = normalizeUser(data.token);
+                if (!user) {
+                    alert("Помилка: не вдалося отримати дані користувача");
+                    return;
+                }
+                localStorage.setItem("token", data.token);
+                dispatch(setUser({ user, token: data.token }));
                 navigate("/home");
+                // if (data.token) {
+                //     const user = normalizeUser(data.token);
+                //     if (user) {
+                //         localStorage.setItem("token", data.token);
+                //         dispatch(setUser({ user, token: data.token }));
+                //     }
+                // }
+                // navigate("/home");
+            // } catch (err) {
+            //     alert("Помилка реєстрації: " + (err as AxiosError).message);
+            // }
+
             } catch (err) {
-                alert("Помилка реєстрації: " + (err as AxiosError).message);
+                const axiosErr = err as AxiosError<{ error?: string; message?: string }>;
+
+                // те, що прислав бекенд у body:
+                const apiMsg =
+                    axiosErr.response?.data?.error ??
+                    axiosErr.response?.data?.message ??
+                    "";
+
+                // HTTP-статус може бути 400 або 409 (залежно від  обробки)
+                const status = axiosErr.response?.status;
+
+                //  email уже прив’язаний до Google-акаунта
+                if ((status === 400 || status === 409) && apiMsg.includes("Google-акаунта")) {
+                    alert(
+                        "Цей email вже прив'язаний до Google. Увійдіть через Google, а потім у профілі встановіть локальний пароль (Меню → Профіль → Встановити пароль)."
+                    );
+                    return;
+                }
+
+                // інші  валідаційні помилки з бекенда
+                if ((status === 400 || status === 409) && apiMsg) {
+                    alert("Помилка реєстрації: " + apiMsg);
+                    return;
+                }
+
+                // якщо бекенд не дав зрозумілого тексту
+                alert("Помилка реєстрації: " + (axiosErr.message || "невідома помилка"));
             }
         }
     };
 
-    //--- Додано: обробка Google Login ---
-    const handleGoogleLogin = async (credentialResponse: any) => {
+// NEW: допоміжний тип (не обов’язково, але зручно)
+    type GoogleAuthResponse = {
+        token: string;
+        expiresAt?: string;
+        id?: number;
+        username?: string;
+        email?: string;
+        avatarUrl?: string;
+    };
 
-        console.log("Google login response:", credentialResponse.access_token);
+// NEW: акуратне діставання тексту помилки без any
+    const msgFromError = (e: unknown) =>
+        e instanceof Error ? e.message : typeof e === "string" ? e : JSON.stringify(e);
+
+    const handleGoogleSuccess = async (response: CredentialResponse) => {
+        const idToken = response.credential;
+        if (!idToken) {
+            alert("No credential from Google");
+            return;
+        }
+
+        // DEBUG лише у dev:
+        if (import.meta.env.DEV) {
+            // console.debug("[GSI] idToken len=", idToken.length, "sample=", idToken.slice(0, 30), "...");
+            console.debug("[GSI] idToken =", idToken); // ПОВНИЙ токен
+        }
+
+        let res: Response;
         try {
-            const res = await fetch("http://localhost:5122/auth/google", {
+            res = await fetch("http://localhost:5122/auth/google", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: credentialResponse.access_token }),
+                body: JSON.stringify({ token: idToken }),
             });
-
-            if (!res.ok) {
-                console.error("Google login failed");
-                return;
-            }
-
-            const data = await res.json();
-            console.log("User info from backend:", data);
-
-            // Зберігаємо користувача
-            const user = data; // payload з бекенду
-            localStorage.setItem("token", credentialResponse.access_token);
-            dispatch(setUser({ user, token: credentialResponse.access_token }));
-            alert("Логін через Google успішний!");
-            navigate("/home");
-        } catch (error) {
-            console.error("Error during Google login:", error);
+        } catch (e: unknown) {                // CHANGED: було (e: any) → стало (e: unknown)
+            alert("Network error: " + msgFromError(e));   // NEW: без any, коректний вивід
+            return;
         }
+
+        //читаємо тіло відповіді  1 раз
+        if (!res.ok) {
+            const errBody = await res.text();  // CHANGED: читаємо .text() тільки тут (при помилці)
+            if (import.meta.env.DEV) {
+                console.error("[/auth/google] status:", res.status, "body:", errBody);
+            }
+            alert(`Google login failed: ${res.status}\n${errBody}`);
+            return;
+        }
+
+        // тепер читаємо JSON (тіло ще не читалося у success-гілці)
+        const data: GoogleAuthResponse = await res.json();  // додано типізацію відповіді
+
+        const token = data?.token;
+        if (!token) {
+            alert("Google login failed: missing token in response");
+            return;
+        }
+
+        localStorage.setItem("token", token);
+
+        const user =
+            normalizeUser(token) ?? {
+                id: data.id!,
+                username: data.username!,
+                email: data.email!,
+                avatarUrl: data.avatarUrl,
+                totalPlays: 0, // new
+            };
+
+        dispatch(setUser({ user, token }));
+        navigate("/home");
     };
-    const googleLogin = useGoogleLogin({
-        onSuccess: handleGoogleLogin,
-        onError: () => console.log("Google Login Failed"),
-    });
+
+    // Додаємо правильну обробку GIS (отримуємо ID token = credential):
+    // const handleGoogleSuccess = async (res: CredentialResponse) => {
+    //     const idToken = res.credential; //  Google ID token (eyJ... з 2 крапками)
+    //     console.log("ID_TOKEN:", idToken); // Логування для дебагу
+    //     if (!idToken) {
+    //         console.error("No credential returned by Google");
+    //         alert("Google login failed: No credential returned");
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const r = await fetch("http://localhost:5122/auth/google", {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({ token: idToken }),
+    //         });
+    //
+    //         // new
+    //         const text = await r.text();
+    //         console.log("[/auth/google] status:", r.status, "body:", text);
+    //
+    //         if (!r.ok) {
+    //             const text = await r.text();
+    //             console.error("Google login failed:", text);
+    //             // alert("Google login failed");
+    //             alert(`Google login failed: ${r.status}\n${text}`);
+    //             return;
+    //         }
+    //
+    //         const data = await r.json();
+    //         // очікуємо { token: '<API_JWT>', expiresAt, id, username, email, avatarUrl }
+    //         if (!data.token) {
+    //             alert("Помилка: токен не отримано від сервера");
+    //             return;
+    //         }
+    //         localStorage.setItem("token", data.token);
+    //         const user = {
+    //             id: data.id,
+    //             username: data.username,
+    //             email: data.email,
+    //             avatarUrl: data.avatarUrl,
+    //         };
+    //         dispatch(setUser({ user, token: data.token }));
+    //         alert("Логін через Google успішний!");
+    //         navigate("/home");
+    //     } catch (error) {
+    //         console.error("Error during Google login:", error);
+    //         alert("Google login failed");
+    //     }
+    // };
+
+    const handleGoogleError = () => {
+        console.error("Google Login Failed");
+        alert("Google login failed");
+    };
+
     return (
         <>
             <div className="first_container">
@@ -152,21 +297,62 @@ const LoginSignup: React.FC = () => {
                                     <div className="login_second_container_text baloo2">
                                         <h1>{isLogin ? "Sign into your account" : "Sign Up"}</h1>
                                     </div>
-                                    <div className="login_third_google_facebook_container">
 
-                                        <button
-                                            type="button"
-                                            onClick={()=>googleLogin()}
-                                            // запускає Google OAuth
-                                            className="login_third_google_button baloo2"
-                                        >
-                                            <img
-                                                src="src/images/icons/google_icon.png"
-                                                alt="google_icon"
-                                                className="w-5 h-5 mr-2"
-                                            />
-                                            Sign in with Google
-                                        </button>
+
+                                    <div className="login_third_google_facebook_container">
+                                        {/* new */}
+                                        {/*<div className="login_third_google_button baloo2">*/}
+                                        {/*    <GoogleLogin*/}
+                                        {/*        onSuccess={handleGoogleSuccess}*/}
+                                        {/*        onError={handleGoogleError}*/}
+                                        {/*        theme="outline"*/}
+                                        {/*        size="large"*/}
+                                        {/*        text="signin_with"*/}
+                                        {/*        shape="pill"*/}
+                                        {/*        width="100%"*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
+
+                                        {/* new */}
+                                        <div className="login_third_google_button baloo2">
+                                            <div className="oauth-wrap">
+                                                {/* Видима фіолетова кнопка */}
+                                                <button type="button" className="oauth-btn">
+                                                    <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon" />
+                                                    Google login
+                                                </button>
+
+                                                {/* Невидимий реальний GoogleLogin поверх */}
+                                                <div className="oauth-overlay">
+                                                    <GoogleLogin
+                                                        onSuccess={handleGoogleSuccess}
+                                                        onError={handleGoogleError}
+                                                        theme="filled_blue"  // будь-що — елемент все одно невидимий
+                                                        size="large"
+                                                        text="signin_with"
+                                                        shape="pill"
+                                                        width="100%"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        {/*old :*/}
+
+                                    {/*    <button*/}
+                                    {/*    type="button"*/}
+                                    {/*    onClick={()=>googleLogin()}*/}
+                                    {/*    // запускає Google OAuth*/}
+                                    {/*    className="login_third_google_button baloo2"*/}
+                                    {/*>*/}
+                                    {/*    <img*/}
+                                    {/*        src="src/images/icons/google_icon.png"*/}
+                                    {/*        alt="google_icon"*/}
+                                    {/*        className="w-5 h-5 mr-2"*/}
+                                    {/*    />*/}
+                                    {/*    Sign in with Google*/}
+                                    {/*</button>*/}
                                         <button className="login_third_google_button baloo2"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
                                             Facebook
@@ -317,17 +503,57 @@ const LoginSignup: React.FC = () => {
                                         <h1>{isLogin ? "Sign into your account" : "Sign Up"}</h1>
                                     </div>
                                     <div className="login_third_google_facebook_container">
-                                        <button
-                                            onClick={()=>googleLogin()}
-                                            className="login_third_google_button baloo2"
-                                        >
-                                            <img
-                                                src="src/images/icons/google_icon.png"
-                                                alt="google_icon"
-                                                className="w-5 h-5"
-                                            />
-                                            Sign in with Google
-                                        </button>
+
+                                        {/*/!* new *!/*/}
+                                        {/*<div className="login_third_google_button baloo2">*/}
+                                        {/*    <GoogleLogin*/}
+                                        {/*        onSuccess={handleGoogleSuccess}*/}
+                                        {/*        onError={handleGoogleError}*/}
+                                        {/*        theme="filled_blue"*/}
+                                        {/*        size="large"*/}
+                                        {/*        text="signin_with"*/}
+                                        {/*        shape="rectangular"*/}
+                                        {/*        width="100%"*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
+
+                                        <div className="login_third_google_button baloo2">
+                                            <div className="oauth-wrap">
+                                                {/* Видима фіолетова кнопка */}
+                                                <button type="button" className="oauth-btn">
+                                                    <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon" />
+                                                    Google login
+                                                </button>
+
+                                                {/* Невидимий реальний GoogleLogin поверх */}
+                                                <div className="oauth-overlay">
+                                                    <GoogleLogin
+                                                        onSuccess={handleGoogleSuccess}
+                                                        onError={handleGoogleError}
+                                                        theme="filled_blue"  // Елемент невидимий, але зберігаємо конфігурацію
+                                                        size="large"
+                                                        text="signin_with"
+                                                        shape="pill"
+                                                        width="100%"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        {/*<button*/}
+                                        {/*    onClick={()=>googleLogin()}*/}
+                                        {/*    className="login_third_google_button baloo2"*/}
+                                        {/*>*/}
+                                        {/*    <img*/}
+                                        {/*        src="src/images/icons/google_icon.png"*/}
+                                        {/*        alt="google_icon"*/}
+                                        {/*        className="w-5 h-5"*/}
+                                        {/*    />*/}
+                                        {/*    Sign in with Google*/}
+                                        {/*</button>*/}
+
+
                                         <button className="login_third_google_button baloo2"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
                                             Facebook
@@ -433,7 +659,7 @@ const LoginSignup: React.FC = () => {
                                                 <button
                                                     type="button"
                                                     className="eye_icon_position_signin_confirm"
-                                                    onClick={() => setShowConfrimPassword(!showConfirmPassword)}
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                                 >
                                                     <img src="src/images/icons/eye_icon.png" alt="eye_icon"/>
                                                 </button>

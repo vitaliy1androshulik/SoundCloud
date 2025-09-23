@@ -47,6 +47,9 @@ namespace SoundCloudWebApi.Data.Entities
 
         public ICollection<AlbumEntity>? Albums { get; set; }
         public ICollection<PlaylistEntity>? Playlists { get; set; }
+        public AuthProvider AuthProvider { get; set; } = AuthProvider.Local; // як створ акаунт
+        public string? GoogleSubject { get; set; }  // стабільний Google sub (payload.Subject)
+        public bool IsLocalPasswordSet { get; set; } = true; // чи є локальний пароль для входу
 
 
     }

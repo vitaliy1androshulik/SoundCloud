@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Data.Entities;
+using SoundCloudWebApi.Migrations;
 using SoundCloudWebApi.Models.Album;
 using SoundCloudWebApi.Models.Track;
 using SoundCloudWebApi.Services.Interfaces;
@@ -76,7 +77,8 @@ namespace SoundCloudWebApi.Services.Implementations
 
         public async Task<IEnumerable<TrackDto>> GetAllByUserAsync(int userId)
         {
-            var tracks = await _db.Tracks
+            var (actorId, _) = GetActor(); // id поточного користувача
+            return await _db.Tracks
                 .AsNoTracking()
                 .Where(t => t.AuthorId == userId) // фільтруємо тільки треки користувача
                 .Include(t => t.AlbumTracks)
@@ -84,6 +86,37 @@ namespace SoundCloudWebApi.Services.Implementations
                         .ThenInclude(a => a.Owner)
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
+                .Include(t => t.TrackLikes) // підвантажуємо лайки
+                .Select(t => new TrackDto
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    AuthorId = t.AuthorId,
+                    Author = t.Author.Username,
+                    Duration = t.Duration,
+                    Url = t.Url,
+                    ImageUrl = t.ImageUrl,
+                    IsHidden = t.IsHidden,
+                    PlayCount = t.PlayCount,
+                    GenreId = t.GenreId.HasValue ? (int)t.GenreId.Value : 0,
+                    Genre = t.Genre != null ? t.Genre.Name : null,
+                    Albums = t.AlbumTracks
+                        .Select(at => new AlbumDto
+                        {
+                            Id = at.Album.Id,
+                            Title = at.Album.Title,
+                            OwnerId = at.Album.OwnerId,
+                            OwnerName = at.Album.Owner.Username,
+                            CoverUrl = at.Album.CoverUrl,
+                            CreatedAt = at.Album.CreatedAt,
+                            IsPublic = at.Album.IsPublic
+                        })
+                        .ToList(),
+
+                    // ===== нові поля лайків =====
+                    LikesCount = t.TrackLikes.Count(),
+                    IsLikedByCurrentUser = t.TrackLikes.Any(l => l.UserId == actorId)
+                })
                 .ToListAsync();
 
             return tracks.Select(t => new TrackDto
@@ -113,8 +146,11 @@ namespace SoundCloudWebApi.Services.Implementations
         }
 
 
+
         public async Task<IEnumerable<TrackDto>> GetAllTracksAsync()
         {
+            var (actorId, _) = GetActor(); // id поточного користувача
+
             return await _db.Tracks
                 .AsNoTracking()
                 .Include(t => t.Author)
@@ -122,6 +158,7 @@ namespace SoundCloudWebApi.Services.Implementations
                 .Include(t => t.AlbumTracks)
                     .ThenInclude(at => at.Album)
                         .ThenInclude(a => a.Owner)
+                .Include(t => t.TrackLikes) // підвантажуємо лайки
                 .Select(t => new TrackDto
                 {
                     Id = t.Id,
@@ -136,7 +173,6 @@ namespace SoundCloudWebApi.Services.Implementations
                     GenreId = t.GenreId.HasValue ? (int)t.GenreId.Value : 0,
                     Genre = t.Genre != null ? t.Genre.Name : null,
 
-                    // Тут можемо повертати список альбомів для треку
                     Albums = t.AlbumTracks.Select(at => new AlbumDto
                     {
                         Id = at.Album.Id,
@@ -146,31 +182,33 @@ namespace SoundCloudWebApi.Services.Implementations
                         CoverUrl = at.Album.CoverUrl,
                         CreatedAt = at.Album.CreatedAt,
                         IsPublic = at.Album.IsPublic
-                    }).ToList()
+                    }).ToList(),
+
+                    LikesCount = t.TrackLikes.Count(),
+                    IsLikedByCurrentUser = t.TrackLikes.Any(l => l.UserId == actorId)
                 })
                 .ToListAsync();
         }
 
         public async Task<TrackDto?> GetByIdAsync(int id)
         {
-            var (actorId, actorRole) = GetActor();
+            return await GetByIdInternalAsync(id, includeUserLikes: true);
+        }
+
+        public async Task<TrackDto> GetByIdInternalAsync(int id, bool includeUserLikes)
+        {
+            var (actorId, _) = GetActor();
 
             var track = await _db.Tracks
                 .Include(t => t.Author)
                 .Include(t => t.Genre)
-                .Include(t => t.AlbumTracks)               // many-to-many зв'язки
-                    .ThenInclude(at => at.Album)          // самі альбоми
-                .ThenInclude(a => a.Owner)                // власник альбому
+                .Include(t => t.AlbumTracks)
+                    .ThenInclude(at => at.Album)
+                .Include(t => t.TrackLikes)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (track == null) return null;
-
-            // Перевірка доступу: якщо не адмін, трек повинен належати публічному альбому або твоєму альбому
-            var allowed = actorRole == UserRole.Admin ||
-                          track.AlbumTracks.Any(at => at.Album.IsPublic || at.Album.OwnerId == actorId);
-
-            if (!allowed)
-                throw new UnauthorizedAccessException("You are not allowed to view this track.");
+            if (track == null)
+                throw new Exception("Track not found");
 
             return new TrackDto
             {
@@ -189,25 +227,30 @@ namespace SoundCloudWebApi.Services.Implementations
                 {
                     Id = at.Album.Id,
                     Title = at.Album.Title,
+                    OwnerId = at.Album.OwnerId,
                     OwnerName = at.Album.Owner.Username,
                     CoverUrl = at.Album.CoverUrl,
+                    CreatedAt = at.Album.CreatedAt,
                     IsPublic = at.Album.IsPublic
-                }).ToList()
+                }).ToList(),
+                LikesCount = track.TrackLikes.Count,
+                IsLikedByCurrentUser = includeUserLikes && track.TrackLikes.Any(l => l.UserId == actorId)
             };
         }
+
 
 
         public async Task<TrackDto> CreateAsync(CreateTrackDto dto)
         {
             var (actorId, actorRole) = GetActor();
 
-            // Перевіряємо, чи існує альбом і його власника
-            var album = await _db.Albums.Include(a => a.Owner)
-                .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
-                ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
+            //// Перевіряємо, чи існує альбом і його власника
+            //var album = await _db.Albums.Include(a => a.Owner)
+            //    .FirstOrDefaultAsync(a => a.Id == dto.AlbumId)
+            //    ?? throw new KeyNotFoundException($"Album {dto.AlbumId} not found");
 
-            if (actorRole != UserRole.Admin && album.OwnerId != actorId)
-                throw new UnauthorizedAccessException("You are not owner of this album");
+            //if (actorRole != UserRole.Admin && album.OwnerId != actorId)
+            //    throw new UnauthorizedAccessException("You are not owner of this album");
 
             // Перевіряємо користувача-автора
             var author = await _db.Users.FindAsync(actorId)
@@ -231,7 +274,11 @@ namespace SoundCloudWebApi.Services.Implementations
             // Додаємо зв'язок трек → альбом
             _db.AlbumTracks.Add(new AlbumTrackEntity
             {
-                AlbumId = dto.AlbumId,
+                //поки коментуємо (помилка 'CreateTrackDto' does not contain a definition for 'AlbumId' and no accessible
+                //extension method 'AlbumId' accepting a first argument
+                //of type 'CreateTrackDto' could be found (are you missing a using directive or an assembly reference?))
+
+                //AlbumId = dto.AlbumId,
                 TrackId = track.Id
             });
             await _db.SaveChangesAsync();
@@ -252,16 +299,19 @@ namespace SoundCloudWebApi.Services.Implementations
                 // Альбоми, до яких належить трек
                 Albums = new List<AlbumDto>
         {
-            new AlbumDto
-            {
-                Id = album.Id,
-                Title = album.Title,
-                Description = album.Description,
-                OwnerId = album.OwnerId,
-                OwnerName = album.Owner.Username,
-                CoverUrl = album.CoverUrl,
-                CreatedAt = album.CreatedAt
-            }
+                    //поки коментуємо (помилка 'CreateTrackDto' does not contain a definition for 'AlbumId' and no accessible
+                    //extension method 'AlbumId' accepting a first argument
+                    //of type 'CreateTrackDto' could be found (are you missing a using directive or an assembly reference?))
+            //new AlbumDto
+            //{
+            //    Id = album.Id,
+            //    Title = album.Title,
+            //    Description = album.Description,
+            //    OwnerId = album.OwnerId,
+            //    OwnerName = album.Owner.Username,
+            //    CoverUrl = album.CoverUrl,
+            //    CreatedAt = album.CreatedAt
+            //}
         }
             };
         }
@@ -512,26 +562,72 @@ namespace SoundCloudWebApi.Services.Implementations
         }
 
 
-        public async Task LikeAsync(int trackId, int userId)
+        public async Task LikeAsync(int trackId)
         {
-            var exists = await _db.Tracks.AnyAsync(t => t.Id == trackId);
-            if (!exists) throw new KeyNotFoundException($"Track {trackId} not found");
+            var (userId, _) = GetActor(); // беремо поточного користувача з токена
 
-            var already = await _db.TrackLikes.AnyAsync(l => l.TrackId == trackId && l.UserId == userId);
-            if (already) throw new InvalidOperationException("Already liked");
+            var track = await _db.Tracks
+                .Include(t => t.TrackLikes)
+                .FirstOrDefaultAsync(t => t.Id == trackId);
 
-            _db.TrackLikes.Add(new TrackLikeEntity { TrackId = trackId, UserId = userId });
-            await _db.SaveChangesAsync();
+            if (track == null)
+                throw new KeyNotFoundException("Track not found");
+
+            // Якщо користувач ще не лайкнув цей трек
+            if (!track.TrackLikes.Any(l => l.UserId == userId))
+            {
+                track.TrackLikes.Add(new TrackLikeEntity
+                {
+                    TrackId = trackId,
+                    UserId = userId
+                });
+
+                await _db.SaveChangesAsync();
+            }
         }
 
-        public async Task UnlikeAsync(int trackId, int userId)
+        public async Task UnlikeAsync(int trackId)
         {
-            var like = await _db.TrackLikes.FirstOrDefaultAsync(l => l.TrackId == trackId && l.UserId == userId);
-            if (like == null) throw new KeyNotFoundException("Like not found");
+            var (userId, _) = GetActor(); // беремо поточного користувача
 
-            _db.TrackLikes.Remove(like);
-            await _db.SaveChangesAsync();
+            var like = await _db.TrackLikes
+                .FirstOrDefaultAsync(l => l.TrackId == trackId && l.UserId == userId);
+
+            if (like != null)
+            {
+                _db.TrackLikes.Remove(like);
+                await _db.SaveChangesAsync();
+            }
+            // Якщо лайка немає — нічого не робимо
         }
+
+        //Отримати лайкнуті треки поточного користувача
+        public async Task<List<TrackDto>> GetLikedByUserAsync(int userId)
+        {
+            var likedTracks = await _db.TrackLikes
+                .Where(tl => tl.UserId == userId)
+                .Select(tl => tl.Track)
+                .Select(track => new TrackDto
+                {
+                    Id = track.Id,
+                    Title = track.Title,
+                    AuthorId = track.AuthorId,
+                    Author = track.Author.Username, // або Name, залежно від твоєї моделі User
+                    GenreId = track.GenreId ?? 0,
+                    Genre = track.Genre != null ? track.Genre.Name : "",
+                    Duration = track.Duration,
+                    Url = track.Url,
+                    ImageUrl = track.ImageUrl,
+                    PlayCount = track.PlayCount,
+                    LikesCount = track.TrackLikes.Count,
+                    IsLikedByCurrentUser = true // бо це лайкнуті треки поточного користувача
+                })
+                .ToListAsync();
+
+            return likedTracks;
+        }
+
+
 
         public async Task<TrackStatsDto> GetTrackStatsAsync(int trackId)
         {
