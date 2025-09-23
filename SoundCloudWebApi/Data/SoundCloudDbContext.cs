@@ -18,6 +18,7 @@ public class SoundCloudDbContext : DbContext
     public DbSet<TrackListenEntity> TrackListens { get; set; }
     public DbSet<TrackLikeEntity> TrackLikes { get; set; }
     public DbSet<AlbumTrackEntity> AlbumTracks { get; set; }
+    public DbSet<FollowEntity> Follows { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -122,8 +123,22 @@ public class SoundCloudDbContext : DbContext
             .WithMany(t => t.AlbumTracks)
             .HasForeignKey(at => at.TrackId);
 
+        // Follow: унікальність пари (FollowerId, FollowingId)
+        modelBuilder.Entity<FollowEntity>()
+            .HasIndex(f => new { f.FollowerId, f.FollowingId })
+            .IsUnique();
 
+        modelBuilder.Entity<FollowEntity>()
+            .HasOne(f => f.Follower)
+            .WithMany()
+            .HasForeignKey(f => f.FollowerId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<FollowEntity>()
+            .HasOne(f => f.Following)
+            .WithMany()
+            .HasForeignKey(f => f.FollowingId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 }

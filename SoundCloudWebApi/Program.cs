@@ -49,6 +49,10 @@ builder.Services.AddScoped<IGenreService, GenreService>();
 
 builder.Services.AddScoped<ISearchService, SearchService>();
 
+// Follow system
+builder.Services.AddScoped<IFollowService, FollowService>();
+
+
 builder.Services.AddHttpContextAccessor();
 
 

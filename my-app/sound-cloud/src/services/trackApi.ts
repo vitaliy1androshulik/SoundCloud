@@ -1,6 +1,17 @@
 import { ITrack } from "../types/track";
 import api from "../utilities/axiosInstance";
+import axios from "axios";
+import { TokenService } from "../utilities/tokenService.ts";
 
+const API_URL = "http://localhost:5122/api";
+
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    headers: {
+        Authorization: `Bearer ${TokenService.getAccessToken()}`,
+        "Content-Type": "application/json",
+    },
+});
 
 export const trackService = {
 
@@ -24,6 +35,7 @@ export const trackService = {
             throw error;
         }
     },
+
 
 
     // Створити новий трек (усі поля обов'язкові)
@@ -61,4 +73,20 @@ export const trackService = {
             throw error;
         }
     },
+
+    async like(trackId: number) {
+        return axiosInstance.post(`/Track/${trackId}/like`);
+    },
+    async unlike(trackId: number) {
+        return axiosInstance.delete(`/Track/${trackId}/like`);
+    },
+    async getLikedTracks(): Promise<ITrack[]> {
+        try {
+            const res = await api.get("/Track/liked"); // точно як у Swagger
+            return res.data;
+        } catch (error) {
+            console.error("Failed to fetch liked tracks", error);
+            throw error;
+        }
+    }
 };

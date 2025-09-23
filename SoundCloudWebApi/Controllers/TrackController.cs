@@ -122,28 +122,34 @@ namespace SoundCloudWebApi.Controllers
 
 
         [HttpPost("{id:int}/like")]
-        [SwaggerOperation(OperationId = "LikeTrack", Summary = "Поставити лайк треку")]
         public async Task<IActionResult> Like(int id)
         {
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
-            try
-            {
-                await _trackService.LikeAsync(id, userId);
-                return Ok(new { trackId = id, status = "liked" });
-            }
-            catch (InvalidOperationException)
-            {
-                return Conflict(new { trackId = id, error = "already-liked" });
-            }
+            await _trackService.LikeAsync(id); // додаємо лайк
+            var track = await _trackService.GetByIdAsync(id); // отримуємо актуальний трек
+            return Ok(track);
         }
 
         [HttpDelete("{id:int}/like")]
-        [SwaggerOperation(OperationId = "UnlikeTrack", Summary = "Зняти лайк з треку")]
         public async Task<IActionResult> Unlike(int id)
         {
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
-            await _trackService.UnlikeAsync(id, userId);
-            return Ok(new { trackId = id, status = "unliked" });
+            await _trackService.UnlikeAsync(id); // видаляємо лайк
+            var track = await _trackService.GetByIdAsync(id); // отримуємо актуальний трек
+            return Ok(track);
+        }
+
+        // Отримати улюблені треки авторизованого користувача
+        [HttpGet("liked")]
+        [Authorize]
+        public async Task<IActionResult> GetLikedTracks()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            List<TrackDto> tracks = await _trackService.GetLikedByUserAsync(userId);
+            return Ok(tracks);
         }
 
 

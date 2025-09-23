@@ -43,10 +43,14 @@ namespace SoundCloudWebApi.Data.Entities
         public string? ImageUrl { get; set; }
 
         // нові
-        public int? GenreId { get; set; }
+        public int? GenreId { get; set; }   
         public GenreEntity? Genre { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public int? UpdatedById { get; set; }
+
+        // Зв'язок «один трек — багато лайків»
+        public ICollection<TrackLikeEntity> TrackLikes { get; set; } = new List<TrackLikeEntity>();
+
     }
 }
