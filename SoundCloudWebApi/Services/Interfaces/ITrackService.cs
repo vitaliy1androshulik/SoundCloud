@@ -10,6 +10,8 @@ namespace SoundCloudWebApi.Services.Interfaces
     public interface ITrackService
     {
         // Отримати всі треки
+        Task<IEnumerable<TrackDto>> GetAllByUserAsync(int userId);
+
         Task<IEnumerable<TrackDto>> GetAllAsync();
 
         // Отримати трек за ID
@@ -49,5 +51,6 @@ namespace SoundCloudWebApi.Services.Interfaces
 
 
         Task<List<TrackDto>> GetLikedByUserAsync(int userId);
+
     }
 }
