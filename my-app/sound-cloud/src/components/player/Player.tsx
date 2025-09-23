@@ -23,7 +23,7 @@ export default function Player({ footerSelector }: PlayerProps) {
     const minBottom = 50;   // коли футер не видно
     const maxBottom = 100;  // коли футер повністю видно
 
-    const progressPercent = (currentTime / duration) * 100;
+    const progressPercent = (currentTime / duration) * 99;
 
 // Випередження: чим ближче до кінця, тим менше
     const offset = Math.max(0, 1 - (currentTime / duration) * 1); // в процентах або пікселях

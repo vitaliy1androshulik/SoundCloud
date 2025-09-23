@@ -10,7 +10,7 @@ namespace SoundCloudWebApi.Services.Interfaces
     public interface ITrackService
     {
         // Отримати всі треки
-        Task<IEnumerable<TrackDto>> GetAllAsync();
+        Task<IEnumerable<TrackDto>> GetAllByUserAsync(int userId);
 
         // Отримати трек за ID
         Task<TrackDto?> GetByIdAsync(int id);

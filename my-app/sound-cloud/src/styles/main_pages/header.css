@@ -1,3 +1,23 @@
+.header_image_behind{
+    /* Vector 23 */
+
+    position: absolute;
+    width: 1920px;
+    height: 45px;
+    left: 0px;
+    opacity: 0.5;
+}
+.header_image_ahead{
+    /* Vector 24 */
+
+    position: absolute;
+    width: 1920px;
+    height: 45px;
+    left: 0px;
+    top: 0px;
+
+    opacity: 0.8;
+}
 
 .header_logo_main {
     /* Logo */

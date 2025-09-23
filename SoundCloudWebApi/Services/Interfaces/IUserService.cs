@@ -19,6 +19,10 @@ namespace SoundCloudWebApi.Services.Interfaces
         // Оновити дані користувача (ім'я, email, аватар)
         Task<UserProfileDto> UpdateAsync(int id, UpdateUserRequestDto dto);
 
+        //Оновити банер користувача
+        Task<string?> UpdateBannerAsync(int userId, IFormFile? bannerFile);
+
+
         // Видалити користувача
         Task DeleteAsync(int id);
 

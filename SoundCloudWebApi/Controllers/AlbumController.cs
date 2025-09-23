@@ -24,13 +24,27 @@ namespace SoundCloudWebApi.Controllers
         // ===== CRUD для поточного користувача =====
 
         [HttpGet]
-        [SwaggerOperation(OperationId = "GetAlbums", Summary = "Отримати всі публічні альбоми або альбоми користувача")]
+        [SwaggerOperation(OperationId = "GetAlbums", Summary = "Отримати всі альбоми користувача")]
         public async Task<IActionResult> GetAll()
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
             var albums = await _albumService.GetAllByUserAsync(userId); // новий метод враховує IsPublic
             return Ok(albums);
         }
+        [HttpGet("public")]
+        [SwaggerOperation(OperationId = "GetAllAlbums", Summary = "Отримати всі публічні альбоми користувачів")]
+        public async Task<IActionResult> GetAllPublicAlbums()
+        {
+            var albums = await _albumService.GetAllPublicAlbumsAsync(); 
+            return Ok(albums);
+        }
+
 
         [HttpGet("{id:int}")]
         [SwaggerOperation(OperationId = "GetAlbumById", Summary = "Отримати альбом за ID")]

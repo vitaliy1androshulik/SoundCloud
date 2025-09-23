@@ -17,7 +17,7 @@ export const trackService = {
     // Отримати треки поточного користувача
     async getMyTracks(): Promise<ITrack[]> {
         try {
-            const res = await api.get("/Track");
+            const res = await api.get(`/Track/my`)
             return res.data;
         } catch (error) {
             console.error("Failed to fetch user tracks", error);

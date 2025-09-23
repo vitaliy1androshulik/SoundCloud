@@ -307,6 +307,13 @@ namespace SoundCloudWebApi.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("text");
 
+                    b.Property<string>("BannerUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Bio")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -471,10 +478,7 @@ namespace SoundCloudWebApi.Migrations
             modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
                 {
                     b.Navigation("AlbumTracks");
-                });
 
-            modelBuilder.Entity("SoundCloudWebApi.Data.Entities.TrackEntity", b =>
-                {
                     b.Navigation("UserPlays");
                 });
 

@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Google.Apis.Auth;
 using SoundCloudWebApi.Models.Track;
+using System;
 
 
 namespace SoundCloudWebApi.Services
@@ -65,6 +66,7 @@ namespace SoundCloudWebApi.Services
                     Id = u.Id.ToString(),
                     Username = u.Username,
                     Email = u.Email,
+                    Bio =u.Bio,
                     CreatedAt = u.CreatedAt,
                     AvatarUrl = u.AvatarUrl,
                     Role = u.Role,
@@ -84,19 +86,12 @@ namespace SoundCloudWebApi.Services
             var user = await _db.Users.FindAsync(id)
                 ?? throw new KeyNotFoundException($"User with id={id} not found");
 
-            //if (!string.IsNullOrWhiteSpace(dto.Username))
-            //    user.Username = dto.Username;
-            //if (!string.IsNullOrWhiteSpace(dto.Email))
-            //    user.Email = dto.Email;
-
-            //більш ефективні методи перевірки:
-            // - Email 
+            // --- Оновлення Email ---
             if (!string.IsNullOrWhiteSpace(dto.Email))
             {
                 var emailTrim = dto.Email.Trim();
                 var emailNorm = emailTrim.ToLower();
 
-                // Якщо змінюється (ігноруємо лише різницю в регістрі)
                 var currentEmailNorm = (user.Email ?? string.Empty).ToLower();
                 if (currentEmailNorm != emailNorm)
                 {
@@ -111,24 +106,57 @@ namespace SoundCloudWebApi.Services
                 }
             }
 
-            // - Username 
+            // --- Оновлення Username ---
             if (!string.IsNullOrWhiteSpace(dto.Username))
             {
-                var usernameTrim = dto.Username.Trim();
-                var usernameNorm = usernameTrim.ToLower();
+                // зберігаємо всі пробіли як є
+                var usernameInput = dto.Username;
 
+                // нормалізація тільки для перевірки унікальності: нижній регістр
+                var usernameNorm = usernameInput.ToLower();
                 var currentNameNorm = (user.Username ?? string.Empty).ToLower();
+
                 if (currentNameNorm != usernameNorm)
                 {
                     var nameTaken = await _db.Users
                         .AsNoTracking()
-                        .AnyAsync(u => u.Id != id && u.Username.ToLower() == usernameNorm);
+                        .AnyAsync(u => (u.Username ?? string.Empty).ToLower() == usernameNorm && u.Id != id);
 
                     if (nameTaken)
                         throw new InvalidOperationException("Користувач з таким ім'ям вже існує");
 
-                    user.Username = usernameTrim;
+                    user.Username = usernameInput; // зберігаємо всі пробіли і символи
                 }
+            }
+
+            // --- Оновлення Bio ---
+            if (dto.Bio != null)
+            {
+                user.Bio = dto.Bio;
+            }
+
+            // --- Тут можна додати логіку для Avatar (завантаження файлу) ---
+            if (dto.Avatar != null)
+            {
+                // Папка для аватарок
+                var uploadsFolder = Path.Combine("wwwroot", "uploads", "avatars");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                // Генеруємо унікальне ім'я файлу
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.Avatar.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                // Зберігаємо файл
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.Avatar.CopyToAsync(stream);
+                }
+
+                // Зберігаємо шлях у базі
+                user.AvatarUrl = $"/uploads/avatars/{fileName}";
+
+                await _db.SaveChangesAsync();
             }
 
             user.UpdatedAt = DateTime.UtcNow;
@@ -140,10 +168,42 @@ namespace SoundCloudWebApi.Services
                 Id = user.Id.ToString(),
                 Username = user.Username,
                 Email = user.Email,
+                Bio = user.Bio,  
                 CreatedAt = user.CreatedAt,
                 Role = user.Role,
-                UpdatedAt = user.UpdatedAt
+                UpdatedAt = user.UpdatedAt,
+                AvatarUrl = user.AvatarUrl 
             };
+        }
+
+        public async Task<string?> UpdateBannerAsync(int userId, IFormFile? bannerFile)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) throw new Exception("User not found");
+
+            if (bannerFile != null)
+            {
+                var uploadsFolder = Path.Combine("wwwroot", "uploads", "banner");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(bannerFile.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await bannerFile.CopyToAsync(stream);
+                }
+
+                user.BannerUrl = $"/uploads/banner/{fileName}";
+            }
+            else
+            {
+                user.BannerUrl = null;
+            }
+
+            await _db.SaveChangesAsync();
+            return user.BannerUrl;
         }
 
         public async Task DeleteAsync(int id)

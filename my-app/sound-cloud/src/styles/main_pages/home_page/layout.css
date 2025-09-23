@@ -12,7 +12,7 @@
     width: 1170px;
     height: 338px;
     left: 176px;
-    top: 200px;
+    top: 235px;
        /* для кнопок */
 }
 
@@ -158,7 +158,7 @@
     width: 1170px;
     height: 338px;
     left: 176px;
-    top: 596px;
+    top: 631px;
 }
 
 .third_first_container{
@@ -175,7 +175,7 @@
     width: 1170px;
     height: 312px;
     left: 176px;
-    top: 966px;
+    top: 1001px;
 }
 
 .playlist_container{
@@ -192,7 +192,7 @@
     width: 1170px;
     height: 732px;
     left: 176px;
-    top: 1335px;
+    top: 1370px;
 }
 
 .trending_by_genre_container{
@@ -209,7 +209,7 @@
     width: 1170px;
     height: 338px;
     left: 176px;
-    top: 2074px;
+    top: 2109px;
 }
 
 .discover_new_songs_container{
@@ -226,7 +226,7 @@
     width: 1170px;
     height: 338px;
     left: 176px;
-    top: 2444px;
+    top: 2479px;
 }
 .button_side_bar_right_container{
     position: absolute;
@@ -295,7 +295,7 @@
     width: 374px;
     height: 346px;
     left: 1370px;
-    top: 200px;
+    top: 235px;
 }
 
 .top_creators_top_text_container{
@@ -462,7 +462,7 @@
     width: 374px;
     height: 346px;
     left: 1370px;
-    top: 570px;
+    top: 605px;
 }
 
 .recommended_for_you_author_container{
@@ -525,7 +525,7 @@
     width: 374px;
     height: 346px;
     left: 1370px;
-    top: 940px;
+    top: 975px;
 }
 .history_track_image_container{
     /* Rectangle 55 */

@@ -1,0 +1,1648 @@
+
+.banner_avatar_container {
+    /* Rectangle 50 */
+
+    position: absolute;
+    width: 1568px;
+    height: 314px;
+    top:-20px;
+    border-radius: 30px;
+
+}
+.banner_image_style{
+    /* Rectangle 50 */
+
+    position: absolute;
+    width: 1568px;
+    height: 314px;
+    left: 176px;
+    top: 226px;
+
+
+
+    border-radius: 30px;
+
+}
+
+.profile_tabs_container{
+    /* Frame 26080086 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 48px;
+
+    position: absolute;
+    width: 507px;
+    height: 44px;
+    left: 176px;
+    top: 572px;
+
+
+
+
+}
+
+.profile_tab_buttons_container{
+    box-sizing: border-box;
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 0px 3px;
+    gap: 48px;
+
+    width: auto;
+    height: 23px;
+    color: white;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.profile_tab_buttons_non_active{
+    /* Tracks */
+    width: auto;
+    height: 20px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.profile_tab_buttons_container_activated{
+    /* All */
+    width: auto;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #C9D4FF;
+    border-bottom: 1px solid #FFFFFF;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_tracks_container{
+    /* Playlists */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 32px;
+
+    position: absolute;
+    width: 1170px;
+    height: auto;
+    left: 176px;
+    top: 648px;
+}
+
+.profile_track_container{
+    /* Playlist */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 48px;
+
+    margin-bottom: 32px;
+
+    width: 1170px;
+    height: auto;        /* висота підлаштовується під контент */
+    max-height: 476px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+
+
+.profile_page_playlist_image{
+    /* Rectangle 55 */
+
+    width: 241px;
+    height: 241px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_track_information_container{
+    /* Frame 26080115 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 905px;
+    height: auto;        /* висота підлаштовується під контент */
+    max-height: 476px;
+
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.profile_page_track_play_button_container{
+    /* Frame 26080116 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 905px;
+    height: 43px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_play_button_background{
+    /* ic:round-play-arrow */
+
+    width: 43px;
+    height: 43px;
+    align-content:center;
+    justify-items: center;
+    background: #5241B3;
+    border-radius: 100px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_track_title_style{
+    /* Just vibes */
+
+    width: 905px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.profile_page_tracks_in_playlist_container{
+    /* Songs */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 905px;
+    max-height: 296px;
+
+    overflow-y:auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+
+}
+
+.profile_page_tracks{
+    /* Song */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 905px;
+    height: 56px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+
+.profile_page_tracks_image_style{
+    /* Rectangle 55 */
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 10px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_track_info_title_style{
+    /* Name */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 692px;
+    height: 20px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+
+}
+.txt_style{
+    /* Derivakat */
+
+    width: 692px;
+    height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+.txt_style_is_playing{
+    /* Derivakat */
+
+    width: 692px;
+    height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #54E0FF;
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+.profile_page_track_controls_buttons{
+    /* Options */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 375px;
+    height: 43px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+
+}
+
+.profile_page_user_avatar_container{
+    /* Ellipse 59 */
+
+    position: absolute;
+    width: 241px;
+    height: 241px;
+    display: block;
+    left: 309px;
+    top: 262px;
+    object-fit: cover;
+    z-index: 9999;
+    overflow: hidden;
+}
+.profile_page_user_avatar_style{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* зберігає пропорції, заповнюючи контейнер */
+    border-radius: 100%;
+
+}
+.profile_page_banner_upload_container{
+    /* Frame 26080118 */
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    position: absolute;
+    width: 189px;
+    height: 44px;
+    left: 1503px;
+    top: 238px;
+
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+}
+.profile_page_banner_upload_container:hover{
+    cursor: pointer;
+}
+.profile_page_banner_upload_button_txt_style{
+    /* Update image */
+
+    width: 125px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_modal_container{
+    /* Profile_Page */
+
+    position: fixed;
+    inset: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(82, 65, 179, 0.3);
+    /* Rectangle 27 */
+    z-index:9999;
+}
+.profile_page_banner_modal{
+    /* Frame 26080108 */
+    /* Frame 26080109 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 32px 36px;
+    gap: 32px;
+
+    position: absolute;
+    width: 1086px;
+    height: 485px;
+    left: 417px;
+    top: 166px;
+
+    background: #101010;
+    border-radius: 30px;
+
+}
+.profile_page_title_and_close_button_container{
+    /* Frame 26080106 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 604px;
+
+    width: 1014px;
+    height: 48px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.profile_page_title_modal_style{
+    /* Edit profile header */
+
+    width: 362px;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    /* identical to box height, or 100% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_modal_close_icon{
+    /* ic:baseline-close */
+
+    box-sizing: border-box;
+
+    width: 48px;
+    height: 48px;
+
+    align-content: center;
+    justify-items: center;
+
+    border: 2px solid #344289;
+    border-radius: 100px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.profile_page_modal_close_icon:hover{
+    cursor: pointer;
+}
+
+.profile_page_modal_banner_preview{
+    /* Frame 26080127 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    gap: 24px;
+
+    width: 1014px;
+    height: 265px;
+
+    border-radius: 30px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.profile_page_modal_banner_buttons_bottom_container{
+    /* Frame 26080129 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 555px;
+
+    width: 1014px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.profile_page_modal_upload_button_container{
+    /* Save */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    padding: 12px 32px;
+
+    width: 187px;
+    height: 44px;
+
+    border: 2px solid #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_modal_upload_button_container .txt_style{
+    /* Upload image */
+
+    width: 187px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_modal_banner_cancel_save_button_container{
+    /* Frame 26080128 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 0px;
+    gap: 24px;
+
+    width: 272px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+
+.profile_page_modal_banner_cancel_save_button_container .button_cancel{
+    /* Cancel */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 124px;
+    height: 44px;
+
+    border: 2px solid #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.profile_page_modal_banner_cancel_save_button_container .txt_style{
+    /* Cancel */
+
+    width: 60px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_modal_banner_cancel_save_button_container .button_save{
+    /* Save */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    padding: 12px 32px;
+
+    width: 124px;
+    height: 44px;
+
+    background: #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.profile_page_modal_banner_user_avatar{
+    /* Ellipse 59 */
+
+    position: absolute;
+    width: 175px;
+    height: 175px;
+    display: block;
+    left: 140px;
+    top: 169px;
+    object-fit: cover;
+    z-index: 9999;
+    overflow: hidden;
+}
+.profile_page_modal_banner_user_avatar .img_style{
+    /* Ellipse 59 */
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* зберігає пропорції, заповнюючи контейнер */
+    border-radius: 100%;
+
+}
+.profile_page_modal_banner_avatar_container{
+    /* Frame 26080125 */
+
+    position: absolute;
+    width: 550px;
+    height: 36px;
+    display: block;
+    left: 328px;
+    top: 235px;
+    object-fit: cover;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.profile_page_modal_banner_avatar_container .txt_style{
+    /* Username */
+
+    width: 241px;
+    height: 36px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 36px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.profile_page_user_name_container{
+    /* Anon */
+
+    position: absolute;
+    width: 241px;
+    height: 36px;
+    left: 574px;
+    top: 364px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 36px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+}
+.profile_page_user_button_controls{
+    /* Frame 26080202 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    position: absolute;
+    width: 241px;
+    height: 44px;
+    left: 1503px;
+    top: 572px;
+
+
+}
+
+.profile_page_user_button_controls .share_button{
+    /* Share */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 4px;
+
+    width: 108px;
+    height: 44px;
+
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_user_button_controls .share_button .txt_style{
+    /* Share */
+
+    width: 52px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.profile_page_user_button_controls .share_button .img_style{
+    /* ic:round-ios-share */
+
+    width: 20px;
+    height: 20px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+
+.profile_page_user_button_controls .edit_button{
+    /* Edit */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    gap: 4px;
+
+    width: 109px;
+    height: 44px;
+
+    border: 2px solid #5241B3;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.profile_page_user_button_controls .edit_button .txt_style{
+    width: 37px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.profile_page_user_button_controls .edit_button .img_style{
+    width: 16px;
+    height: 16px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_modal_user_edit_container{
+    /* Frame 26080108 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 32px 36px;
+    gap: 32px;
+
+    position: absolute;
+    width: 772px;
+    height: 639px;
+    left: 574px;
+    top: 166px;
+
+    background: #101010;
+    border-radius: 30px;
+}
+.profile_page_edit_profile_close_container{
+    /* Frame 26080106 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 410px;
+
+    width: 700px;
+    height: 48px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.profile_page_edit_profile_close_container .txt_style{
+    /* Edit profile */
+
+    margin: 0 auto;
+    width: 241px;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    /* identical to box height, or 100% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.profile_page_edit_profile_close_container .img_style{
+    box-sizing: border-box;
+
+    width: 48px;
+    height: 48px;
+
+
+    align-content: center;
+    justify-items: center;
+
+    border: 2px solid #344289;
+    border-radius: 100px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_modal_user_edit_container .user_info_container{
+    /* Frame 26080107 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 700px;
+    height: 419px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.profile_page_modal_user_edit_container .user_info_container .img_container{
+    /* Frame 26080105 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* центрує по горизонталі */
+    justify-content: center;
+    padding: 0px;
+    gap: 32px;
+
+    width: 241px;
+    height: 317px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.img_container .img_style{
+    /* Ellipse 60 */
+
+    width: 241px;
+    height: 241px;
+
+    object-fit: cover;
+    border-radius: 100%;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: center;
+    flex-grow: 0;
+
+}
+.img_container .button_container{
+    /* Edit_P */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 168px;
+    height: 44px;
+
+    background: #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: center;
+    flex-grow: 0;
+
+}
+.button_container .txt_style{
+    /* Edit picture */
+
+    width: 104px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.profile_page_modal_user_edit_container .user_info_tables_container{
+    /* Frame 26080104 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 0px;
+    gap: 32px;
+
+    width: 435px;
+    height: 419px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+}
+
+.user_info_tables_container .username_container{
+    /* Name */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 435px;
+    height: 88px;
+
+    border-radius: 5px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.user_info_tables_container .username_title{
+    /* Username */
+
+    width: 265px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.user_info_tables_container .username_input{
+    /* Enter */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+
+    width: 435px;
+    height: 56px;
+
+    border: 2px solid #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.user_info_tables_container .email_container{
+    /* Email */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 435px;
+    height: 88px;
+
+    border-radius: 5px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.user_info_tables_container .bio_container{
+    /* Bio */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 435px;
+    height: 203px;
+
+    border-radius: 5px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.user_info_tables_container .bio_input{
+    /* Enter */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 12px 20px;
+
+    width: 435px;
+    height: 171px;
+
+    border: 2px solid #344289;
+    border-radius: 20px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.bio_input_2{
+    color: #FFFFFF;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    resize: none;
+    overflow-y: scroll;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+}
+
+.profile_page_modal_user_edit_container .button_cancel_save_container{
+    /* Frame 26080103 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 291px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.button_cancel_save_container .cancel_button{
+    /* Cancel */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+    margin-bottom: 25px;
+
+    width: 124px;
+    height: 44px;
+
+    border: 2px solid #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.cancel_button .txt_style{
+    /* Cancel */
+
+    width: 60px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.button_cancel_save_container .save_button{
+    /* Save */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+    margin-bottom: 25px;
+
+    width: 143px;
+    height: 44px;
+
+    background: #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+.save_button .txt_style{
+    /* Save profile */
+
+    width: 108px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+
+
+.profile_page_following_tracks_info_container{
+    /* Stats */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    position: absolute;
+    width: 374px;
+    height: 58px;
+    left: 1370px;
+    top: 648px;
+}
+.profile_page_following_tracks_info_container .followers_container{
+    /* Followers */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 109px;
+    height: 58px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.profile_page_following_tracks_info_container .title{
+    /* Followers */
+
+    width: 109px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.profile_page_following_tracks_info_container .number{
+    /* 104 */
+
+    width: 109px;
+    height: 30px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 30px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.profile_page_following_tracks_info_container .following_container{
+    /* Following */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 108px;
+    height: 58px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.profile_page_following_tracks_info_container .tracks_container{
+    /* Tracks */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 109px;
+    height: 58px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+
+
+/* Контейнер правого сайдбару */
+.profile_page_right_sidebar {
+    position: absolute; /* або fixed якщо треба фіксувати на екрані */
+    top: 738px;         /* відступ зверху */
+    left: 1370px;       /* відступ від лівого краю */
+
+    display: flex;
+    flex-direction: column; /* вертикально один під одним */
+    gap: 24px;              /* відстань між блоками */
+    width: 374px;
+
+    /* Важливо: прибрати всі top/left у внутрішніх блоках */
+}
+
+/* Біо користувача */
+.profile_page_bio_container {
+    width: 100%;
+    min-height: 40px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #FFFFFF;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+/* Following блок */
+.profile_page_following_users_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile_page_following_users_container .container_title_container,
+.profile_page_likes_users_container .container_title_container {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #5241B3 0%, rgba(16,16,16,0) 79.81%);
+}
+.profile_page_following_users_container .header_txt_style,
+.profile_page_likes_users_container .header_txt_style
+{
+    /* likes */
+
+    width: 211px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+/* Likes блок */
+.profile_page_likes_users_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.user_info_container .txt_style{
+    /* Take Aim */
+
+    width: auto;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
