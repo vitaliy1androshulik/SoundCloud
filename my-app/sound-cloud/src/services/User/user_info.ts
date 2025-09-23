@@ -9,8 +9,10 @@ export const getCurrentUser = async (): Promise<IUser> => {
         username: data.username,
         email: data.email,
         avatar: data.avatarUrl, // мапимо AvatarUrl → avatar
+        banner: data.bannerUrl, // мапимо AvatarUrl → avatar
         createdAt: data.createdAt,
         role: data.role,
+        bio: data.bio,
         totalPlays: data.totalPlays,
     };
     return user;
@@ -36,4 +38,60 @@ export const getTopUsers = async (take: number): Promise<IUser[]> => {
         console.error("Failed to fetch top users:", error);
         return [];
     }
+};
+export const uploadUserBanner = {
+    async updateBanner(userId: number, bannerFile: File) {
+        const formData = new FormData();
+        formData.append("Banner", bannerFile);
+
+        const response = await fetch(`http://localhost:5122/api/User/${userId}/banner`, {
+            method: "PUT",
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to update banner");
+        }
+
+        return await response.json(); // повертає { bannerUrl: "..."}
+    },
+};
+
+export const updateUserProfile = async (
+    userId: number,
+    data: {
+        username?: string;
+        email?: string;
+        bio?: string;
+        avatar?: File;
+    }
+): Promise<IUser> => {
+    const formData = new FormData();
+
+    if (data.username) formData.append("Username", data.username);
+    if (data.email) formData.append("Email", data.email);
+    if (data.bio) formData.append("Bio", data.bio);
+    if (data.avatar) formData.append("Avatar", data.avatar);
+
+    const response = await api.put(`/User/profile`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    const resData = response.data;
+
+    const updatedUser: IUser = {
+        id: resData.id,
+        username: resData.username,
+        email: resData.email || "",
+        avatar: resData.avatarUrl || "",
+        banner: resData.bannerUrl || "",
+        createdAt: resData.createdAt,
+        role: resData.role,
+        bio: resData.bio || "",
+        totalPlays: resData.totalPlays || 0,
+        isBlocked: resData.isBlocked,
+        password: resData.password,
+    };
+
+    return updatedUser;
 };

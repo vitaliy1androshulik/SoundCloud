@@ -1,6 +1,13 @@
 import api from "../utilities/axiosInstance";
 import { IAlbum } from "../types/album";
-import { ITrack } from "../types/track";
+
+interface CreateAlbumDto {
+    title: string;
+    description: string;
+    ownerId: number;
+    cover?: File;
+    isPublic: boolean;
+}
 
 export const albumService = {
     getMyAlbums: async (): Promise<IAlbum[]> => {
@@ -8,20 +15,15 @@ export const albumService = {
         return res.data;
     },
 
-    create: async (dto: {
-        title: string;
-        description?: string;
-        isPublic: boolean;
-        cover?: File;
-        ownerId: number;
-    }): Promise<IAlbum> => {
+    create: async (dto: CreateAlbumDto): Promise<IAlbum> => {
         const formData = new FormData();
-        formData.append("title", dto.title);
-        if (dto.description) formData.append("description", dto.description);
-        formData.append("isPublic", String(dto.isPublic));
-        formData.append("ownerId", String(dto.ownerId)); // додаємо власника
-        if (dto.cover) formData.append("cover", dto.cover); // додаємо файл обкладинки
-
+        formData.append("Title", dto.title);
+        if (dto.description) formData.append("Description", dto.description);
+        formData.append("OwnerId", dto.ownerId.toString());
+        formData.append("IsPublic", dto.isPublic ? "true" : "false");
+        if (dto.cover) {
+            formData.append("CoverUrl", dto.cover);
+        }
         const res = await api.post("/Album", formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
@@ -29,7 +31,7 @@ export const albumService = {
         return res.data;
     },
 
-    getTracks: async (albumId: number): Promise<ITrack[]> => {
+    getTracks: async (albumId: number) => {
         const res = await api.get(`/Album/${albumId}/tracks`);
         return res.data;
     },

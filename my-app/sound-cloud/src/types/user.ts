@@ -5,10 +5,12 @@ export interface IUser {
     username: string;
     email: string;
     avatar?:string;
+    banner?:string;
     createdAt?: string; // Date на фронті зручно передавати як ISO string
     isBlocked?: boolean;
     password?:string;
     role?:string;
+    bio?:string;
     totalPlays:number;
 }
 

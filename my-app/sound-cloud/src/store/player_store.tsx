@@ -1,17 +1,22 @@
+// store/player_store.ts
 import { create } from "zustand";
-import {PlayerContextType} from "../types/player_context.ts";
-import {ITrack} from "../types/track.ts";
-
+import { PlayerContextType } from "../types/player_context";
+import { ITrack } from "../types/track";
 
 export const usePlayerStore = create<PlayerContextType>((set, get) => ({
     track: null,
     isPlaying: false,
-    playlist: [] as ITrack[], // список треків
+    playlist: [] as ITrack[],
     currentIndex: -1,
+    currentAlbumId: null,
     history: JSON.parse(localStorage.getItem('trackHistory') || '[]'),
-    pauseTrack:(track) => {set({track, isPlaying:false})},
-    playTrack: (track, playlist) => {
-        const list = playlist || get().playlist; // якщо список передали — оновлюємо
+
+    pauseTrack: () => {
+        set({ isPlaying: false });
+    },
+
+    playTrack: (track, playlist, albumId = null) => {
+        const list = playlist || get().playlist;
         const index = list.findIndex((t) => t.id === track.id);
 
         set({
@@ -19,10 +24,14 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
             isPlaying: true,
             playlist: list,
             currentIndex: index,
+            currentAlbumId: albumId,
         });
+
         get().addToHistory(track);
     },
+
     togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
+
     addToHistory: (track) => {
         set((state) => {
             const newHistory = [track, ...state.history.filter(t => t.id !== track.id)];
@@ -30,6 +39,7 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
             return { history: newHistory };
         });
     },
+
     nextTrack: () => {
         const { playlist, currentIndex } = get();
         if (playlist.length === 0) return;
@@ -53,5 +63,4 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
             isPlaying: true,
         });
     },
-
 }));

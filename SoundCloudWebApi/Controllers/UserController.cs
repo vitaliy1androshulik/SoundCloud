@@ -113,7 +113,7 @@ public class UserController : ControllerBase
     [SwaggerOperation(
     OperationId = "UpdateOwnProfile",
     Summary = "Оновити власний профіль [Authorize]")]
-    public async Task<IActionResult> UpdateOwnProfile([FromBody] UpdateUserRequestDto dto)
+    public async Task<IActionResult> UpdateOwnProfile([FromForm] UpdateUserRequestDto dto)
     {
         // Дістаємо userId з токена
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -130,6 +130,14 @@ public class UserController : ControllerBase
     {
         var result = await _userService.GetTopUsersAsync(take);
         return Ok(result);
+    }
+
+    [HttpPut("{id}/banner")]
+    [SwaggerOperation(Summary = "Оновити свій банер")]
+    public async Task<IActionResult> UpdateBanner(int id, [FromForm] UpdateUserBannerDto dto)
+    {
+        var bannerUrl = await _userService.UpdateBannerAsync(id, dto.Banner);
+        return Ok(new { BannerUrl = bannerUrl });
     }
 
     [Authorize]
