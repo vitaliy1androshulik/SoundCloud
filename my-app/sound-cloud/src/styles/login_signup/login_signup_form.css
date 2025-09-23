@@ -100,7 +100,9 @@
     padding: 12px 94px;
     gap: 16px;
 
-    width: 482px;
+    /*width: 482px;*/
+    width: 100%;
+    max-width: 720px;
     height: 56px;
 
     background: #5241B3;
@@ -119,9 +121,91 @@
     line-height: 32px;
     /* identical to box height */
 
-    color: #FFFFFF;
-
 }
+
+:root { --oauth-h: 56px; } /* одна точка вх */
+
+/* зовнішній фіолетовий овал */
+.login_third_google_button{
+    position: relative;
+    height: var(--oauth-h);
+    padding: 0;                 /* без внутрішніх відступів */
+    background: #5241B3;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* обгортка */
+.oauth-wrap{ position: relative; width: 100%; height: var(--oauth-h); }
+
+/* видима “красива” кнопка */
+.oauth-btn{
+    width: 100%;
+    height: var(--oauth-h);
+    line-height: calc(var(--oauth-h) - 2px);
+    border-radius: 100px;
+    background: #5241B3;   /* той самий фіолетовий */
+    border: 0;
+    /*color: #fff;*/
+    color: #000;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    cursor: pointer;
+}
+
+/* прозорий шар із GoogleLogin поверх — рівно в розміри контейнера */
+.oauth-overlay{
+    position: absolute; inset: 0;
+    opacity: 0;                 /* невидимий */
+    cursor: pointer;
+}
+
+/*  внутрішні обгортки Google на всю висоту/ширину */
+.oauth-overlay > div,
+.oauth-overlay iframe{
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+}
+
+/*.oauth-wrap {*/
+/*    position: relative;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.oauth-btn {*/
+/*    width: 100%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    gap: 14px;*/
+/*    padding: 16px 24px;*/
+/*    background: #5241B3;   !* той самий фіолетовий *!*/
+/*    color: #fff;*/
+/*    border: 0;*/
+/*    border-radius: 100px;*/
+/*    font-size: 20px;*/
+/*    line-height: 32px;*/
+/*    cursor: pointer;*/
+/*}*/
+/*.oauth-btn__icon { width: 28px; height: 26px; }*/
+
+/*.oauth-overlay {*/
+/*    position: absolute;*/
+/*    inset: 0;*/
+/*    opacity: 0;            !* повністю невидимий шар з Google iframe *!*/
+/*    cursor: pointer;*/
+/*}*/
+/*.oauth-overlay > div { width: 100% !important; height: 100% !important; }*/
+
+
+
+
 .login_third_google_button:hover{
     background: #4231a0;
     cursor: pointer;
@@ -140,6 +224,8 @@
     order: 3;
     align-self: stretch;
     flex-grow: 0;
+
+    /*color: #fff;*/
 }
 .login_fourth_text_or{
     width: 482px;
