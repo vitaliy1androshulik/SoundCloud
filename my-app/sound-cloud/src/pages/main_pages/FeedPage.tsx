@@ -295,8 +295,12 @@ const FeedPage: React.FC = ()=> {
                                 </div>
                                 <div className="history_buttons_container">
                                     <div className="history_like">
-                                        <img src="src/images/icons/unlike.png"
-                                             alt={"like"}/>
+                                        <img
+                                            src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                                            alt="like"
+                                            onClick={() => toggleLike(track)}
+                                            style={{cursor: "pointer"}}
+                                        />
                                     </div>
                                     <div className="history_add_info">
                                         <img src="src/images/icons/more_info.png"

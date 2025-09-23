@@ -5,20 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9322b0a-da28-4992-bfab-c35b85217c3d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_09_2025_16_38_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_09_2025_16_38__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/TrackEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Data/Entities/TrackEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Migrations/SoundCloudDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Migrations/SoundCloudDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Models/Track/TrackDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/ITrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/ITrackService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/types/track.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/track.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +56,7 @@
       <updated>1758152834986</updated>
       <workItem from="1758152845455" duration="1810000" />
       <workItem from="1758212034798" duration="1531000" />
-      <workItem from="1758545838181" duration="13436000" />
+      <workItem from="1758545838181" duration="15272000" />
     </task>
     <servers />
   </component>

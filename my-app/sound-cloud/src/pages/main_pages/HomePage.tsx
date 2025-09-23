@@ -118,6 +118,37 @@ const HomePage: React.FC = () => {
 
 
 
+    //для лайків
+    const [likedTracksIds, setLikedTracksIds] = useState<number[]>([]);
+    useEffect(() => {
+        trackService.getAll()
+            .then((data) => {
+                setTracks(data);
+                const likedIds = data.filter(t => t.isLikedByCurrentUser).map(t => t.id);
+                setLikedTracksIds(likedIds);
+            })
+            .catch((err) => console.error(err));
+    }, []);
+
+    const toggleLike = async (track: ITrack) => {
+        try {
+            if (likedTracksIds.includes(track.id)) {
+                // анлайк
+                await trackService.unlike(track.id);
+                setLikedTracksIds(prev => prev.filter(id => id !== track.id));
+                track.isLikedByCurrentUser = false; // оновлюємо локально
+            } else {
+                // лайк
+                await trackService.like(track.id);
+                setLikedTracksIds(prev => [...prev, track.id]);
+                track.isLikedByCurrentUser = true; // оновлюємо локально
+            }
+        } catch (err) {
+            console.error("Error liking track:", err);
+        }
+    };
+
+
 
 
     return (
@@ -416,8 +447,12 @@ const HomePage: React.FC = () => {
                                 </div>
                                 <div className="history_buttons_container">
                                     <div className="history_like">
-                                        <img src="src/images/icons/unlike.png"
-                                             alt={"like"}/>
+                                        <img
+                                            src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                                            alt="like"
+                                            onClick={() => toggleLike(track)}
+                                            style={{cursor: "pointer"}}
+                                        />
                                     </div>
                                     <div className="history_add_info">
                                         <img src="src/images/icons/more_info.png"

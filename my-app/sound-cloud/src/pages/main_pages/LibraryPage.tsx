@@ -29,10 +29,11 @@ const LibraryPage: React.FC = () => {
 
     return (
         <div className=" text-white layout-container mb-[2000px]">
-            <h1 className="text-2xl font-bold mb-6 mt-[200px]">Моя бібліотека</h1>
+
+
 
             <div>
-                <h2 className="text-xl font-semibold mb-4">Liked</h2>
+                <h2 className="text-xl font-semibold mb-4 mt-[200px]">Liked</h2>
                 {loading ? (
                     <p className="text-gray-400">Завантаження...</p>
                 ) : tracks.length === 0 ? (
