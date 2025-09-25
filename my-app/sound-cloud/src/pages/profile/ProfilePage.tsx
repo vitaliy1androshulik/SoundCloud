@@ -9,6 +9,11 @@ import {playlistService} from "../../services/playlistApi.ts";
 import {getCurrentUser, updateUserProfile, uploadUserBanner} from "../../services/User/user_info.ts";
 import {usePlayerStore} from "../../store/player_store.tsx";
 import {IUser} from "../../types/user.ts";
+import { followService } from "../../services/followApi.ts";
+import {IUserFollow} from "../../types/follow.ts";
+//import {IUserFollow} from "../../types/follow.ts";
+//import {useSelector} from "react-redux";
+//import {RootState} from "../../store/store.ts";
 
 const tabs = ["All","Tracks", "Albums", "Playlists" ,"Reposts"];
 
@@ -446,6 +451,88 @@ const ProfilePage: React.FC = () => {
             alert("Failed to create album. Check console for details.");
         }
     };
+
+
+    //для follow
+    // Кількість підписників і підписок
+    const [followersCount, setFollowersCount] = useState<number>(0);
+    const [followingCount, setFollowingCount] = useState<number>(0);
+
+    const [followingUsers, setFollowingUsers] = useState<IUserFollow[]>([]);
+
+
+    useEffect(() => {
+        if (!user) return;
+
+        const fetchFollowCounts = async () => {
+            try {
+                const followers = await followService.getFollowersCount(user.id);
+                const following = await followService.getFollowingCount(user.id);
+
+                setFollowersCount(followers);
+                setFollowingCount(following);
+
+                console.log("Followers:", followers, "Following:", following);
+            } catch (error) {
+                console.error("Помилка при отриманні кількості підписок:", error);
+            }
+        };
+
+        fetchFollowCounts();
+    }, [user]);
+
+
+
+    useEffect(() => {
+        if (!user) return;
+
+        const fetchFollowingUsers = async () => {
+            try {
+                const usersFromApi = await followService.getFollowing(user.id);
+
+                setFollowingUsers(
+                    usersFromApi.map(u => ({
+                        id: u.id,
+                        username: u.username,
+                        avatarUrl: u.avatarUrl,
+                        isFollowing: true
+                    }))
+                );
+            } catch (error) {
+                console.error("Помилка при отриманні списку Following:", error);
+            }
+        };
+
+        fetchFollowingUsers();
+    }, [user]);
+
+// 3️⃣ Функція toggleFollow для кнопки
+    const toggleFollow = async (userId: number) => {
+        try {
+            const userToToggle = followingUsers.find(u => u.id === userId);
+            if (!userToToggle) return;
+
+            if (userToToggle.isFollowing) {
+                await followService.unfollow(userId);
+            } else {
+                await followService.follow(userId);
+            }
+
+            // оновлюємо локально стан
+            setFollowingUsers(prev =>
+                prev.map(u =>
+                    u.id === userId ? { ...u, isFollowing: !u.isFollowing } : u
+                )
+            );
+        } catch (error) {
+            console.error("Error toggling follow:", error);
+        }
+    };
+    const getUserAvatarUrl = (user: IUserFollow) => {
+        if (!user.avatarUrl) return "/default-cover.png"; // запасна картинка
+        return `http://localhost:5122${user.avatarUrl}`;
+    };
+
     return (
         <div className="layout_container mb-[2900px] baloo2">
             <div className="banner_container">
@@ -458,8 +545,8 @@ const ProfilePage: React.FC = () => {
                     Update image
                 </span>
             </button>
-            <div className="profile_page_user_avatar_container">
-                <img className="profile_page_user_avatar_style" src={getUserImageUrl(user)} alt="Avatar"/>
+            <div className="profile_page_user_avatar_container" >
+                <img className="profile_page_user_avatar_style " src={getUserImageUrl(user)} alt="Avatar"/>
             </div>
             <div className="profile_page_user_name_container">
                 {user?.username}
@@ -471,7 +558,7 @@ const ProfilePage: React.FC = () => {
                         Followers
                     </div>
                     <div className="number">
-                        0
+                        <span>{followersCount}</span>
                     </div>
                 </div>
                 <div className="following_container">
@@ -479,7 +566,7 @@ const ProfilePage: React.FC = () => {
                         Following
                     </div>
                     <div className="number">
-                        0
+                        <span>{followingCount}</span>
                     </div>
                 </div>
                 <div className="tracks_container">
@@ -501,9 +588,31 @@ const ProfilePage: React.FC = () => {
                     <div className="container_title_container">
                         <span className="header_txt_style">FOLLOWING</span>
                     </div>
-                    <div className="user_info_container">
-                        <span className="txt_style">You don`t have Followings</span>
-                    </div>
+
+                    {followingUsers.length === 0 ? (
+                        <div className="user_info_container">
+                            <span className="txt_style">You don`t have Followings</span>
+                        </div>
+                    ) : (
+                        <div className="user_info_container">
+                            {followingUsers.map(u => (
+                                <div key={u.id} className="user_container">
+                                    <div className="user_avatar_text_container">
+                                        <div className="user_avatar_container">
+                                            <img className="img_style" src={getUserAvatarUrl(u)} alt="avatar" />
+                                        </div>
+                                        <div className="user_text_container">{u.username}</div>
+                                    </div>
+                                    <button
+                                        className="user_button_container"
+                                        onClick={() => toggleFollow(u.id)}
+                                    >
+                                        <span className="user_button_text_style">{u.isFollowing ? "Unfollow" : "Follow"}</span>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="profile_page_likes_users_container">

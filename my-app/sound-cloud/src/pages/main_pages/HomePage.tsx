@@ -6,6 +6,8 @@ import {ITrack} from "../../types/track.ts";
 import {usePlayerStore} from "../../store/player_store.tsx";
 import {IUser} from "../../types/user.ts";
 import {getTopUsers} from "../../services/User/user_info.ts";
+import { followService } from "../../services/followApi.ts";
+//import { IUserFollow } from "../../types/follow.ts";
 
 const HomePage: React.FC = () => {
     const [tracks, setTracks] = useState<ITrack[]>([]);
@@ -149,7 +151,49 @@ const HomePage: React.FC = () => {
     };
 
 
+    //для follow
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const topUsers = await getTopUsers(4); // беремо топ юзерів
+                const usersWithStatus = await Promise.all(
+                    topUsers.map(async (u) => {
+                        try {
+                            const status = await followService.getFollowStatus(u.id);
+                            return { ...u, isFollowing: status.isFollowing };
+                        } catch {
+                            return { ...u, isFollowing: false };
+                        }
+                    })
+                );
+                setUsers(usersWithStatus);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+        fetchUsers();
+    }, []);
 
+    const toggleFollow = async (userId: number) => {
+        try {
+            setUsers(prev =>
+                prev.map(u =>
+                    u.id === userId ? { ...u, isFollowing: !u.isFollowing } : u
+                )
+            );
+
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            if (user.isFollowing) {
+                await followService.unfollow(userId);
+            } else {
+                await followService.follow(userId);
+            }
+        } catch (error) {
+            console.error("Error toggling follow:", error);
+        }
+    };
 
     return (
         <main className="layout_container mb-[1950px]">
@@ -380,21 +424,16 @@ const HomePage: React.FC = () => {
                     TOP CREATORS
                 </div>
                 <div className="top_creators_creators_container">
-                    {users.slice(0,4).map((user, index) => (
-                        <li className="top_creator_container baloo2
-                     text-white text-[20px] font-bold"
-                            key={user.id}>
-                            <div className="top_creators_numeration baloo2">
-                                {index + 1}.
-                            </div>
-
-                            <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)}
-                                 alt={"userAvatar"}/>
-                            <div className="top_creators_author_container">
-                                {user.username}
-                            </div>
-                            <button className="top_creators_follow_button_container">
-                                Follow
+                    {users.slice(0, 4).map((user, index) => (
+                        <li key={user.id} className="top_creator_container baloo2 text-white text-[20px] font-bold">
+                            <div className="top_creators_numeration">{index + 1}.</div>
+                            <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)} alt="userAvatar" />
+                            <div className="top_creators_author_container">{user.username}</div>
+                            <button
+                                className="top_creators_follow_button_container"
+                                onClick={() => toggleFollow(user.id)}
+                            >
+                                {user.isFollowing ? "Unfollow" : "Follow"}
                             </button>
                         </li>
                     ))}
@@ -414,8 +453,11 @@ const HomePage: React.FC = () => {
                             <div className="recommended_for_you_author_container">
                                 {user.username}
                             </div>
-                            <button className="recommended_for_you_follow_button_container">
-                                Follow
+                            <button
+                                className="recommended_for_you_follow_button_container"
+                                onClick={() => toggleFollow(user.id)}
+                            >
+                                {user.isFollowing ? "Unfollow" : "Follow"}
                             </button>
                         </li>
                     ))}
