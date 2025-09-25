@@ -452,7 +452,6 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-
     //для follow
     // Кількість підписників і підписок
     const [followersCount, setFollowersCount] = useState<number>(0);
@@ -532,6 +531,43 @@ const ProfilePage: React.FC = () => {
         if (!user.avatarUrl) return "/default-cover.png"; // запасна картинка
         return `http://localhost:5122${user.avatarUrl}`;
     };
+
+
+    //лайки
+    // окремо зберігаємо саме лайкнуті треки
+    const [likedTracks, setLikedTracks] = useState<ITrack[]>([]);
+
+    useEffect(() => {
+        const fetchLikedTracks = async () => {
+            try {
+                const liked = await trackService.getLikedTracks();
+                setLikedTracks(liked);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchLikedTracks();
+    }, []);
+
+
+
+
+    const toggleLike = async (track: ITrack) => {
+        try {
+            if (track.isLikedByCurrentUser) {
+                // unlike
+                await trackService.unlike(track.id);
+                setLikedTracks(prev => prev.filter(t => t.id !== track.id));
+            } else {
+                // like
+                await trackService.like(track.id);
+                setLikedTracks(prev => [...prev, { ...track, isLikedByCurrentUser: true }]);
+            }
+        } catch (err) {
+            console.error("Error liking/unliking track:", err);
+        }
+    };
+
 
     return (
         <div className="layout_container mb-[2900px] baloo2">
@@ -619,9 +655,41 @@ const ProfilePage: React.FC = () => {
                     <div className="container_title_container">
                         <span className="header_txt_style">LIKES</span>
                     </div>
-                    <div className="user_info_container">
-                        <span className="txt_style">You don`t have Likes</span>
-                    </div>
+
+                    {likedTracks.length === 0 ? (
+                        <div className="user_info_container">
+                            <span className="txt_style">You don`t have Likes</span>
+                        </div>
+                    ) : (
+                        likedTracks.map(track => (
+                            <div key={track.id} className="user_info_container">
+                                <div className="user_container">
+                                    <div className="user_avatar_text_container">
+                                        <div className="user_avatar_container">
+                                            <img className="user_avatar_container"  src={getTrackImageUrl(track)} alt={track.title} />
+                                        </div>
+                                        <div className="user_text_container">
+                                            <p>{track.title}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="user_like_moreinfo_container">
+                                        <div className="user_like_style">
+                                            <img
+                                                src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                                                alt="like"
+                                                onClick={() => toggleLike(track)}
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </div>
+                                        <div className="user_moreinfo_style">
+                                            <img src="src/images/icons/more_info.png" alt="more info" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 

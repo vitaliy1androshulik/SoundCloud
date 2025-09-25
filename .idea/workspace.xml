@@ -5,17 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="36ec40f3-eb88-4be6-9bc6-cb99d7ef03df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/followApi.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/follow.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/FollowController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/FollowController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/FollowService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/FollowService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IFollowService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IFollowService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/profile_page/profile_layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/profile_page/profile_layout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/types/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/user.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +68,7 @@
       <workItem from="1758537827573" duration="36559000" />
       <workItem from="1758626040778" duration="7466000" />
       <workItem from="1758721954604" duration="14110000" />
-      <workItem from="1758803621216" duration="1359000" />
+      <workItem from="1758803621216" duration="10554000" />
     </task>
     <servers />
   </component>
