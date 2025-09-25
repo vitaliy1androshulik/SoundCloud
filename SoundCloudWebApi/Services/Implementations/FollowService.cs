@@ -1,7 +1,9 @@
-﻿using SoundCloudWebApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SoundCloudWebApi.Data;
 using SoundCloudWebApi.Data.Entities;
+using SoundCloudWebApi.Migrations;
+using SoundCloudWebApi.Models.Auth;
 using SoundCloudWebApi.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace SoundCloudWebApi.Services.Implementations
 {
@@ -70,6 +72,29 @@ namespace SoundCloudWebApi.Services.Implementations
         {
             return await _context.Follows.CountAsync(f => f.FollowerId == userId);
         }
+        // нове
+        public async Task<bool> IsFollowingAsync(int followerId, int followingId)
+        {
+            return await _context.Follows
+                .AnyAsync(f => f.FollowerId == followerId && f.FollowingId == followingId);
+        }
+
+        public async Task<UserFollowDto> GetUserFollowStatusAsync(int currentUserId, int targetUserId)
+        {
+            var user = await _context.Users.FindAsync(targetUserId);
+            if (user == null) return null;
+
+            var isFollowing = await IsFollowingAsync(currentUserId, targetUserId);
+
+            return new UserFollowDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                IsFollowing = isFollowing
+            };
+        }
+
+
     }
 
 }

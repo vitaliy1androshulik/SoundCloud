@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SoundCloudWebApi.Models.Auth;
 using SoundCloudWebApi.Services.Interfaces;
 using System.Security.Claims;
 
@@ -10,16 +11,17 @@ namespace SoundCloudWebApi.Controllers
     public class FollowController : ControllerBase
     {
         private readonly IFollowService _followService;
+        private readonly IUserService _userService;
 
-        public FollowController(IFollowService followService)
+        public FollowController(IFollowService followService, IUserService userService)
         {
             _followService = followService;
+            _userService = userService;
         }
 
         /// <summary>
         /// Підписатися на користувача
         /// </summary>
-        /// <param name="id">ID користувача, на якого хочемо підписатися</param>
         [HttpPost("{id}/follow")]
         [Authorize]
         public async Task<IActionResult> Follow(int id)
@@ -32,7 +34,6 @@ namespace SoundCloudWebApi.Controllers
         /// <summary>
         /// Відписатися від користувача
         /// </summary>
-        /// <param name="id">ID користувача, від якого хочемо відписатися</param>
         [HttpDelete("{id}/unfollow")]
         [Authorize]
         public async Task<IActionResult> Unfollow(int id)
@@ -45,7 +46,6 @@ namespace SoundCloudWebApi.Controllers
         /// <summary>
         /// Отримати список підписників (followers) для конкретного користувача
         /// </summary>
-        /// <param name="id">ID користувача</param>
         [HttpGet("{id}/followers")]
         public async Task<IActionResult> GetFollowers(int id)
         {
@@ -56,7 +56,6 @@ namespace SoundCloudWebApi.Controllers
         /// <summary>
         /// Отримати список користувачів, на яких підписаний конкретний користувач (following)
         /// </summary>
-        /// <param name="id">ID користувача</param>
         [HttpGet("{id}/following")]
         public async Task<IActionResult> GetFollowing(int id)
         {
@@ -67,7 +66,6 @@ namespace SoundCloudWebApi.Controllers
         /// <summary>
         /// Отримати кількість підписників користувача
         /// </summary>
-        /// <param name="id">ID користувача</param>
         [HttpGet("{id}/followers/count")]
         public async Task<IActionResult> GetFollowersCount(int id)
         {
@@ -78,12 +76,26 @@ namespace SoundCloudWebApi.Controllers
         /// <summary>
         /// Отримати кількість підписок користувача
         /// </summary>
-        /// <param name="id">ID користувача</param>
         [HttpGet("{id}/following/count")]
         public async Task<IActionResult> GetFollowingCount(int id)
         {
             var count = await _followService.GetFollowingCountAsync(id);
             return Ok(count);
         }
+
+
+        [HttpGet("{id}/status")]
+        [Authorize]
+        public async Task<ActionResult<UserFollowDto>> GetFollowStatus(int id)
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _followService.GetUserFollowStatusAsync(currentUserId, id);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
+
     }
 }

@@ -6,6 +6,8 @@ import {usePlayerStore} from "../../store/player_store.tsx";
 import "../../styles/main_pages/feed_page/layout.css"
 import {IUser} from "../../types/user.ts";
 import {getTopUsers} from "../../services/User/user_info.ts";
+import { followService } from "../../services/followApi.ts";
+//import { IUserFollow } from "../../types/follow.ts";
 
 
 const FeedPage: React.FC = ()=> {
@@ -86,6 +88,52 @@ const FeedPage: React.FC = ()=> {
             console.error("Error liking track:", err);
         }
     };
+
+
+    //для follow
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const topUsers = await getTopUsers(4); // беремо топ юзерів
+                const usersWithStatus = await Promise.all(
+                    topUsers.map(async (u) => {
+                        try {
+                            const status = await followService.getFollowStatus(u.id);
+                            return { ...u, isFollowing: status.isFollowing };
+                        } catch {
+                            return { ...u, isFollowing: false };
+                        }
+                    })
+                );
+                setUsers(usersWithStatus);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+        fetchUsers();
+    }, []);
+
+    const toggleFollow = async (userId: number) => {
+        try {
+            setUsers(prev =>
+                prev.map(u =>
+                    u.id === userId ? { ...u, isFollowing: !u.isFollowing } : u
+                )
+            );
+
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            if (user.isFollowing) {
+                await followService.unfollow(userId);
+            } else {
+                await followService.follow(userId);
+            }
+        } catch (error) {
+            console.error("Error toggling follow:", error);
+        }
+    };
+
 
 
     return (
@@ -199,8 +247,11 @@ const FeedPage: React.FC = ()=> {
                             <div className="top_creators_author_container">
                                 {user.username}
                             </div>
-                            <button className="top_creators_follow_button_container">
-                                Follow
+                            <button
+                                className="top_creators_follow_button_container"
+                                onClick={() => toggleFollow(user.id)}
+                            >
+                                {user.isFollowing ? "Unfollow" : "Follow"}
                             </button>
                         </li>
                     ))}
@@ -220,8 +271,11 @@ const FeedPage: React.FC = ()=> {
                             <div className="recommended_for_you_author_container">
                                 {user.username}
                             </div>
-                            <button className="recommended_for_you_follow_button_container">
-                                Follow
+                            <button
+                                className="recommended_for_you_follow_button_container"
+                                onClick={() => toggleFollow(user.id)}
+                            >
+                                {user.isFollowing ? "Unfollow" : "Follow"}
                             </button>
                         </li>
                     ))}
