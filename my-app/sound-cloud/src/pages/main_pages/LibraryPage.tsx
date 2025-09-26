@@ -51,11 +51,11 @@ const LibraryPage: React.FC = () => {
                                     className="track-cover"
                                 />
                                 <span className="font-semibold text-white truncate w-full">
-            {track.title}
-          </span>
+                                    {track.title}
+                                </span>
                                 <span className="text-sm text-gray-400">
-            {track.author}
-          </span>
+                                    {track.author}
+                                </span>
                             </li>
                         ))}
                     </ul>
