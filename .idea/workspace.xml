@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="36ec40f3-eb88-4be6-9bc6-cb99d7ef03df" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/home_page/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/home_page/layout.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/profile_page/profile_layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/profile_page/profile_layout.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +70,8 @@
       <workItem from="1758537827573" duration="36559000" />
       <workItem from="1758626040778" duration="7466000" />
       <workItem from="1758721954604" duration="14110000" />
-      <workItem from="1758803621216" duration="10554000" />
+      <workItem from="1758803621216" duration="13282000" />
+      <workItem from="1758902371592" duration="956000" />
     </task>
     <servers />
   </component>

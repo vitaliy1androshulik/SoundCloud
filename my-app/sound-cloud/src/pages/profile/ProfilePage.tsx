@@ -639,12 +639,16 @@ const ProfilePage: React.FC = () => {
                                         </div>
                                         <div className="user_text_container">{u.username}</div>
                                     </div>
-                                    <button
-                                        className="user_button_container"
-                                        onClick={() => toggleFollow(u.id)}
-                                    >
-                                        <span className="user_button_text_style">{u.isFollowing ? "Unfollow" : "Follow"}</span>
-                                    </button>
+                                    <div className="user_container">
+                                        <button
+                                            className={u.isFollowing ? "unfollow_button_container" : "follow_button_container"}
+                                            onClick={() => toggleFollow(u.id)}
+                                        >
+                                            <span className="user_button_text_style">
+                                                {u.isFollowing ? "Unfollow" : "Follow"}
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
