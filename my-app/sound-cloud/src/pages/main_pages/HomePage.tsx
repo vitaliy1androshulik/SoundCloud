@@ -430,10 +430,12 @@ const HomePage: React.FC = () => {
                             <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)} alt="userAvatar" />
                             <div className="top_creators_author_container">{user.username}</div>
                             <button
-                                className="top_creators_follow_button_container"
+                                className={user.isFollowing ? "top_creators_unfollow_button_container" : "top_creators_follow_button_container"}
                                 onClick={() => toggleFollow(user.id)}
                             >
-                                {user.isFollowing ? "Unfollow" : "Follow"}
+                                            <span className="user_button_text_style">
+                                                {user.isFollowing ? "Unfollow" : "Follow"}
+                                            </span>
                             </button>
                         </li>
                     ))}
@@ -454,10 +456,12 @@ const HomePage: React.FC = () => {
                                 {user.username}
                             </div>
                             <button
-                                className="recommended_for_you_follow_button_container"
+                                className={user.isFollowing ? "top_creators_unfollow_button_container" : "top_creators_follow_button_container"}
                                 onClick={() => toggleFollow(user.id)}
                             >
-                                {user.isFollowing ? "Unfollow" : "Follow"}
+                                            <span className="user_button_text_style">
+                                                {user.isFollowing ? "Unfollow" : "Follow"}
+                                            </span>
                             </button>
                         </li>
                     ))}
