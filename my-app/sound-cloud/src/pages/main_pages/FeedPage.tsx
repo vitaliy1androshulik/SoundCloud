@@ -10,22 +10,11 @@ import { followService } from "../../services/followApi.ts";
 //import { IUserFollow } from "../../types/follow.ts";
 
 
-
 const FeedPage: React.FC = ()=> {
     const playTrack = usePlayerStore(state => state.playTrack);
-
-
     const pauseTrack = usePlayerStore((state) => state.pauseTrack);
 
     const history = usePlayerStore(state => state.history);
-
-    const initHistory = usePlayerStore(state => state.initHistory);
-    useEffect(() => {
-        initHistory();
-    }, [initHistory]);
-
-    const addtoHistory = usePlayerStore(state => state.addToHistory);
-
 
     const [loop, setLoop] = useState<boolean>(false);
 
@@ -39,9 +28,6 @@ const FeedPage: React.FC = ()=> {
     const currentTracks = tracks.slice(indexOfFirstTrack, indexOfLastTrack);
 
     const totalPages = Math.ceil(tracks.length / tracksPerPage);
-
-
-
 
     //для лайків
     const [likedTracksIds, setLikedTracksIds] = useState<number[]>([]);
@@ -69,13 +55,27 @@ const FeedPage: React.FC = ()=> {
         return `http://localhost:5122${user.avatar}`;
     };
     const [users, setUsers] = useState<IUser[]>([]);
-    const topCount = 5;
+
     useEffect(() => {
         const fetchUsers = async () => {
-            const data = await getTopUsers(topCount);
-            setUsers(data);
+            try {
+                const topUsers = await getTopUsers(4);
+                const usersWithStatus = await Promise.all(
+                    (Array.isArray(topUsers) ? topUsers : []).map(async (u) => {
+                        try {
+                            const status = await followService.getFollowStatus(u.id);
+                            return { ...u, isFollowing: status.isFollowing };
+                        } catch {
+                            return { ...u, isFollowing: false };
+                        }
+                    })
+                );
+                setUsers(usersWithStatus);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+                setUsers([]); // безпечний fallback
+            }
         };
-
         fetchUsers();
     }, []);
 
@@ -92,15 +92,11 @@ const FeedPage: React.FC = ()=> {
                 await trackService.unlike(track.id);
                 setLikedTracksIds(prev => prev.filter(id => id !== track.id));
                 track.isLikedByCurrentUser = false; // оновлюємо локально
-                addtoHistory(track);
-                trackService.getAll()
             } else {
                 // лайк
                 await trackService.like(track.id);
                 setLikedTracksIds(prev => [...prev, track.id]);
                 track.isLikedByCurrentUser = true; // оновлюємо локально
-                addtoHistory(track);
-                trackService.getAll()
             }
         } catch (err) {
             console.error("Error liking track:", err);
@@ -109,27 +105,7 @@ const FeedPage: React.FC = ()=> {
 
 
     //для follow
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const topUsers = await getTopUsers(4); // беремо топ юзерів
-                const usersWithStatus = await Promise.all(
-                    topUsers.map(async (u) => {
-                        try {
-                            const status = await followService.getFollowStatus(u.id);
-                            return { ...u, isFollowing: status.isFollowing };
-                        } catch {
-                            return { ...u, isFollowing: false };
-                        }
-                    })
-                );
-                setUsers(usersWithStatus);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        };
-        fetchUsers();
-    }, []);
+   
 
     const toggleFollow = async (userId: number) => {
         try {
@@ -202,9 +178,7 @@ const FeedPage: React.FC = ()=> {
                                                 <img
                                                     src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
                                                     alt="like"
-                                                    onClick={() => {
-                                                        toggleLike(track);
-                                                    }}
+                                                    onClick={() => toggleLike(track)}
                                                     style={{cursor: "pointer"}}
                                                 />
                                             </div>

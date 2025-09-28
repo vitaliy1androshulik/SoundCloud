@@ -33,9 +33,7 @@ export const getTopUsers = async (take: number): Promise<IUser[]> => {
         const response = await api.get(`/User/top?take=${take}`);
         const usersData = response.data;
 
-
         const users: IUser[] = (usersData as RawUserData[]).map((data) => ({
-
             id: data.userId,
             username: data.username,
             email: data.email || "",
@@ -43,7 +41,9 @@ export const getTopUsers = async (take: number): Promise<IUser[]> => {
             createdAt: data.createdAt || "",
             role: data.role || "",
             totalPlays: data.totalPlays,
-        })) as IUser[];
+        }));
+
+        return users; // ✅ тепер функція реально щось повертає
     } catch (e) {
         console.error("Failed to fetch top users", e);
         return [];
