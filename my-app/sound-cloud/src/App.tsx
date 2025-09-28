@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {setUser} from "./store/slices/userSlice.ts";
 import {normalizeUser} from "./utilities/normalizeUser.ts";
+import SetPassword from "./pages/login_signup/SetPassword";
 
 //імпорти для адмінки
 
@@ -52,6 +53,7 @@ export default function App() {
                     <Route path="/library" element={<LibraryPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/search-page" element={<SearchPage/>}/>
+                    <Route path="/set-password" element={<SetPassword />} />
                 </Route>
 
                 {/*  Адмінка (ОКРЕМО, без Layout) */}

@@ -11,6 +11,7 @@ import {usePlayerStore} from "../../store/player_store.tsx";
 import {IUser} from "../../types/user.ts";
 import { followService } from "../../services/followApi.ts";
 import {IUserFollow} from "../../types/follow.ts";
+import { useNavigate } from "react-router-dom";//new
 //import {IUserFollow} from "../../types/follow.ts";
 //import {useSelector} from "react-redux";
 //import {RootState} from "../../store/store.ts";
@@ -36,6 +37,7 @@ const ProfilePage: React.FC = () => {
     const [genreId, setGenreId] = useState<number>(0);
     const [file, setFile] = useState<File | undefined>();
     const [cover, setCover] = useState<File | undefined>();
+    const navigate = useNavigate();//new
 
     const playTrack = usePlayerStore(state => state.playTrack);
     const pauseTrack = usePlayerStore((state) => state.pauseTrack);
@@ -235,7 +237,8 @@ const ProfilePage: React.FC = () => {
             if (playlistCoverFile) {
                 formData.append("cover", playlistCoverFile);
             }
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error тимчасово: сервіс приймає FormData у рантаймі
             const newPlaylist = await playlistService.create(formData); // метод сервісу приймає FormData
             setPlaylists([...playlists, newPlaylist]);
 
@@ -720,6 +723,18 @@ const ProfilePage: React.FC = () => {
                     <img className="img_style" src="src/images/icons/share.png" alt="shareIcon"/>
                     <span className="txt_style">Share</span>
                 </button>
+
+                {/* Показуємо, якщо пароль ще НЕ встановлено */}
+                {!user?.isLocalPasswordSet && (
+                    <button
+                        className="set_password_button cursor-pointer"
+                        onClick={() => navigate('/set-password')}
+                    >
+                        {/*<img className="img_style" src={lockIcon} alt="lockIcon" />*/}
+                        <span className="txt_style">🔒 Set Password</span>
+                    </button>
+                )}
+
                 <button className="edit_button cursor-pointer"
                         onClick={() => setUserEditOpen(true)}
                 >
