@@ -6,6 +6,7 @@ import { ITrack } from "../types/track"; // шлях підкоригуй під
 export interface ICreatePlaylist {
     name: string;
     ownerId: number;
+    cover?:string;
     coverUrl?: string; // додали опційне поле
 }
 

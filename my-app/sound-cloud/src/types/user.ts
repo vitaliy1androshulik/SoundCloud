@@ -10,7 +10,7 @@ export interface IUser {
     role?:string;
     bio?:string;
     totalPlays:number;
-
+    isLocalPasswordSet: boolean;//new
 
     isFollowing?: boolean;
 
@@ -26,6 +26,6 @@ export interface IUserState {
 }
 
 export const initialState: IUserState = {
-    user: null,
-    token: null,
+    user: null, //user: null as IUser | null,
+    token: null, //token: null as string | null,
 };

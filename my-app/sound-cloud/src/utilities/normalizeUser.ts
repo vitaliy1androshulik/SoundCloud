@@ -10,5 +10,11 @@ export const normalizeUser = (token: string): IUser | null => {
         username: payload.unique_name || payload.username || "",
         email: payload.email,
         role: payload.role||"User",
+        avatar: payload.avatarUrl || '', //new
+        banner: payload.bannerUrl || '',//new
+        createdAt: payload.createdAt,//new
+        bio: payload.bio || '',//new
+        totalPlays: payload.totalPlays || 0,//new
+        isLocalPasswordSet: payload.isLocalPasswordSet || false//new
     };
 };

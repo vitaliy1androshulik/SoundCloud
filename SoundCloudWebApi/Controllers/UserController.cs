@@ -173,20 +173,44 @@ public class UserController : ControllerBase
     [SwaggerOperation(
     OperationId = "SetOwnPassword",
     Summary = "Встановити пароль користувача")]
-    public async Task<IActionResult> SetPassword([FromBody] SetPasswordRequest req, [FromServices] IAuthService auth)
+    public async Task<IActionResult> SetPassword(
+        [FromBody] SoundCloudWebApi.Models.Auth.SetPasswordRequest req,
+        [FromServices] IAuthService auth)
     {
+        // Базові перевірки, щоб не ламати існуючу поведінку
+        if (req is null)
+            return BadRequest(new { error = "Невірний формат запиту" });
+
         if (string.IsNullOrWhiteSpace(req?.NewPassword) || req.NewPassword.Length < 6)
             return BadRequest(new { error = "Пароль має містити щонайменше 6 символів" });
+
+        if (string.IsNullOrWhiteSpace(req.ConfirmPassword) || req.ConfirmPassword != req.NewPassword)
+            return BadRequest(new { error = "Підтвердження пароля не збігається" });
+
+        // (Опційно) Спробуємо прогнати FluentValidation, якщо валідатор зареєстрований
+        var fv = HttpContext.RequestServices.GetService(
+            typeof(FluentValidation.IValidator<SoundCloudWebApi.Models.Auth.SetPasswordRequest>))
+                 as FluentValidation.IValidator<SoundCloudWebApi.Models.Auth.SetPasswordRequest>;
+
+        if (fv is not null)
+        {
+            var result = await fv.ValidateAsync(req);
+            if (!result.IsValid)
+            {
+                // Формуємо єдиний формат помилок { errors: { field: [messages] } }
+                var errors = result.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+                return BadRequest(new { errors });
+            }
+        }
 
         var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userIdStr)) return Unauthorized(new { error = "No user in context" });
 
         await auth.SetLocalPasswordAsync(int.Parse(userIdStr), req.NewPassword);
-        return Ok(new { ok = true });
+        return Ok(new { ok = true, isLocalPasswordSet = true });// Сумісна відповідь +  прапорець для фронта
     }
-
-
-
 
 }
 

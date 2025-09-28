@@ -58,11 +58,11 @@
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Mykola\\WebstormProjects\\SoundCloud\\my-app\\sound-cloud\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.120" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.222" />
       </set>
     </attachedChunks>
   </component>
@@ -85,6 +85,7 @@
       <workItem from="1758902371592" duration="13275000" />
       <workItem from="1758924855289" duration="488000" />
       <workItem from="1759060637593" duration="15911000" />
+
     </task>
     <servers />
   </component>

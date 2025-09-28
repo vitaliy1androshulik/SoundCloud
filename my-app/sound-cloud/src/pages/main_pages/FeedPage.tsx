@@ -55,13 +55,27 @@ const FeedPage: React.FC = ()=> {
         return `http://localhost:5122${user.avatar}`;
     };
     const [users, setUsers] = useState<IUser[]>([]);
-    const topCount = 5;
+
     useEffect(() => {
         const fetchUsers = async () => {
-            const data = await getTopUsers(topCount);
-            setUsers(data);
+            try {
+                const topUsers = await getTopUsers(4);
+                const usersWithStatus = await Promise.all(
+                    (Array.isArray(topUsers) ? topUsers : []).map(async (u) => {
+                        try {
+                            const status = await followService.getFollowStatus(u.id);
+                            return { ...u, isFollowing: status.isFollowing };
+                        } catch {
+                            return { ...u, isFollowing: false };
+                        }
+                    })
+                );
+                setUsers(usersWithStatus);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+                setUsers([]); // безпечний fallback
+            }
         };
-
         fetchUsers();
     }, []);
 
@@ -91,27 +105,7 @@ const FeedPage: React.FC = ()=> {
 
 
     //для follow
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const topUsers = await getTopUsers(4); // беремо топ юзерів
-                const usersWithStatus = await Promise.all(
-                    topUsers.map(async (u) => {
-                        try {
-                            const status = await followService.getFollowStatus(u.id);
-                            return { ...u, isFollowing: status.isFollowing };
-                        } catch {
-                            return { ...u, isFollowing: false };
-                        }
-                    })
-                );
-                setUsers(usersWithStatus);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        };
-        fetchUsers();
-    }, []);
+   
 
     const toggleFollow = async (userId: number) => {
         try {

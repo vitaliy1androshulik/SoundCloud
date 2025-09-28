@@ -6,6 +6,7 @@ using SoundCloudWebApi.Models.Album;
 using SoundCloudWebApi.Models.Track;
 using SoundCloudWebApi.Services.Interfaces;
 using System.Security.Claims;
+using TagLib;
 
 namespace SoundCloudWebApi.Services.Implementations
 {
@@ -266,13 +267,18 @@ namespace SoundCloudWebApi.Services.Implementations
             // Перевіряємо користувача-автора
             var author = await _db.Users.FindAsync(actorId)
                 ?? throw new KeyNotFoundException($"Author {actorId} not found");
-
+            TrackEntity tr = new TrackEntity();
+            TimeSpan duration;
+            using (var tagFile = TagLib.File.Create(tr.Url))
+            {
+                duration = tagFile.Properties.Duration;
+            }
             // Створюємо трек
             var track = new TrackEntity
             {
                 Title = dto.Title.Trim(),
                 AuthorId = actorId,
-                Duration = dto.Duration,
+                Duration = duration,
                 GenreId = dto.GenreId,
                 IsHidden = false,
                 ImageUrl = null,
@@ -348,6 +354,14 @@ namespace SoundCloudWebApi.Services.Implementations
 
             var url = $"/uploads/tracks/{fileName}";
 
+            TimeSpan duration;
+            using (var tagFile = TagLib.File.Create(filePath))
+            {
+                duration = tagFile.Properties.Duration;
+            }
+
+
+
             // ===== Обробка обкладинки =====
             string? imageUrl = null;
             if (dto.Cover != null && dto.Cover.Length > 0)
@@ -372,7 +386,7 @@ namespace SoundCloudWebApi.Services.Implementations
             {
                 Title = dto.Title.Trim(),
                 Url = url,
-                Duration = dto.Duration,
+                Duration = duration,
                 AuthorId = actorId,
                 GenreId = dto.GenreId,
                 IsHidden = false,
@@ -443,70 +457,119 @@ namespace SoundCloudWebApi.Services.Implementations
 
 
 
-        public async Task<TrackDto> UpdateAsync(int id, UpdateTrackDto dto)
+        public async Task<TrackDto> UpdateAsyncFile(int trackId, UpdateTrackDto dto)
         {
-            var track = await _db.Tracks
-                .Include(t => t.Author)
-                .Include(t => t.Genre)
-                .Include(t => t.AlbumTracks)
-                    .ThenInclude(at => at.Album)
-                        .ThenInclude(a => a.Owner)
-                .FirstOrDefaultAsync(t => t.Id == id)
-                ?? throw new KeyNotFoundException($"Track {id} not found");
+            // Знаходимо трек
+            var track = await _db.Tracks.FindAsync(trackId);
+            if (track == null) throw new ArgumentException("Track not found");
 
             var (actorId, actorRole) = GetActor();
+            if (track.AuthorId != actorId) throw new UnauthorizedAccessException("You are not the author");
 
-            // Перевіряємо, чи є хоча б один альбом треку, власником якого є поточний користувач
-            if (actorRole != UserRole.Admin && !track.AlbumTracks.Any(at => at.Album.OwnerId == actorId))
-                throw new UnauthorizedAccessException("You are not allowed to update this track.");
+            // ===== Оновлення файлу =====
+            if (dto.File != null && dto.File.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tracks");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
 
-            track.Title = dto.Title.Trim();
-            track.AuthorId = dto.AuthorId;
-            track.Duration = dto.Duration;
-            track.GenreId = dto.GenreId;
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.File.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
 
-            // Оновлюємо альбоми треку
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.File.CopyToAsync(stream);
+                }
+
+                track.Url = $"/uploads/tracks/{fileName}";
+
+                // Оновлюємо тривалість
+                using (var tagFile = TagLib.File.Create(filePath))
+                {
+                    track.Duration = tagFile.Properties.Duration;
+                }
+            }
+
+            // ===== Оновлення обкладинки =====
+            if (dto.Cover != null && dto.Cover.Length > 0)
+            {
+                var coverFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tracks", "cover");
+                if (!Directory.Exists(coverFolder))
+                    Directory.CreateDirectory(coverFolder);
+
+                var coverFileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.Cover.FileName);
+                var coverFilePath = Path.Combine(coverFolder, coverFileName);
+
+                using (var coverStream = new FileStream(coverFilePath, FileMode.Create))
+                {
+                    await dto.Cover.CopyToAsync(coverStream);
+                }
+
+                track.ImageUrl = $"/uploads/tracks/cover/{coverFileName}";
+            }
+
+                track.Title = dto.Title;
+
+            if (dto.GenreId.HasValue)
+                track.GenreId = dto.GenreId.Value;
+
+            // ===== Оновлення альбомів (many-to-many) =====
             if (dto.AlbumIds != null)
             {
-                // Видаляємо старі зв’язки
-                var oldAlbumTracks = track.AlbumTracks.ToList();
-                _db.AlbumTracks.RemoveRange(oldAlbumTracks);
+                // Видаляємо старі зв'язки
+                var existingLinks = _db.AlbumTracks.Where(at => at.TrackId == track.Id);
+                _db.AlbumTracks.RemoveRange(existingLinks);
 
-                // Додаємо нові зв’язки
-                foreach (var albumId in dto.AlbumIds)
+                // Додаємо нові
+                var albums = await _db.Albums.Where(a => dto.AlbumIds.Contains(a.Id)).ToListAsync();
+                foreach (var album in albums)
                 {
                     _db.AlbumTracks.Add(new AlbumTrackEntity
                     {
                         TrackId = track.Id,
-                        AlbumId = albumId
+                        AlbumId = album.Id
                     });
                 }
             }
 
             await _db.SaveChangesAsync();
 
+            // ===== Підготовка DTO для відповіді =====
+            var albumDtos = (await _db.Albums
+                .Include(a => a.Owner)
+                .Where(a => _db.AlbumTracks.Any(at => at.TrackId == track.Id && at.AlbumId == a.Id))
+                .ToListAsync())
+                .Select(a => new AlbumDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    OwnerId = a.OwnerId,
+                    OwnerName = a.Owner.Username,
+                    CoverUrl = a.CoverUrl,
+                    IsPublic = a.IsPublic
+                }).ToList();
+
+            string? genreName = null;
+            if (track.GenreId.HasValue)
+            {
+                var genre = await _db.Genres.FindAsync(track.GenreId.Value);
+                genreName = genre?.Name;
+            }
+
             return new TrackDto
             {
                 Id = track.Id,
                 Title = track.Title,
-                AuthorId = track.AuthorId,
-                Author = track.Author.Username,
-                Duration = track.Duration,
                 Url = track.Url,
+                Duration = track.Duration,
+                AuthorId = actorId,
+                Author = (await _db.Users.FindAsync(actorId))!.Username,
                 ImageUrl = track.ImageUrl,
                 IsHidden = track.IsHidden,
-                PlayCount = track.PlayCount,
-                GenreId = (int)track.GenreId,
-                Genre = track.Genre?.Name,
-                Albums = track.AlbumTracks.Select(at => new AlbumDto
-                {
-                    Id = at.Album.Id,
-                    Title = at.Album.Title,
-                    OwnerId = at.Album.OwnerId,
-                    OwnerName = at.Album.Owner.Username,
-                    CoverUrl = at.Album.CoverUrl,
-                    IsPublic = at.Album.IsPublic
-                }).ToList()
+                GenreId = track.GenreId,
+                Genre = genreName,
+                Albums = albumDtos
             };
         }
 
