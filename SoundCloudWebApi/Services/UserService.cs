@@ -57,6 +57,25 @@ namespace SoundCloudWebApi.Services
                 .ToListAsync();
         }
 
+        //public async Task<UserProfileDto> GetByIdAsync(int id)
+        //{
+        //    return await _db.Users
+        //        .Where(u => u.Id == id)
+        //        .Select(u => new UserProfileDto
+        //        {
+        //            Id = u.Id.ToString(),
+        //            Username = u.Username,
+        //            Email = u.Email,
+        //            Bio =u.Bio,
+        //            CreatedAt = u.CreatedAt,
+        //            AvatarUrl = u.AvatarUrl,
+        //            Role = u.Role,
+        //        })
+        //        .FirstOrDefaultAsync()
+        //        ?? throw new KeyNotFoundException($"User with id={id} not found");
+        //}
+
+
         public async Task<UserProfileDto> GetByIdAsync(int id)
         {
             return await _db.Users
@@ -66,14 +85,17 @@ namespace SoundCloudWebApi.Services
                     Id = u.Id.ToString(),
                     Username = u.Username,
                     Email = u.Email,
-                    Bio =u.Bio,
+                    Bio = u.Bio,
                     CreatedAt = u.CreatedAt,
                     AvatarUrl = u.AvatarUrl,
+                    BannerUrl = u.BannerUrl,  // <- додати це!
                     Role = u.Role,
                 })
                 .FirstOrDefaultAsync()
                 ?? throw new KeyNotFoundException($"User with id={id} not found");
         }
+
+
 
         public async Task<UserProfileDto> UpdateAsync(int id, UpdateUserRequestDto dto)
         {

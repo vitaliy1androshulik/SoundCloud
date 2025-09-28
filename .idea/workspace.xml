@@ -38,17 +38,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "all__pages__design__fixes__new__features",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;create__and__functionality__UserProfilePage&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Mykola\\WebstormProjects\\SoundCloud\\my-app\\sound-cloud\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -72,11 +72,12 @@
       <workItem from="1758372697410" duration="7948000" />
       <workItem from="1758537827573" duration="36559000" />
       <workItem from="1758626040778" duration="7466000" />
-      <workItem from="1758720099288" duration="17844000" />
-      <workItem from="1758799173707" duration="12758000" />
-      <workItem from="1758903954827" duration="16470000" />
-      <workItem from="1758973787432" duration="7060000" />
-      <workItem from="1759056335648" duration="5774000" />
+      <workItem from="1758721954604" duration="14110000" />
+      <workItem from="1758803621216" duration="13282000" />
+      <workItem from="1758902371592" duration="13275000" />
+      <workItem from="1758924855289" duration="488000" />
+      <workItem from="1759060637593" duration="15911000" />
+
     </task>
     <servers />
   </component>

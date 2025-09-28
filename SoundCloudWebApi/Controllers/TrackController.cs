@@ -48,6 +48,20 @@ namespace SoundCloudWebApi.Controllers
             return Ok(tracks);
         }
 
+        // ===== Треки конкретного користувача =====
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserTracks(int userId)
+        {
+            var tracks = await _trackService.GetAllByUserAsync(userId);
+
+            if (!tracks.Any())
+                return NotFound($"No tracks found for user with id {userId}");
+
+            return Ok(tracks);
+        }
+
+
         // ===== Треки поточного користувача like=====
         [HttpGet]
         [SwaggerOperation(OperationId = "GetTracks", Summary = "Отримати всі треки поточного користувача")]

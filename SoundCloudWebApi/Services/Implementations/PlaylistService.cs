@@ -233,5 +233,18 @@ public class PlaylistService : IPlaylistService
         }).ToList();
     }
 
+    public async Task<IEnumerable<PlaylistDto>> GetAllByUserIdAsync(int userId)
+    {
+        return await _db.Playlists
+            .Where(p => p.OwnerId == userId)
+            .Select(p => new PlaylistDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                CoverUrl = p.CoverUrl
+            })
+            .ToListAsync();
+    }
+
 
 }

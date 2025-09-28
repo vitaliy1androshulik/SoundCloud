@@ -21,6 +21,21 @@ namespace SoundCloudWebApi.Controllers
             _albumService = albumService;
         }
 
+        // ===== Отримати всі альбоми користувача за ID  =====
+
+
+        [HttpGet("user/{userId:int}")]
+        [SwaggerOperation(OperationId = "GetAlbumsByUser", Summary = "Отримати всі альбоми користувача за ID")]
+        public async Task<IActionResult> GetByUserId(int userId)
+        {
+            var albums = await _albumService.GetAllByUserAsync(userId);
+
+            if (!albums.Any())
+                return NotFound($"No albums found for user with id {userId}");
+
+            return Ok(albums);
+        }
+
         // ===== CRUD для поточного користувача =====
 
         [HttpGet]

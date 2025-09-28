@@ -16,6 +16,7 @@ export const playlistService = {
         return res.data;
     },
 
+
     create: async (dto: ICreatePlaylist): Promise<IPlaylist> => {
         const { data } = await api.post("/Playlist", dto);
         return data;
@@ -47,6 +48,12 @@ export const playlistService = {
     getTracks: async (playlistId: number): Promise<ITrack[]> => {
         const { data } = await api.get(`/Playlist/${playlistId}/tracks`);
         return data;
-    }
+    },
+
+    // Отримати всі плейлисти конкретного користувача
+    getAllByUser: async (userId: number): Promise<IPlaylist[]> => {
+        const res = await api.get<IPlaylist[]>(`/playlist/user/${userId}`);
+        return res.data;
+    },
 
 };
