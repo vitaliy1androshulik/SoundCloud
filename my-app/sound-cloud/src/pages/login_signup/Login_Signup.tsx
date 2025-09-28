@@ -133,6 +133,7 @@ const LoginSignup: React.FC = () => {
         username?: string;
         email?: string;
         avatarUrl?: string;
+        isLocalPasswordSet?: boolean;//new
     };
 
 // NEW: акуратне діставання тексту помилки без any
@@ -192,6 +193,7 @@ const LoginSignup: React.FC = () => {
                 email: data.email!,
                 avatarUrl: data.avatarUrl,
                 totalPlays: 0, // new
+                isLocalPasswordSet: false // new,  false for Google users without local password
             };
 
         dispatch(setUser({ user, token }));

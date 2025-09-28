@@ -15,6 +15,7 @@ export const getCurrentUser = async (): Promise<IUser> => {
     const response = await api.get("/User/profile");
     const data = response.data;
     const user: IUser = {
+        isLocalPasswordSet: false,
         id: data.id,
         username: data.username,
         email: data.email,
@@ -23,7 +24,7 @@ export const getCurrentUser = async (): Promise<IUser> => {
         createdAt: data.createdAt,
         role: data.role,
         bio: data.bio,
-        totalPlays: data.totalPlays,
+        totalPlays: data.totalPlays
     };
     return user;
 };
@@ -32,23 +33,23 @@ export const getTopUsers = async (take: number): Promise<IUser[]> => {
         const response = await api.get(`/User/top?take=${take}`);
         const usersData = response.data;
 
-        // Мапимо дані API на наш тип IUser
+
         const users: IUser[] = (usersData as RawUserData[]).map((data) => ({
+
             id: data.userId,
             username: data.username,
-            email: data.email || "",       // якщо email відсутній
-            avatar: data.avatarUrl || "",  // запасний avatarUrl
+            email: data.email || "",
+            avatar: data.avatarUrl || "",
             createdAt: data.createdAt || "",
             role: data.role || "",
-            totalPlays: data.totalPlays   // додаємо totalPlays для топу
-        }));
-
-        return users;
-    } catch (error) {
-        console.error("Failed to fetch top users:", error);
+            totalPlays: data.totalPlays,
+        })) as IUser[];
+    } catch (e) {
+        console.error("Failed to fetch top users", e);
         return [];
     }
 };
+
 export const uploadUserBanner = {
     async updateBanner(userId: number, bannerFile: File) {
         const formData = new FormData();
@@ -76,6 +77,7 @@ export const updateUserProfile = async (
         avatar?: File;
     }
 ): Promise<IUser> => {
+    void userId; //new заглушка
     const formData = new FormData();
 
     if (data.username) formData.append("Username", data.username);
@@ -90,6 +92,7 @@ export const updateUserProfile = async (
     const resData = response.data;
 
     const updatedUser: IUser = {
+        isLocalPasswordSet: false,
         id: resData.id,
         username: resData.username,
         email: resData.email || "",
@@ -100,7 +103,7 @@ export const updateUserProfile = async (
         bio: resData.bio || "",
         totalPlays: resData.totalPlays || 0,
         isBlocked: resData.isBlocked,
-        password: resData.password,
+        password: resData.password
     };
 
     return updatedUser;
