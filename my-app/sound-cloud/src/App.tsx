@@ -6,6 +6,7 @@ import HomePage from "./pages/main_pages/HomePage";
 import LoginSignup from "./pages/login_signup/Login_Signup";
 import LibraryPage from "./pages/main_pages/LibraryPage.tsx";
 import ProfilePage from "./pages/profile/ProfilePage.tsx";
+import PlayAlbumPage from "./pages/play_album/PlayAlbumPage.tsx";
 import './index.css';
 import FeedPage from "./pages/main_pages/FeedPage.tsx";
 import {useDispatch} from "react-redux";
@@ -24,6 +25,7 @@ import CategoriesPage from "./pages/admin/CategoriesPage.tsx";
 import PlaylistsPage from "./pages/admin/PlaylistsPage.tsx";
 import AdminPage from "./pages/admin/AdminPage.tsx";
 import SearchPage from "./pages/main_pages/SearchPage.tsx";
+import {usePlayerStore} from "./store/player_store.tsx";
 
 
 export default function App() {
@@ -39,6 +41,11 @@ export default function App() {
             console.log("init user", user);
         }
     }, [dispatch]);
+    const initHistory = usePlayerStore((state) => state.initHistory);
+
+    useEffect(() => {
+        initHistory(); // ✅ підтягнемо історію з localStorage
+    }, [initHistory]);
     return (
         <Router>
             <Routes>
@@ -52,6 +59,7 @@ export default function App() {
                     <Route path="/feed" element={<FeedPage />} />
                     <Route path="/library" element={<LibraryPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/play-album/:id" element={<PlayAlbumPage />} />
                     <Route path="/search-page" element={<SearchPage/>}/>
                     <Route path="/set-password" element={<SetPassword />} />
                 </Route>

@@ -14,7 +14,6 @@ import {IGenre} from "../../types/genre.ts";
 import {genreService} from "../../services/genreApi.ts";
 import { followService } from "../../services/followApi.ts";
 import {IUserFollow} from "../../types/follow.ts";
-import { useNavigate } from "react-router-dom";//new
 //import {IUserFollow} from "../../types/follow.ts";
 //import {useSelector} from "react-redux";
 //import {RootState} from "../../store/store.ts";
@@ -430,7 +429,7 @@ const ProfilePage: React.FC = () => {
 
                 setAlbumTracks(tracksByAlbum);
             } catch (err) {
-                console.error("Failed to load all album tracks", err);
+                console.error("Failed to load all play_album tracks", err);
             }
         };
 
@@ -462,20 +461,20 @@ const ProfilePage: React.FC = () => {
 
     const handleConfirmAddToAlbum = async () => {
         if (!selectedAlbumId || !selectedTrackToAddToAlbum) {
-            alert("Choose an album");
+            alert("Choose an play_album");
             return;
         }
 
         try {
             await albumService.addTrack(selectedAlbumId, selectedTrackToAddToAlbum);
-            alert("Track added to album!");
+            alert("Track added to play_album!");
             setAddToAlbumModalOpen(false);
             setSelectedTrackToAddToAlbum(null);
             setSelectedAlbumId(null);
             handleViewAlbumTracks(selectedAlbumId); // оновлюємо треки альбому
         } catch (err) {
             console.error(err);
-            alert("Failed to add track to album.");
+            alert("Failed to add track to play_album.");
         }
     };
     useEffect(() => {
@@ -505,7 +504,7 @@ const ProfilePage: React.FC = () => {
             }
 
             if (!albumTitle) {
-                alert("Enter album title");
+                alert("Enter play_album title");
                 return;
             }
 
@@ -527,8 +526,8 @@ const ProfilePage: React.FC = () => {
             setAlbumIsPublic(true);
             setAlbumModalOpen(false);
         } catch (err) {
-            console.error("Failed to create album:", err);
-            alert("Failed to create album. Check console for details.");
+            console.error("Failed to create play_album:", err);
+            alert("Failed to create play_album. Check console for details.");
         }
     };
 
