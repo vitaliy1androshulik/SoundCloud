@@ -1,4 +1,5 @@
 ﻿using SoundCloudWebApi.Data.Entities;
+using SoundCloudWebApi.Models.Auth;
 
 namespace SoundCloudWebApi.Services.Interfaces
 {
@@ -10,5 +11,10 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task<List<UserEntity>> GetFollowingAsync(int userId);
         Task<int> GetFollowersCountAsync(int userId);
         Task<int> GetFollowingCountAsync(int userId);
+
+        // нове
+        Task<bool> IsFollowingAsync(int followerId, int followingId);
+        // Новий метод для контролера
+        Task<UserFollowDto?> GetUserFollowStatusAsync(int currentUserId, int targetUserId);
     }
 }

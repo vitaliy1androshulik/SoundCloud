@@ -362,7 +362,28 @@
     align-self: stretch;
     flex-grow: 0;
 }
+.top_creator_container{
+    /* Artist */
 
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 374px;
+    height: 56px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
 
 .top_creators_numeration{
     /* 1. */
@@ -440,6 +461,31 @@
     height: 44px;
 
     background: #5241B3;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+
+
+}
+.top_creators_unfollow_button_container{
+    /* Frame 26080067 */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 109px;
+    height: 44px;
+
+    border: 2px solid #5241B3;
     border-radius: 50px;
 
     /* Inside auto layout */

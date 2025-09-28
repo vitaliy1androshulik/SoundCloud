@@ -1,5 +1,3 @@
-
-
 export interface IUser {
     id: number;
     username: string;
@@ -12,6 +10,10 @@ export interface IUser {
     role?:string;
     bio?:string;
     totalPlays:number;
+
+
+    isFollowing?: boolean;
+
 }
 
 export interface IAuthResponse {
