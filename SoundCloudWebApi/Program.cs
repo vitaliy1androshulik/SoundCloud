@@ -105,15 +105,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// 1б) Налаштування CORS — ім’я політики "AllowAll"
+// 1б) Налаштування CORS — ім’я політики "AllowFrontend"
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", p =>
+    options.AddPolicy("AllowFrontend", p =>
     {
-        p
-         .AllowAnyOrigin()
+        p.WithOrigins("http://localhost:5173")
+         //.AllowAnyOrigin()
          .AllowAnyMethod()
-         .AllowAnyHeader();
+         .AllowAnyHeader()
+         .AllowCredentials();
     });
 });
 
@@ -188,7 +189,7 @@ app.UseGlobalErrorHandler();
 
 app.UseStaticFiles();          // віддаємо /uploads/** з wwwroot/uploads
 
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 
