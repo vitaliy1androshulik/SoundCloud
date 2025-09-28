@@ -398,7 +398,7 @@
     left: 309px;
     top: 262px;
     object-fit: cover;
-    z-index: 9999;
+    z-index: 960;
     overflow: hidden;
 }
 .profile_page_user_avatar_style{
@@ -836,7 +836,7 @@
     position: absolute;
     width: 241px;
     height: 44px;
-    left: 1503px;
+    left: 1488px;
     top: 572px;
 
 
@@ -855,7 +855,7 @@
     padding: 12px 16px;
     gap: 4px;
 
-    width: 108px;
+    width: auto;
     height: 44px;
 
     border: 2px solid #5241B3;
@@ -870,7 +870,7 @@
 .profile_page_user_button_controls .share_button .txt_style{
     /* Share */
 
-    width: 52px;
+    width: auto;
     height: 20px;
 
     font-style: normal;
@@ -1645,4 +1645,885 @@
     order: 1;
     align-self: stretch;
     flex-grow: 0;
+}
+
+
+.profile_page_track_upload_container{
+    /* Upload */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 36px;
+    gap: 24px;
+
+    position: absolute;
+    width: 1038px;
+    height: auto;
+    left: 441px;
+    top: 15px;
+
+    background: #101010;
+    border-radius: 30px;
+
+}
+
+.profile_page_track_upload_container .upload_title_container{
+    /* Frame 26080106 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: start;
+    align-items: center;
+    padding: 0px;
+    gap: 825px;
+
+    width: 966px;
+    height: 48px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.profile_page_track_upload_container .upload_title_container_edit{
+    /* Frame 26080106 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: start;
+    align-items: center;
+    padding: 0px;
+    gap: 775px;
+
+    width: 966px;
+    height: 48px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.upload_title_container .txt_style_upload,
+.upload_title_container_edit .txt_style_upload{
+    /* Upload */
+
+    margin: 0 auto;
+    width: auto;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    /* identical to box height, or 100% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.upload_title_container .img_style,
+.upload_title_container_edit .img_style{
+    box-sizing: border-box;
+
+    width: 48px;
+    height: 48px;
+
+
+    align-content: center;
+    justify-items: center;
+
+    border: 2px solid #344289;
+    border-radius: 100px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.profile_page_track_info_container{
+    /* Frame 26080107 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 966px;
+    height: 317px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+
+.profile_page_track_info_container .img_button_container{
+    /* Frame 26080105 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+
+    width: 241px;
+    height: 317px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.img_button_container .img_container_style{
+    /* Rectangle 59 */
+
+    width: 241px;
+    height: 241px;
+
+    border-radius: 30px;
+    background-color: #FFFFFF;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.button_add_container{
+    /* Frame 26080102 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    width: 168px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.profile_page_add_track_picture_button{
+    /* Edit_P */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: auto;
+    height: 44px;
+
+    background: #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.profile_page_add_track_picture_button .txt_style{
+    /* Add picture */
+
+    width: auto;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_track_info_container .song_info_container{
+    /* Frame 26080104 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 0px;
+    gap: 20px;
+
+    width: 701px;
+    height: 304px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+
+}
+.song_info_container .track_title_container{
+    /* Name */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 701px;
+    height: 88px;
+
+    border-radius: 5px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.song_info_container .txt_style{
+    /* Song Title */
+
+    width: 265px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.song_info_container .input_upload_track_container{
+    /* Enter */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 20px;
+
+    width: 701px;
+    height: 56px;
+
+    border: 2px solid #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    appearance: none; /* прибираємо стандартну стрілку */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Choose a genre */
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 29px;
+    /* identical to box height */
+
+    color: #C9D4FF;
+
+}
+.input_upload_track_container:focus{
+    border-color: #4f46e5; /* фіолетова рамка при фокусі */
+    box-shadow: 0 0 4px rgba(79, 70, 229, 0.5); /* підсвітка */
+    outline: none;
+}
+.input_upload_track_container option {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-radius: 50px;
+}
+.input_upload_track_container::placeholder{
+    color: #C9D4FF;
+}
+
+
+.song_info_container .album_container{
+    /* Email */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 701px;
+    height: 88px;
+
+    border-radius: 5px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.song_info_container .genre_container{
+    /* Bio */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 701px;
+    height: 88px;
+
+    border-radius: 5px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.profile_page_track_upload_container .track_file_container{
+    /* Frame 26080117 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 41px;
+    gap: 32px;
+
+    width: 966px;
+    height: auto;
+
+    border: 2px solid #344289;
+    border-radius: 30px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+
+.track_file_container .title_instruction_container{
+    /* Frame 26080158 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    width: 884px;
+    height: 58px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.title_instruction_container .txt_style_up{
+    /* Upload your audio files. */
+
+    width: 884px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.title_instruction_container .txt_style_down{
+    /* For best quality, use WAV, FLAC, AIFF, or ALAC. The maximum file size is 4GB uncompressed. */
+
+    width: 884px;
+    height: 18px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 18px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.profile_page_track_upload_container .input_style_container{
+    /* Frame 26080216 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+
+    justify-content:center;
+    align-items: center;
+
+
+    padding: 0px;
+    gap: 24px;
+
+    width: 506px;
+    height: 225.01px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.input_style_container .img_style_container{
+    /* Vector */
+
+    width: 109px;
+    height: 109px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.input_style_container .drag_text_style{
+    /* Drag or drop your audio files to upload */
+
+    width: 506px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    transform: rotate(0deg);
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.input_style_container .choose_file_button_container{
+    /* Frame 26080087 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 175px;
+    height: 44px;
+
+    background: #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+
+}
+.profile_page_track_upload_container .upload_button_container{
+    /* Save */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: auto;
+    height: 44px;
+
+    background: #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+
+}
+.upload_button_container .txt_style{
+    /* Upload */
+
+    width: auto;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.choose_file_button_container .txt_style{
+    /* Choose files */
+
+    width: 111px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.track_file_container .input_track_info_container{
+    /* Artist */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 122px;
+
+    width: 884px;
+    height: 54px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.input_track_info_container .track_info_img_container{
+    /* Frame 26080083 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 719px;
+    height: 54px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.track_info_img_container .img_container_style{
+    /* Rectangle 55 */
+
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.track_info_img_container .track_file_path{
+    /* Frame 26080068 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 641px;
+    height: 20px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+
+}
+.track_file_path .txt_style{
+    /* Documents/Audio/Dark_Sky.mp3 */
+    max-width: 641px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.track_info_img_container .delete_track_container{
+    /* ic:baseline-close */
+
+    width: 43px;
+    height: 43px;
+
+    margin-left:115px;
+    justify-items: center;
+    align-content: center;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+
+.profile_page_track_image_wrapper {
+    position: relative;
+    display: inline-block;
+    width: 241px;
+    height: 241px;
+}
+
+.profile_page_track_image {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+/* Overlay на всю картинку */
+.profile_page_track_image_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(82, 65, 179, 0.3); /* напівпрозорий чорний */
+    border-radius: 10px; /* щоб збігалося з картинкою */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    opacity: 0; /* спочатку невидимий */
+    transition: opacity 0.3s ease; /* плавна анімація */
+
+}
+
+.profile_page_track_image_wrapper:hover .profile_page_track_image_overlay {
+    opacity: 1; /* показати при наведенні */
+}
+
+.profile_page_track_image_overlay .img_style{
+    width:50px;
+    height:50px;
+}
+
+.profile_page_track_upload_container .delete_upload_button_container{
+    /* Frame 26080230 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 966px;
+    height: 44px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 3;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.delete_upload_button_container .delete_button_container{
+    /* Save */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: 242px;
+    height: 44px;
+
+    border: 2px solid #344289;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.delete_button_container .txt_style{
+    /* Delete */
+
+    width: 59px;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
 }

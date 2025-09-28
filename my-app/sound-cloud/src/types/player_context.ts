@@ -14,4 +14,6 @@ export interface PlayerContextType {
     addToHistory: (track: ITrack) => void;
     nextTrack: () => void;
     previousTrack: () => void;
+    refreshHistory: () => Promise<void>;
+    initHistory:()=>void;
 }

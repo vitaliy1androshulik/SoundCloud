@@ -10,7 +10,15 @@ import {getTopUsers} from "../../services/User/user_info.ts";
 const HomePage: React.FC = () => {
     const [tracks, setTracks] = useState<ITrack[]>([]);
 
+
+    const addtoHistory = usePlayerStore(state => state.addToHistory);
+
+
     const history = usePlayerStore(state => state.history);
+    const initHistory = usePlayerStore(state => state.initHistory);
+    useEffect(() => {
+        initHistory();
+    }, [initHistory]);
 
     const playTrack = usePlayerStore(state => state.playTrack);
 
@@ -91,10 +99,12 @@ const HomePage: React.FC = () => {
         ref.current?.scrollBy({ left: 200, behavior: "smooth" });
     };
 
+
     useEffect(() => {
         trackService.getAll()
             .then((data) => setTracks(data))
             .catch((err) => console.error(err));
+
     }, []);
     const getTrackImageUrl = (track: ITrack) => {
         if (!track.imageUrl) return "/default-cover.png"; // запасна картинка
@@ -137,11 +147,15 @@ const HomePage: React.FC = () => {
                 await trackService.unlike(track.id);
                 setLikedTracksIds(prev => prev.filter(id => id !== track.id));
                 track.isLikedByCurrentUser = false; // оновлюємо локально
+                addtoHistory(track);
+                trackService.getAll()
             } else {
                 // лайк
                 await trackService.like(track.id);
                 setLikedTracksIds(prev => [...prev, track.id]);
                 track.isLikedByCurrentUser = true; // оновлюємо локально
+                addtoHistory(track);
+                trackService.getAll()
             }
         } catch (err) {
             console.error("Error liking track:", err);
@@ -152,7 +166,7 @@ const HomePage: React.FC = () => {
 
 
     return (
-        <main className="layout_container mb-[1950px]">
+        <main className="layout_container mb-[1750px]">
             <div className="first_first_container relative">
                 <div className="first_first_container_text baloo2 text-lightpurple text-[24px] font-bold">
                     MORE OF WHAT YOU LIKE

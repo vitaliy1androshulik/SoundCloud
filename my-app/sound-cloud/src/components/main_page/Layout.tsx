@@ -4,25 +4,24 @@ import Header from "./Header.tsx";
 import Footer from "./Footer.tsx";
 import Player from "../player/Player.tsx";
 import "../../styles/General.css";
+import "../../index.css";
 
 const Layout: React.FC = () => {
 
     return(
         <>
-            <div className="page-container">
+            <div className="layout_container">
                 <div>
                     <Header/>
                 </div>
 
-                <div>
+                <div className="content_container">
                     <Outlet/>
-
-                    <Player footerSelector=".footer_container" />
-
                 </div>
                 <div className="footer_container">
                     <Footer/>
                 </div>
+                <Player footerSelector=".footer_container" />
             </div>
         </>
     );

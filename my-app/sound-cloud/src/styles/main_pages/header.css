@@ -109,11 +109,18 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+    align-content: center;
+    justify-items: center;
 }
 .image_container_user{
     width: 100%;
     height: 100%;
     object-fit: cover; /* картинка заповнює контейнер і обрізається */
+    display: block;
+}
+.image_container_user_not_login{
+    width: 32px;
+    height: 32px;
     display: block;
 }
 .user_drop_bar{

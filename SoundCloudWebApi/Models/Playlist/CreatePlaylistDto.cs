@@ -13,4 +13,5 @@ public class CreatePlaylistDto
 
     // Файл обкладинки
     public IFormFile? Cover { get; set; }
+    public string? CoverUrl { get; set; }
 }

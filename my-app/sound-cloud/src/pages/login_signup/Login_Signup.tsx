@@ -319,7 +319,7 @@ const LoginSignup: React.FC = () => {
                                                 {/* Видима фіолетова кнопка */}
                                                 <button type="button" className="oauth-btn">
                                                     <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon" />
-                                                    Google login
+                                                    Sign in with Google
                                                 </button>
 
                                                 {/* Невидимий реальний GoogleLogin поверх */}
@@ -353,7 +353,7 @@ const LoginSignup: React.FC = () => {
                                     {/*    />*/}
                                     {/*    Sign in with Google*/}
                                     {/*</button>*/}
-                                        <button className="login_third_google_button baloo2"><img
+                                        <button className="login_third_google_button baloo2 text-white"><img
                                             src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
                                             Facebook
                                         </button>
@@ -521,12 +521,12 @@ const LoginSignup: React.FC = () => {
                                             <div className="oauth-wrap">
                                                 {/* Видима фіолетова кнопка */}
                                                 <button type="button" className="oauth-btn">
-                                                    <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon" />
-                                                    Google login
+                                                    <img src="src/images/icons/google_icon.png" alt="" className="oauth-btn__icon " />
+                                                    <span>Sign up with Google</span>
                                                 </button>
 
                                                 {/* Невидимий реальний GoogleLogin поверх */}
-                                                <div className="oauth-overlay">
+                                                <div className="oauth-overlay text-white">
                                                     <GoogleLogin
                                                         onSuccess={handleGoogleSuccess}
                                                         onError={handleGoogleError}
@@ -554,8 +554,8 @@ const LoginSignup: React.FC = () => {
                                         {/*</button>*/}
 
 
-                                        <button className="login_third_google_button baloo2"><img
-                                            src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign in with
+                                        <button className="login_third_google_button baloo2 text-white"><img
+                                            src="src/images/icons/facebook_icon.png" alt="google_icon"/> Sign up with
                                             Facebook
                                         </button>
                                     </div>

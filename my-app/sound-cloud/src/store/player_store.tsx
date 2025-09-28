@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { PlayerContextType } from "../types/player_context";
 import { ITrack } from "../types/track";
+import api from "../utilities/axiosInstance.ts";
 
 export const usePlayerStore = create<PlayerContextType>((set, get) => ({
     track: null,
@@ -9,7 +10,7 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
     playlist: [] as ITrack[],
     currentIndex: -1,
     currentAlbumId: null,
-    history: JSON.parse(localStorage.getItem('trackHistory') || '[]'),
+    history: [],
 
     pauseTrack: () => {
         set({ isPlaying: false });
@@ -33,34 +34,65 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
     togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
 
     addToHistory: (track) => {
+        // локальне оновлення
         set((state) => {
             const newHistory = [track, ...state.history.filter(t => t.id !== track.id)];
-            localStorage.setItem('trackHistory', JSON.stringify(newHistory));
+            localStorage.setItem("trackHistory", JSON.stringify(newHistory));
             return { history: newHistory };
         });
+
+    },
+
+    refreshHistory: async () => {
+        try {
+            const res = await api.get("/Track/all");
+            const serverHistory: ITrack[] = res.data;
+
+            set((state) => {
+                // об’єднуємо локальні та серверні дані
+                const merged = [
+                    ...state.history,
+                    ...serverHistory.filter(t => !state.history.some(h => h.id === t.id))
+                ];
+                localStorage.setItem("trackHistory", JSON.stringify(merged));
+                return { history: merged };
+            });
+        } catch (err) {
+            console.error("refreshHistory failed:", err);
+        }
+    },
+
+    initHistory: () => {
+        if (typeof window === "undefined") return;
+
+        const raw = localStorage.getItem("trackHistory");
+        if (raw) {
+            try {
+                const parsed: ITrack[] = JSON.parse(raw);
+                set({ history: parsed });
+            } catch (err) {
+                console.warn("initHistory parse error", err);
+            }
+        }
+
+        // get().refreshHistory(); // ❌ більше не викликаємо автоматично
     },
 
     nextTrack: () => {
-        const { playlist, currentIndex } = get();
-        if (playlist.length === 0) return;
-
+        const { playlist, currentIndex } = (get() as any); // додай playlist у state якщо є
+        if (!playlist || playlist.length === 0) return;
         const nextIndex = (currentIndex + 1) % playlist.length;
-        set({
-            track: playlist[nextIndex],
-            currentIndex: nextIndex,
-            isPlaying: true,
-        });
+        const track = playlist[nextIndex];
+        set({ track, currentIndex: nextIndex, isPlaying: true });
+        get().addToHistory(track);
     },
 
     previousTrack: () => {
-        const { playlist, currentIndex } = get();
-        if (playlist.length === 0) return;
-
+        const { playlist, currentIndex } = (get() as any);
+        if (!playlist || playlist.length === 0) return;
         const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-        set({
-            track: playlist[prevIndex],
-            currentIndex: prevIndex,
-            isPlaying: true,
-        });
+        const track = playlist[prevIndex];
+        set({ track, currentIndex: prevIndex, isPlaying: true });
+        get().addToHistory(track);
     },
 }));

@@ -88,11 +88,10 @@ const Header: React.FC = () => {
                                         <div className="baloo2 header_profile_image_container">
                                             <div className="user_avatar">
                                                 {user?.avatar ? (
-
                                                     <img className="image_container_user" src={getUserImageUrl(user)}
                                                          alt="people" width="32" height="32"/>
                                                 ) : (
-                                                    <img className="image_container_user"
+                                                    <img className="image_container_user_notlogin"
                                                          src="src/images/search_bar/people.png"
                                                          alt="people" width="22" height="22"/>
                                                 )}

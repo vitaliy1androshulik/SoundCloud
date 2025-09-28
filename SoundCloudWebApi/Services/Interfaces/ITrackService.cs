@@ -29,7 +29,7 @@ namespace SoundCloudWebApi.Services.Interfaces
         Task<TrackDto> CreateAsyncFile(CreateTrackDto dto);
 
         // Оновити трек
-        Task<TrackDto> UpdateAsync(int trackId, UpdateTrackDto dto);
+        Task<TrackDto> UpdateAsyncFile(int trackId, UpdateTrackDto dto);
 
         // Видалити трек
         Task DeleteAsync(int trackId);

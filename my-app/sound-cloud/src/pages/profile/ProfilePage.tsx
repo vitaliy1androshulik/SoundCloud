@@ -9,12 +9,15 @@ import {playlistService} from "../../services/playlistApi.ts";
 import {getCurrentUser, updateUserProfile, uploadUserBanner} from "../../services/User/user_info.ts";
 import {usePlayerStore} from "../../store/player_store.tsx";
 import {IUser} from "../../types/user.ts";
+import {IGenre} from "../../types/genre.ts";
+import {genreService} from "../../services/genreApi.ts";
 
 const tabs = ["All","Tracks", "Albums", "Playlists" ,"Reposts"];
 
 const ProfilePage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>("All");
     const [tracks, setTracks] = useState<ITrack[]>([]);
+
     const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
@@ -26,11 +29,13 @@ const ProfilePage: React.FC = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [title, setTitle] = useState("");
-    const [duration, setDuration] = useState("");
-    const [albumId, setAlbumId] = useState<number>(0);
+    const [albumId, setAlbumId] = useState<number|null>(null);
     const [genreId, setGenreId] = useState<number>(0);
     const [file, setFile] = useState<File | undefined>();
     const [cover, setCover] = useState<File | undefined>();
+
+    const [coverUrl, setCoverUrl] = useState<string | null>(null);
+    const [fileUrl, setFileUrl] = useState("");
 
     const playTrack = usePlayerStore(state => state.playTrack);
     const pauseTrack = usePlayerStore((state) => state.pauseTrack);
@@ -43,9 +48,10 @@ const ProfilePage: React.FC = () => {
     const [playlistTracks, setPlaylistTracks] = useState<{ [playlistId: number]: ITrack[] }>({});
 
 
-
+    const [genres, setGenres] = useState<IGenre[]>([]);
 
     const [albums, setAlbums] = useState<IAlbum[]>([]);
+
     const [albumModalOpen, setAlbumModalOpen] = useState(false);
     const [albumTitle, setAlbumTitle] = useState("");
     const [albumCoverFile, setAlbumCoverFile] = useState<File | undefined>();
@@ -77,16 +83,74 @@ const ProfilePage: React.FC = () => {
     const [selectedTrackToAdd, setSelectedTrackToAdd] = useState<number | null>(null);
     const [selectedPlaylistId, setSelectedPlaylistId] = useState<number | null>(null);
 
+    //Edit track
+    const [selectedTrack, setSelectedTrack] = useState<ITrack | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+
+    const handleTrackClick = (track: ITrack) => {
+        setSelectedTrack(track);
+        setIsEditModalOpen(true);
+    };
+
+    const handleSaveChanges = async (trackId: number, formData: FormData) => {
+        try {
+            // Виклик методу з id треку
+            const updatedTrack = await trackService.updateTrack(trackId, formData);
+
+            // Оновлюємо локальний стан треків
+            setTracks((prev) =>
+                prev.map((t) => (t.id === updatedTrack.id ? updatedTrack : t))
+            );
+
+            // Оновлюємо вибраний трек для модалки
+            setSelectedTrack(updatedTrack);
+
+            alert("Track updated successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Failed to update track.");
+        }
+    };
+
+
+    useEffect(() => {
+        if (selectedTrack) {
+            setTitle(selectedTrack.title);
+            setCoverUrl(selectedTrack.imageUrl??null); // скидаємо, щоб показувався існуючий imageUrl
+            setFileUrl(selectedTrack.url);
+        }
+
+    }, [selectedTrack]);
+    useEffect(() => {
+        if (selectedTrack) {
+            const foundGenre = genres.find(g => g.name === selectedTrack.genre);
+
+            if (foundGenre) {
+                setGenreId(foundGenre.id); // тут явно передаємо number
+            } else {
+                setGenreId(null); // якщо не знайшли, можна передати null
+            }
+        }
+    }, [selectedTrack, genres]);
+
+    const refreshPage = () => {
+        window.location.reload();
+    };
+
     const { track: currentTrack, isPlaying,currentAlbumId } = usePlayerStore();
     console.log(tracks);
     useEffect(() => {
         trackService.getAll()
             .then((data) => setTracks(data))
             .catch((err) => console.error(err));
+
     }, []);
 
+
+
     useEffect(() => {
-        if (bannerModalOpen||isUserEditOpen) {
+        if (bannerModalOpen||isUserEditOpen||isModalOpen) {
             // Забороняємо скрол
             document.body.style.overflow = "hidden";
         } else {
@@ -98,7 +162,7 @@ const ProfilePage: React.FC = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [bannerModalOpen,isUserEditOpen]);
+    }, [bannerModalOpen,isUserEditOpen,isModalOpen]);
 
     useEffect(() => {
         if (isUserEditOpen && user) {
@@ -114,6 +178,7 @@ const ProfilePage: React.FC = () => {
         trackService.getMyTracks().then(setTracks).catch(console.error);
         playlistService.getAll().then(setPlaylists).catch(console.error);
         albumService.getMyAlbums().then(setAlbums).catch(console.error);
+        genreService.getGenres().then(setGenres).catch(console.error);
     }, []);
 
     const handleUserUpdate = async (updateData: {
@@ -194,18 +259,17 @@ const ProfilePage: React.FC = () => {
         return `http://localhost:5122${user.banner}`;
     };
     const handleUpload = async () => {
-        if (!title || !duration || !albumId || !file || !cover || genreId === undefined) {
+        if (!title || !file || !cover ) {
             alert("Please fill all required fields and select files!");
             return;
         }
 
         try {
-            const newTrack = await trackService.createTrack(title, duration, albumId, file, cover, genreId);
+            const newTrack = await trackService.createTrack(title, albumId, file, cover, genreId);
             setTracks([...tracks, newTrack]);
 
             // Очистка полів і закриття модалки
             setTitle("");
-            setDuration("");
             setAlbumId(0);
             setGenreId(0);
             setFile(undefined);
@@ -410,6 +474,19 @@ const ProfilePage: React.FC = () => {
         console.log("Current user:", user);
     }, [user]);
 
+
+    useEffect(() => {
+        if (!isEditModalOpen) {
+            setTitle(null);
+            setAlbumId(null);
+            setGenreId(null);
+            setCover(null);
+            setCoverUrl(null);
+            setFile(null);
+
+            setSelectedTrack(null);
+        }
+    }, [isEditModalOpen]);
     const handleAlbumCreate = async () => {
         try {
             const currentUser = await getCurrentUser();
@@ -519,14 +596,14 @@ const ProfilePage: React.FC = () => {
             {/* Tabs */}
             <div className="profile_tabs_container">
                 {tabs.map((tab) => (
-                    <div className="profile_tab_buttons_container text-white baloo2">
+                    <div className="profile_tab_buttons_container  text-white baloo2">
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`${
                                 activeTab === tab
                                     ? "profile_tab_buttons_container_activated"
-                                    : "profile_tab_buttons_non_active"
+                                    : "profile_tab_buttons_non_active cursor-pointer"
                             }`}
                         >
                             {tab}
@@ -535,9 +612,10 @@ const ProfilePage: React.FC = () => {
                 ))}
             </div>
             <div className="profile_page_user_button_controls">
-                <button className="share_button cursor-pointer">
-                    <img className="img_style" src="src/images/icons/share.png" alt="shareIcon"/>
-                    <span className="txt_style">Share</span>
+                <button className="share_button cursor-pointer"
+                        onClick={()=>setIsModalOpen(true)}>
+                        <img className="img_style" src="src/images/icons/share.png" alt="shareIcon"/>
+                        <span className="txt_style">Upload</span>
                 </button>
                 <button className="edit_button cursor-pointer"
                         onClick={() => setUserEditOpen(true)}
@@ -779,17 +857,25 @@ const ProfilePage: React.FC = () => {
                 {activeTab === "Tracks" && (
                     <>
                         {tracks.length ? (
-                            <div>
+                                <div>
                                 {tracks.map((t) => (
                                     <li key={t.id}>
                                         {t.imageUrl && (
                                             <div className="track_container">
-                                                <img
-                                                    src={getTrackImageUrl(t)}
-                                                    alt={t.title}
-                                                    className="track_image"
-                                                    onClick={() => playTrack(t, tracks)}
-                                                />
+                                                <div className="profile_page_track_image_wrapper">
+                                                    <img
+                                                        src={getTrackImageUrl(t)}
+                                                        alt={t.title}
+                                                        className="profile_page_track_image"
+                                                    />
+                                                    <div className="profile_page_track_image_overlay cursor-pointer">
+                                                        <img src="src/images/icons/edit_pen.png" className="img_style"
+                                                             onClick={() => {
+                                                                 handleTrackClick(t)
+                                                             }}
+                                                        />
+                                                    </div>
+                                                </div>
                                                 <div className="track_controls_container">
                                                     <div className="play_info_track_container">
                                                         <div className="play_pause_track_container">
@@ -801,7 +887,7 @@ const ProfilePage: React.FC = () => {
                                                             ) : (
                                                                 <img src="src/images/player/play_icon.png"
                                                                      alt={"playIcon"}
-                                                                     onClick={() => playTrack(t, tracks)}
+                                                                     onClick={() => playTrack(t,tracks)}
                                                                 />
                                                             )}
 
@@ -856,7 +942,7 @@ const ProfilePage: React.FC = () => {
                                         )}
                                     </li>
                                 ))}
-                            </div>
+                                </div>
                         ) : (
                             <p className="text-gray-400 py-4">No tracks yet</p>
                         )}
@@ -1123,55 +1209,312 @@ const ProfilePage: React.FC = () => {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-gray-900 p-6 rounded w-full max-w-md">
-                        <h2 className="text-white text-xl mb-4">Upload Track</h2>
-                        <input
-                            type="text"
-                            placeholder="Title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Duration"
-                            value={duration}
-                            onChange={(e) => setDuration(e.target.value)}
-                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
-                        />
-                        <input
-                            type="number"
-                            placeholder="Album ID"
-                            value={albumId}
-                            onChange={(e) => setAlbumId(Number(e.target.value))}
-                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
-                        />
-                        <input
-                            type="number"
-                            placeholder="Genre ID"
-                            value={genreId}
-                            onChange={(e) => setGenreId(Number(e.target.value))}
-                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
-                        />
-
-                        <input
-                            type="file"
-                            onChange={(e) =>
-                                setAlbumCoverFile(e.target.files?.[0])}
-                        />
-                        <div className="flex justify-end gap-2">
-                            <button
-                                className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
-                                onClick={() => setIsModalOpen(false)}
+                <div className="profile_page_modal_container baloo2">
+                    <div className="profile_page_track_upload_container">
+                        <div className="upload_title_container">
+                            <label className="txt_style_upload">Upload</label>
+                            <div className="img_style cursor-pointer"
+                                 onClick={() => setIsModalOpen(false)}
                             >
-                                Cancel
+                                <img src="src/images/icons/close_icon.png" alt="close"/>
+                            </div>
+                        </div>
+                        <div className="profile_page_track_info_container">
+                            <div className="img_button_container">
+                                {cover ? (
+                                    <img
+                                        className="img_container_style"
+                                        src={URL.createObjectURL(cover)}
+                                        alt="Selected banner preview"
+                                    />
+                                ) : (
+                                    <img
+                                        className="img_container_style"
+                                    />
+                                )}
+                                <div className="button_add_container">
+                                    <button className="profile_page_add_track_picture_button">
+                                        <label className="relative txt_style">Add
+                                            picture
+                                            <input
+                                                className="cursor-pointer absolute inset-0 opacity-0 txt_style"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) =>
+                                                    setCover(e.target.files?.[0])
+                                                }
+                                            />
+                                        </label>
+                                    </button>
+                                </div>
+
+                            </div>
+                            <div className="song_info_container">
+                                <div className="track_title_container">
+                                    <span className="txt_style">Song Title</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Song title"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className="input_upload_track_container"
+                                    />
+                                </div>
+                                <div className="album_container">
+                                    <span className="txt_style">Album</span>
+                                    <select
+                                        value={albumId ?? ""}
+                                        onChange={(e) => {
+                                            setAlbumId(Number(e.target.value)); // якщо пусто → null
+                                        }}
+                                        className="input_upload_track_container"
+                                    >
+                                        <option value="">
+                                            None (no album)
+                                        </option>
+                                        {albums.map((album) => (
+                                            <option key={album.id} value={album.id}>
+                                                {album.title}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="genre_container">
+                                    <span className="txt_style">Genre</span>
+                                    <select
+                                        value={genreId ?? ""}
+                                        onChange={(e) => setGenreId(Number(e.target.value))}
+                                        className="input_upload_track_container"
+                                    >
+                                        <option value="">
+                                            None (no Genre)
+                                        </option>
+                                        {genres.map((genre, index) => (
+                                            <option key={genre.id} value={genre.id || index + 1}>
+                                                {genre.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="track_file_container">
+                            <div className="title_instruction_container">
+                                <span className="txt_style_up">Upload your audio file.</span>
+                                <span className="txt_style_down">For best quality, use WAV, FLAC, AIFF, or ALAC. The maximum file size is 4GB uncompressed.</span>
+                            </div>
+                                {file? (
+                                    <div className="input_track_info_container">
+                                        <div className="track_info_img_container">
+                                            {cover ? (
+                                            <img
+                                                className="img_container_style"
+                                                src={URL.createObjectURL(cover as File)}
+                                                alt="Selected banner preview"
+                                            />
+                                            ) : (
+                                            <img
+                                                className="img_container_style"
+                                                src="src/images/rectangles/rectangle_track.png"
+                                            />
+                                            )}
+                                            <div className="track_file_path">
+                                                <span className="txt_style">{file.name}</span>
+                                            </div>
+                                            <div className="delete_track_container cursor-pointer">
+                                                <img src="src/images/icons/close_icon.png"
+                                                onClick={()=>setFile(0)}
+                                                />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                ) : (
+                                    <div className="input_style_container">
+                                        <div className="img_style_container">
+                                            <img src="src/images/logo/logo_WaveCloud_background.png"/>
+                                        </div>
+                                        <span className="drag_text_style">
+                                    Drag or drop your audio files to upload
+                                         </span>
+                                        <button className="choose_file_button_container cursor-pointer">
+                                            <label className="txt_style relative ">
+                                                Choose file
+                                                <input
+                                                    type="file"
+                                                    onChange={(e) =>
+                                                        setFile(e.target.files?.[0])}
+                                                    className="cursor-pointer absolute inset-0 opacity-0 txt_style"
+                                                />
+                                            </label>
+
+                                        </button>
+                                    </div>
+                                    )}
+                        </div>
+                        <button
+                            className="upload_button_container cursor-pointer"
+                            onClick={handleUpload}
+                        >
+                            <span className="txt_style">Upload</span>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {isEditModalOpen && selectedTrack && (
+                <div className="profile_page_modal_container baloo2">
+                    <div className="profile_page_track_upload_container">
+                        <div className="upload_title_container_edit">
+                            <label className="txt_style_upload">Edit Track</label>
+                            <div className="img_style cursor-pointer" onClick={() => setIsEditModalOpen(false)}>
+                                <img src="src/images/icons/close_icon.png" alt="close"/>
+                            </div>
+                        </div>
+
+                        <div className="profile_page_track_info_container">
+                            <div className="img_button_container">
+                                {cover ? (
+                                    <img
+                                        className="img_container_style"
+                                        src={URL.createObjectURL(cover)}
+                                        alt="Selected banner preview"
+                                    />
+                                ) : (
+                                    <img
+                                        className="img_container_style"
+                                        src={getTrackImageUrl(selectedTrack) || "src/images/rectangles/rectangle_track.png"}
+                                        alt="Track cover"
+                                    />
+                                )}
+                                <div className="button_add_container">
+                                    <button className="profile_page_add_track_picture_button">
+                                        <label className="relative txt_style">
+                                            Change picture
+                                            <input
+                                                className="cursor-pointer absolute inset-0 opacity-0 txt_style"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => setCover(e.target.files?.[0])}
+                                            />
+                                        </label>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="song_info_container">
+                                <div className="track_title_container">
+                                    <span className="txt_style">Song Title</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Song title"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className="input_upload_track_container"
+                                    />
+                                </div>
+                                <div className="genre_container">
+                                    <span className="txt_style">Genre</span>
+                                    <select
+                                        value={genreId ?? ""}
+                                        onChange={(e) => setGenreId(e.target.value)}
+                                        className="input_upload_track_container"
+                                    >
+                                    <option value="">None (no Genre)</option>
+                                        {genres.map((genre) => (
+                                            <option key={genre.id} value={genre.id}>
+                                                {genre.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="track_file_container">
+                            <div className="title_instruction_container">
+                                <span className="txt_style_up">Upload new audio file (optional).</span>
+                                <span className="txt_style_down">
+                        For best quality, use WAV, FLAC, AIFF, or ALAC. Max size 4GB.
+                    </span>
+                            </div>
+                            {fileUrl? (
+                                <div className="input_track_info_container">
+                                    <div className="track_info_img_container">
+                                            <img
+                                                className="img_container_style"
+                                                src={coverUrl ? getTrackImageUrl(selectedTrack) : "src/images/rectangles/rectangle_track.png"}
+                                            />
+                                        <div className="track_file_path">
+                                            <span className="txt_style">{fileUrl}</span>
+                                        </div>
+                                        <div className="delete_track_container cursor-pointer">
+                                            <img src="src/images/icons/close_icon.png"
+                                                 onClick={()=>setFileUrl(0)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            ) : (
+                                <div className="input_style_container">
+                                    <div className="img_style_container">
+                                        <img src="src/images/logo/logo_WaveCloud_background.png"/>
+                                    </div>
+                                    <span className="drag_text_style">
+                                    Drag or drop your audio files to upload
+                                         </span>
+                                    <button className="choose_file_button_container cursor-pointer">
+                                        <label className="txt_style relative ">
+                                            Choose file
+                                            <input
+                                                type="file"
+                                                onChange={(e) =>
+                                                    setFile(e.target.files?.[0])}
+                                                className="cursor-pointer absolute inset-0 opacity-0 txt_style"
+                                            />
+                                        </label>
+
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        <div className="delete_upload_button_container">
+                            <button
+                                className="delete_button_container cursor-pointer"
+                                onClick={async () => {
+                                    if (!selectedTrack) return;
+
+                                    if (!window.confirm("Are you sure you want to delete this track?")) return;
+
+                                    try {
+                                        await trackService.deleteTrack(selectedTrack.id); // виклик на бек
+                                        setTracks(prev => prev.filter(t => t.id !== selectedTrack.id)); // прибираємо з локального стейту
+                                        setIsEditModalOpen(false); // закриваємо модалку
+                                        alert("Track deleted successfully!");
+                                    } catch (error) {
+                                        console.error("Failed to delete track", error);
+                                        alert("Failed to delete track.");
+                                    }
+                                }}
+                            >
+                                <span className="txt_style">Delete</span>
                             </button>
                             <button
-                                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
-                                onClick={handleUpload}
+                                className="upload_button_container cursor-pointer"
+                                onClick={() => {
+                                    const formData = new FormData();
+                                    formData.append("Id", selectedTrack.id.toString());
+                                    formData.append("Title", title);
+                                    if (genreId !== null) formData.append("GenreId", genreId.toString());
+                                    if (cover) formData.append("Cover", cover);
+                                    if (file) formData.append("File", file);
+
+                                    handleSaveChanges(selectedTrack.id, formData);
+                                    setIsEditModalOpen(false);
+                                }}
                             >
-                                Upload
+                                <span className="txt_style">Save Changes</span>
                             </button>
                         </div>
                     </div>
@@ -1263,6 +1606,7 @@ const ProfilePage: React.FC = () => {
                                                 avatar,
                                             });
                                             setUserEditOpen(false);
+                                            refreshPage();
                                         }}
                                         disabled={uploading}
                                     >

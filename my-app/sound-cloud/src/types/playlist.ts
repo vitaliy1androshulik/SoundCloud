@@ -6,5 +6,5 @@ export interface IPlaylist {
     ownerId: number;
     ownerName?: string;
     coverUrl?: string;
-    Tracks: ITrack[]; // з великої літери
+    Tracks?: ITrack[]; // з великої літери
 }

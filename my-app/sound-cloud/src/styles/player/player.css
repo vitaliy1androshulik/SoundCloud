@@ -50,7 +50,7 @@
     gap: 6.33px;
     width: 118px;
     height: 42.33px;
-
+    overflow: hidden;
     flex: none;
     order: 1;
     flex-grow: 0;
@@ -58,7 +58,7 @@
 .player_track_title{
     /* Take the Lead */
 
-    width: 220px;
+    width: 150px;
     height: 19px;
 
     font-style: normal;
@@ -66,14 +66,16 @@
     font-size: 18.9794px;
     line-height: 19px;
     /* identical to box height, or 100% */
-    display: flex;
     align-items: center;
     color: #FFFFFF;
 
     flex: none;
     order: 0;
     flex-grow: 0;
-
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .player_track_author{
 
@@ -85,7 +87,7 @@
     font-size: 14px;
     line-height: 17px;
     /* identical to box height, or 100% */
-    display: flex;
+    display: block;
     align-items: center;
 
     color: rgba(255, 255, 255, 0.6);
@@ -95,7 +97,30 @@
     align-self: stretch;
     flex-grow: 0;
 
+    position: relative;
+
 }
+.player_track_title,
+.player_track_author {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    position: relative;
+}
+
+.player_track_title.scrolling,
+.player_track_author.scrolling {
+    display: flex;
+    width: max-content;    /* ширина під розмір обох копій */
+    animation: scrollText 8s linear infinite;
+}
+
+@keyframes scrollText {
+    0%   { transform: translateX(100%); }
+    100%  { transform: translateX(-100%); }
+}
+
 
 .track_control_container{
 
@@ -106,7 +131,7 @@
     padding: 0px;
     gap: 26px;
 
-    width: 252.68px;
+    width: 280px;
     height: 33.74px;
 
     flex: none;
@@ -114,6 +139,15 @@
     flex-grow: 0;
 
 }
+.track_control_like_container{
+    width: 33.74px;
+    height: 33.74px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
 .track_control_repeat_container{
 
     width: 33.74px;
@@ -157,6 +191,7 @@
 
     width: 748px;
     height: 22px;
+    margin-left:20px;
     flex: none;
     order: 2;
     flex-grow: 0;
@@ -204,7 +239,7 @@
     flex-direction: row;
     align-items: center;
     padding: 0px;
-    margin-left:50px;
+    margin-left:15px;
     width: 168.74px;
     height: 33.74px;
 
