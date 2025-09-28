@@ -40,7 +40,6 @@ const ProfilePage: React.FC = () => {
     const [genreId, setGenreId] = useState<number>(0);
     const [file, setFile] = useState<File | undefined>();
     const [cover, setCover] = useState<File | undefined>();
-    const navigate = useNavigate();//new
 
     const [coverUrl, setCoverUrl] = useState<string | null>(null);
     const [fileUrl, setFileUrl] = useState("");
@@ -720,16 +719,14 @@ const ProfilePage: React.FC = () => {
                                         </div>
                                         <div className="user_text_container">{u.username}</div>
                                     </div>
-                                    <div className="user_container">
                                         <button
-                                            className={u.isFollowing ? "unfollow_button_container" : "follow_button_container"}
+                                            className={u.isFollowing ? "unfollow_button_container cursor-pointer" : "follow_button_container cursor-pointer"}
                                             onClick={() => toggleFollow(u.id)}
                                         >
                                             <span className="user_button_text_style">
                                                 {u.isFollowing ? "Unfollow" : "Follow"}
                                             </span>
                                         </button>
-                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -802,18 +799,6 @@ const ProfilePage: React.FC = () => {
                         <img className="img_style" src="src/images/icons/share.png" alt="shareIcon"/>
                         <span className="txt_style">Upload</span>
                 </button>
-
-                {/* Показуємо, якщо пароль ще НЕ встановлено */}
-                {!user?.isLocalPasswordSet && (
-                    <button
-                        className="set_password_button cursor-pointer"
-                        onClick={() => navigate('/set-password')}
-                    >
-                        {/*<img className="img_style" src={lockIcon} alt="lockIcon" />*/}
-                        <span className="txt_style">🔒 Set Password</span>
-                    </button>
-                )}
-
                 <button className="edit_button cursor-pointer"
                         onClick={() => setUserEditOpen(true)}
                 >
