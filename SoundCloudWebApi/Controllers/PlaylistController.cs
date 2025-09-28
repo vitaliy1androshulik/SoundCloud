@@ -138,6 +138,21 @@ namespace SoundCloudWebApi.Controllers
         }
 
 
+        [Authorize] 
+        [HttpGet("user/{userId:int}")]
+        [SwaggerOperation(
+        OperationId = "GetPlaylistsByUser",
+        Summary = "Отримати всі плейлисти користувача по його ID")]
+        public async Task<IActionResult> GetPlaylistsByUser(int userId)
+        {
+            var lists = await _playlistService.GetAllByUserIdAsync(userId);
+            if (lists == null || !lists.Any())
+                return NotFound("У цього користувача немає плейлистів");
+
+            return Ok(lists);
+        }
+
+
 
 
     }

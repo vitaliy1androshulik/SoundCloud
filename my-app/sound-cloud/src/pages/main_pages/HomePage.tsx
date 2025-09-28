@@ -5,9 +5,11 @@ import {trackService} from "../../services/trackApi.ts";
 import {ITrack} from "../../types/track.ts";
 import {usePlayerStore} from "../../store/player_store.tsx";
 import {IUser} from "../../types/user.ts";
-import {getTopUsers} from "../../services/User/user_info.ts";
+import {getCurrentUser, getTopUsers} from "../../services/User/user_info.ts";
 import { followService } from "../../services/followApi.ts";
+import {useNavigate} from "react-router-dom";
 //import { IUserFollow } from "../../types/follow.ts";
+
 
 const HomePage: React.FC = () => {
     const [tracks, setTracks] = useState<ITrack[]>([]);
@@ -193,6 +195,13 @@ const HomePage: React.FC = () => {
         } catch (error) {
             console.error("Error toggling follow:", error);
         }
+    };
+
+    // метод для переходу на профіль
+    const navigate = useNavigate();
+
+    const goToUserProfile = (userId: number) => {
+        navigate(`/user/${userId}`);
     };
 
     return (
@@ -427,7 +436,11 @@ const HomePage: React.FC = () => {
                     {users.slice(0, 4).map((user, index) => (
                         <li key={user.id} className="top_creator_container baloo2 text-white text-[20px] font-bold">
                             <div className="top_creators_numeration">{index + 1}.</div>
-                            <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)} alt="userAvatar" />
+                            <img className="top_creators_avatar_container"
+                                 src={getUserAvatarUrl(user)}
+                                 alt="userAvatar"
+                                 onClick={() => goToUserProfile(user.id)}
+                            />
                             <div className="top_creators_author_container">{user.username}</div>
                             <button
                                 className={user.isFollowing ? "top_creators_unfollow_button_container" : "top_creators_follow_button_container"}

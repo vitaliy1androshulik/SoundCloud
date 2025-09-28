@@ -36,6 +36,12 @@ export const trackService = {
         }
     },
 
+    // Отримати всі треки конкретного користувача
+    getAllByUser: async (userId: number): Promise<ITrack[]> => {
+        const res = await api.get<ITrack[]>(`/track/user/${userId}`);
+        return res.data;
+    },
+
 
 
     // Створити новий трек (усі поля обов'язкові)
