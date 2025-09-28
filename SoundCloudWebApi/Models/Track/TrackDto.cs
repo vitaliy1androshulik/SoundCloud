@@ -14,10 +14,10 @@ namespace SoundCloudWebApi.Models.Track
 
         // Опційно: ім’я автора для фронтенду
         public string Author { get; set; }
-        public int GenreId { get; set; }
+        public int? GenreId { get; set; }
 
         // Опційно: категорія для фронтенду
-        public string Genre { get; set; }
+        public string? Genre { get; set; }
 
         public TimeSpan Duration { get; set; }
 
@@ -33,7 +33,7 @@ namespace SoundCloudWebApi.Models.Track
         // Нове поле: кількість прослуховувань
         public int PlayCount { get; set; }
 
-        public List<AlbumDto> Albums { get; set; } = new List<AlbumDto>();
+        public List<AlbumDto>? Albums { get; set; } = new List<AlbumDto>();
 
         public int LikesCount { get; set; }              // кількість лайків
         public bool IsLikedByCurrentUser { get; set; }  // чи лайкнув поточний користувач

@@ -76,7 +76,10 @@ public class PlaylistService : IPlaylistService
 
             coverUrl = $"/uploads/playlists/{fileName}";
         }
-
+        else if(dto.CoverUrl !=null)
+        {
+            coverUrl = $"{dto.CoverUrl}";
+        }
         var entity = new PlaylistEntity
         {
             Name = dto.Name,

@@ -11,13 +11,7 @@ namespace SoundCloudWebApi.Validators.Track
                 .NotEmpty().MaximumLength(200)
                 .WithMessage("Title має бути валідним");
 
-            RuleFor(x => x.AuthorId)
-                .Null()
-                .WithMessage("Немає автора");
 
-            RuleFor(x => x.Duration)
-                .Must(d => d > TimeSpan.Zero)
-                .WithMessage("Тривалість має бути більше 0");
         }
     }
 }

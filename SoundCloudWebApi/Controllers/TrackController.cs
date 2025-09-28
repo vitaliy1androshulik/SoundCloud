@@ -88,7 +88,7 @@ namespace SoundCloudWebApi.Controllers
         [SwaggerOperation(OperationId = "UpdateTrack", Summary = "Оновити трек за ID")]
         public async Task<IActionResult> Update(int id, [FromForm] UpdateTrackDto dto)
         {
-            await _trackService.UpdateAsync(id, dto);
+            await _trackService.UpdateAsyncFile(id, dto);
             return NoContent();
         }
 

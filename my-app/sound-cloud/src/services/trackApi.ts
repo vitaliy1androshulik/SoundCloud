@@ -41,27 +41,27 @@ export const trackService = {
     // Створити новий трек (усі поля обов'язкові)
     async createTrack(
         title: string,
-        duration: string,
-        albumId: number,
+        albumId?: number | null,
         file: File,
         cover: File,
         genreId: number
     ) {
         // Перевірка всіх обов'язкових полів
-        if (!title || !duration || !albumId || !file || !cover || genreId === undefined) {
+        if (!title || !file || !cover || genreId === undefined) {
             throw new Error("Missing required fields for track creation");
         }
 
         try {
             const formData = new FormData();
+
             formData.append("Title", title);
-            formData.append("Duration", duration);
-            formData.append("AlbumId", albumId.toString());
+            const albumIds = albumId != null ? [albumId] : [];
+            albumIds.forEach(id => formData.append("AlbumIds", id.toString()));
             formData.append("File", file);
             formData.append("Cover", cover);
             formData.append("GenreId", genreId.toString());
 
-            console.log("Uploading track:", { title, duration, albumId, file, cover, genreId });
+            console.log("Uploading track:", { title, albumIds, file, cover, genreId });
 
             const res = await api.post("/Track/create-file", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
@@ -73,12 +73,28 @@ export const trackService = {
             throw error;
         }
     },
+    updateTrack: async (id: number, formData: FormData): Promise<ITrack> => {
+        const { data } = await api.put(`/Track/${id}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+
+        });
+        console.log(formData)
+        return data;
+    },
 
     async like(trackId: number) {
         return axiosInstance.post(`/Track/${trackId}/like`);
     },
     async unlike(trackId: number) {
         return axiosInstance.delete(`/Track/${trackId}/like`);
+    },
+    deleteTrack: async (id: number): Promise<void> => {
+        try {
+            await api.delete(`/Track/${id}`);
+        } catch (error) {
+            console.error(`Failed to delete track with id ${id}`, error);
+            throw error;
+        }
     },
     async getLikedTracks(): Promise<ITrack[]> {
         try {
@@ -88,5 +104,6 @@ export const trackService = {
             console.error("Failed to fetch liked tracks", error);
             throw error;
         }
-    }
+    },
+
 };

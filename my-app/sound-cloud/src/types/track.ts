@@ -6,7 +6,7 @@ export interface ITrack {
     genre: string;
     duration: string;
     isHidden: boolean;
-    albumId: number;
+    albumId?: number;
     url: string;
     imageUrl?: string;
 

@@ -20,9 +20,6 @@ namespace SoundCloudWebApi.Models.Track
         [Required]
         public IFormFile Cover { get; set; }
 
-        // Тривалість треку
-        [Required]
-        public TimeSpan Duration { get; set; }
 
         // Альбом (обов’язково)
         //[Required]

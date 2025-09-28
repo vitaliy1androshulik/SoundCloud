@@ -1,6 +1,16 @@
 import {IUser} from "../../types/user.ts";
 import api from "../../utilities/axiosInstance.ts";
 
+interface RawUserData {
+    userId: number;
+    username: string;
+    email?: string;
+    avatarUrl?: string;
+    createdAt?: string;
+    role?: string;
+    totalPlays: number;
+}
+
 export const getCurrentUser = async (): Promise<IUser> => {
     const response = await api.get("/User/profile");
     const data = response.data;
@@ -23,27 +33,9 @@ export const getTopUsers = async (take: number): Promise<IUser[]> => {
         const response = await api.get(`/User/top?take=${take}`);
         const usersData = response.data;
 
-        //         // Мапимо дані API на наш тип IUser
-//         const users: IUser[] = usersData.map((data: any) => ({
-//             id: data.userId,
-//             username: data.username,
-//             email: data.email || "",       // якщо email відсутній
-//             avatar: data.avatarUrl || "",  // запасний avatarUrl
-//             createdAt: data.createdAt || "",
-//             role: data.role || "",
-//             totalPlays: data.totalPlays   // додаємо totalPlays для топу
-//         }));
-//
-//         return users;
-//     } catch (error) {
-//         console.error("Failed to fetch top users:", error);
-//         return [];
-//     }
-// };
 
-        // прибираємо зайву змінну "users" і глушимо лише цю перевірку "any"
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (Array.isArray(usersData) ? usersData : []).map((data: any) => ({
+        const users: IUser[] = (usersData as RawUserData[]).map((data) => ({
+
             id: data.userId,
             username: data.username,
             email: data.email || "",

@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
 
-.page-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+html, body {
+    height: 100%;
+    margin: 0;
 }
+
 
 .header_container_main{
     display: flex;
@@ -13,37 +13,46 @@
     padding: 0px;
     gap: 125px;
 
-    position: absolute;
+    position: relative;
     width: 1568px;
     height: 44px;
     left:176px;
     top: 50px;
 }
-.layout_container{
-    height:100vh;
+.layout_container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content_container {
+    flex-grow: 1;     /* замість height:auto */
+    flex-shrink: 0;
+    flex-basis: auto; /* дозволяє брати висоту від вмісту */
+    margin-bottom: 220px;  /* щоб контент не ховався за Player */
 }
 
 .footer_container {
     width: 100%;
     height: 306px;
-    left: 0px;
+    margin-top: auto;
 }
-.player_container{
+
+/* Player завжди поверх у низу */
+.player_container {
+    position: fixed;
+    left: 176px;
+    bottom: 20px;
+    width: 1568px;
+    height: 79px;
+
     display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: start;
+    align-items: center;
     padding: 12px 32px;
     gap: 50px;
 
-    position: absolute;
-
-    width: 1568px;
-    height: 79px;
-    left: 176px;
-    bottom: 50px;
-
     background: #344289;
     border-radius: 100px;
+    z-index: 1000;
 }
 
