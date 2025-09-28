@@ -81,13 +81,13 @@ public class UserController : ControllerBase
     //public async Task<IActionResult> GetAll()
     //    => Ok(await _userService.GetAllAsync());
 
-    //[Authorize]
-    //[SwaggerOperation(
-    //OperationId = "GetUserById",
-    //Summary = "Отримати користувача за ID [Authorize]")]
-    //[HttpGet("{id:int}")]
-    //public async Task<IActionResult> GetById(int id)
-    //    => Ok(await _userService.GetByIdAsync(id));
+    [Authorize]
+    [SwaggerOperation(
+    OperationId = "GetUserById",
+    Summary = "Отримати користувача за ID [Authorize]")]
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+        => Ok(await _userService.GetByIdAsync(id));
 
     //[Authorize]
     //[SwaggerOperation(

@@ -2,6 +2,12 @@ import React from 'react';
 import "../../styles/footer.css"
 import "../../styles/General.css"
 
+
+import vector_behind from "../../images/footer/vector_behind.png";
+import vector_ahead from "../../images/footer/vector_ahead.png";
+import arrow_down from "../../images/icons/arrow_down.png";
+
+
 const Footer: React.FC = () => {
     return (
         <>
@@ -9,12 +15,12 @@ const Footer: React.FC = () => {
                 <div className="relative w-full h-[306px]">
                     {/* бекграунд */}
                     <img
-                        src="src/images/footer/vector_behind.png"
+                        src={vector_behind}
                         alt="behind"
                         className="absolute inset-0 w-full h-full object-cover z-0"
                     />
                     <img
-                        src="src/images/footer/vector_ahead.png"
+                        src={vector_ahead}
                         alt="ahead"
                         className="absolute inset-0 w-full h-full object-cover z-10"
                     />
@@ -36,7 +42,7 @@ const Footer: React.FC = () => {
                         </div>
                         <div className="footer_text_second">
                             Language: English
-                            <img src="src/images/icons/arrow_down.png"/>
+                            <img src={arrow_down}/>
                         </div>
                     </div>
                 </div>

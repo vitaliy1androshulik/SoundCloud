@@ -7,6 +7,18 @@ import '../../styles/main_pages/header.css';
 import {IUser} from "../../types/user.ts";
 import {getCurrentUser} from "../../services/User/user_info.ts";
 
+import headerBehind from "../../images/header/header_behind.png";
+import headerAhead from "../../images/header/header_ahead.png";
+import logoWave from "../../images/logo/logo_WaveCloud.png";
+import people from "../../images/search_bar/people.png";
+import white_arrow_down from "../../images/icons/white_arrow_down.png";
+import profile from "../../images/icons/profile.png";
+import email from "../../images/icons/email.png";
+import information from "../../images/icons/information.png";
+import search from "../../images/search_bar/search.png";
+import logout2 from "../../images/icons/logout.png";
+
+
 const Header: React.FC = () => {
     const [active, setActive] = useState<string>("home");
     const [user, setUser] = useState<IUser | null>(null);
@@ -46,13 +58,13 @@ const Header: React.FC = () => {
         <>
             <div className="max-w-screen-full-xl">
                 <div>
-                    <img className="header_image_behind" src="src/images/header/header_behind.png" alt="HeaderBehind"/>
-                    <img className="header_image_ahead" src="src/images/header/header_ahead.png" alt="HeaderBehind"/>
+                    <img className="header_image_behind" src={headerBehind} alt="HeaderBehind"/>
+                    <img className="header_image_ahead" src={headerAhead} alt="HeaderBehind"/>
                 </div>
                 <header className="header_container_main">
                         <div className="header_logo">
                             <div className="w-[56px] h-[56px] xl:mr-[12px] lg:mr-[12px]">
-                                <img src="src/images/logo/logo_WaveCloud.png" alt="logo"/>
+                                <img src={logoWave} alt="logo"/>
                             </div>
                             <div className="lg:w-[167px] lg:h-[45px] xl:w-[197px] xl:h-[56px]">
                                 <p className="baloo2 text-lightpurple font-bold lg:text-[13px]
@@ -91,8 +103,10 @@ const Header: React.FC = () => {
                                                     <img className="image_container_user" src={getUserImageUrl(user)}
                                                          alt="people" width="32" height="32"/>
                                                 ) : (
-                                                    <img className="image_container_user_notlogin"
-                                                         src="src/images/search_bar/people.png"
+
+                                                    <img className="image_container_user"
+                                                         src={people}
+
                                                          alt="people" width="22" height="22"/>
                                                 )}
                                             </div>
@@ -101,7 +115,7 @@ const Header: React.FC = () => {
                                                 onClick={() => setOpen((prev) => !prev)}
                                             >
                                                 <img
-                                                    src="src/images/icons/white_arrow_down.png"
+                                                    src={white_arrow_down}
                                                     className="search_logo_home_page"
                                                     alt="arrow"
                                                 />
@@ -116,7 +130,7 @@ const Header: React.FC = () => {
                                                                 setOpen(prev => !prev);
                                                             }}>
                                                             <img
-                                                                src="src/images/icons/profile.png"
+                                                                src={profile}
                                                                 width="20px"
                                                                 height="20px"
                                                                 alt="arrow"
@@ -128,7 +142,7 @@ const Header: React.FC = () => {
                                                         onClick={() => Logout()}
                                                         >
                                                             <img
-                                                                src="src/images/icons/logout.png"
+                                                                src={logout2}
                                                                 width="20px"
                                                                 height="20px"
                                                                 alt="arrow"
@@ -141,12 +155,12 @@ const Header: React.FC = () => {
                                         </div>
                                         <div className="message_information_container baloo2">
                                             <div className="user_drop_bar">
-                                                <img src="src/images/icons/email.png"
+                                                <img src={email}
                                                      className="search_logo_home_page"
                                                      alt="search"/>
                                             </div>
                                             <div className="user_drop_bar">
-                                                <img src="src/images/icons/information.png"
+                                                <img src={information}
                                                      className="search_logo_home_page"
                                                      alt="search"/>
                                             </div>
@@ -155,7 +169,7 @@ const Header: React.FC = () => {
                                     <div className="search_container_home_page">
                                         <div className="search_bar_home_page">
                                             <div>
-                                                <img src="src/images/search_bar/search.png"
+                                                <img src={search}
                                                      className="search_logo_home_page"
                                                      alt="search"/>
                                             </div>
@@ -185,12 +199,12 @@ const Header: React.FC = () => {
                                     </div>
                                     <div className="search_container_home_page">
                                         <div className="people_container">
-                                            <img className="image_container" src="src/images/search_bar/people.png"
+                                            <img className="image_container" src={people}
                                                  alt="people"/>
                                         </div>
                                         <div className="search_bar_home_page">
                                             <div>
-                                                <img src="src/images/search_bar/search.png"
+                                                <img src={search}
                                                      className="search_logo_home_page"
                                                      alt="search"/>
                                             </div>

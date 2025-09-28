@@ -35,6 +35,8 @@ namespace SoundCloudWebApi.Services.Interfaces
 
         //Task<IEnumerable<TrackDto>> GetTracksByPlaylistAsync(int playlistId);
 
+        Task<IEnumerable<PlaylistDto>> GetAllByUserIdAsync(int userId);
+
 
     }
 }
