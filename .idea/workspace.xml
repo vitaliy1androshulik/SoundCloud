@@ -5,23 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="36ec40f3-eb88-4be6-9bc6-cb99d7ef03df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/UserProfilePage.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/userApi.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/TrackProgress.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/play_album/PlayAlbumPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/AlbumController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/PlaylistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/PlaylistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/TrackController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Controllers/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/PlaylistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/PlaylistService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IPlaylistService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Interfaces/IPlaylistService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/UserService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/main_page/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/playlistApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/playlistApi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/library_page/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/library_page/layout.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -14,7 +14,14 @@ export const albumService = {
         const res = await api.get("/Album");
         return res.data;
     },
-
+    getAllAlbums: async (): Promise<IAlbum[]> => {
+        const res = await api.get("/Album/public");
+        return res.data;
+    },
+    getAlbumById: async (id: string | number): Promise<IAlbum> => {
+        const res = await api.get(`/Album/${id}`);
+        return res.data;
+    },
     create: async (dto: CreateAlbumDto): Promise<IAlbum> => {
         const formData = new FormData();
         formData.append("Title", dto.title);

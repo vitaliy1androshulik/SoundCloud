@@ -7,7 +7,7 @@ import {usePlayerStore} from "../../store/player_store.tsx";
 import api from "../../utilities/axiosInstance.ts";
 import {trackService} from "../../services/trackApi.ts";
 import {PlaylistModal} from "../PlaylistModal.tsx";
-
+import { TrackProgress } from "./TrackProgress";
 interface PlayerProps {
     footerSelector: string;
 }
@@ -21,18 +21,10 @@ export default function Player({ footerSelector }: PlayerProps) {
 
     const[loop, setLoop] = useState<boolean>(false);
 
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(1);
     const max = 1;
     const minBottom = 50;   // коли футер не видно
     const maxBottom = 100;  // коли футер повністю видно
-
-    const progressPercent = (currentTime / duration) * 99;
-
-// Випередження: чим ближче до кінця, тим менше
-    const offset = Math.max(0, 1 - (currentTime / duration) * 1); // в процентах або пікселях
-    const valWithOffset = Math.min(progressPercent + offset, 100);
 
     useEffect(() => {
         if (modalOpen) {
@@ -111,30 +103,6 @@ export default function Player({ footerSelector }: PlayerProps) {
             .catch((err) => console.error(err));
     }, []);
 
-
-
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const updateTime = () => setCurrentTime(audio.currentTime);
-        const setAudioDuration = () => setDuration(audio.duration);
-
-        audio.addEventListener("timeupdate", updateTime);
-        audio.addEventListener("loadedmetadata", setAudioDuration);
-
-        return () => {
-            audio.removeEventListener("timeupdate", updateTime);
-            audio.removeEventListener("loadedmetadata", setAudioDuration);
-        };
-    }, [track]);
-
-    // функція для перемотування
-    const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!audioRef.current) return;
-        audioRef.current.currentTime = Number(e.target.value);
-        setCurrentTime(Number(e.target.value));
-    };
 
     const getTrackImageUrl = (track: ITrack) => {
         if (!track.imageUrl) return "/default-cover.png";
@@ -243,27 +211,7 @@ export default function Player({ footerSelector }: PlayerProps) {
 
                     </div>
                 </div>
-                <div className="track_time_skip_container">
-                    <div className="track_duration_first_time_container">
-                        {Math.floor(currentTime / 60)}:{("0" + Math.floor(currentTime % 60)).slice(-2)}
-                    </div>
-                    <div>
-                        <input
-                            type="range"
-                            min={0}
-                            max={duration}
-                            value={currentTime}
-                            className="track_duration_input"
-                            onChange={handleSeek}
-                            style={{"--val": `${valWithOffset}%`} as React.CSSProperties}
-                        />
-                    </div>
-
-
-                    <div className="track_duration_second_time_container">
-                        {Math.floor(duration / 60)}:{("0" + Math.floor(duration % 60)).slice(-2)}
-                    </div>
-                </div>
+                <TrackProgress audioRef={audioRef} track={track} />
                 <div className="track_loudness_container">
                     <div className="track_loudness_image_container">
                         <img src="/src/images/player/volume_up_icon.png" alt="Volume"/>
