@@ -4,87 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="36ec40f3-eb88-4be6-9bc6-cb99d7ef03df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/TrackProgress.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/play_album/PlayAlbumPage.tsx" afterDir="false" />
+    <list default="true" id="76c35a2a-0781-4402-84c5-823eb96fac25" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundCloudWebApi/Services/Implementations/TrackService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/library_page/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/main_pages/library_page/layout.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/player/player.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/player/player.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="TypeScript File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 7
-}</component>
-  <component name="ProjectId" id="32rbYrZGBytC4h9gQC6QwBQFFOX" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;create__and__functionality__UserProfilePage&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Mykola\\WebstormProjects\\SoundCloud\\my-app\\sound-cloud\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "information__add",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "ts.external.directory.path": "H:\\SoundColud\\my-app\\sound-cloud\\node_modules\\typescript\\lib"
   }
 }]]></component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.222" />
-      </set>
-    </attachedChunks>
-  </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="36ec40f3-eb88-4be6-9bc6-cb99d7ef03df" name="Changes" comment="" />
-      <created>1758181694289</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1758181694289</updated>
-      <workItem from="1758181697134" duration="785000" />
-      <workItem from="1758199675696" duration="8616000" />
-      <workItem from="1758306590292" duration="2429000" />
-      <workItem from="1758372697410" duration="7948000" />
-      <workItem from="1758537827573" duration="36559000" />
-      <workItem from="1758626040778" duration="7466000" />
-      <workItem from="1758721954604" duration="14110000" />
-      <workItem from="1758803621216" duration="13282000" />
-      <workItem from="1758902371592" duration="13275000" />
-      <workItem from="1758924855289" duration="488000" />
-      <workItem from="1759060637593" duration="15911000" />
-
-    </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
