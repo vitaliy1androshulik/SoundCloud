@@ -1,0 +1,397 @@
+.play_album_track_player_container {
+    /* Frame 26080125 */
+    position: absolute;
+    width: 100%;
+    height: 483px;
+    left: 0px;
+    top: 226px;
+}
+.play_album_track_player_container .background_gradient {
+    position: absolute;
+    width: 100%;
+    height: 483px;
+    left: 0;
+    top: 0;
+
+    /* Rectangle 39 */
+
+    background: linear-gradient(0deg, rgba(52, 66, 137, 0.32), rgba(52, 66, 137, 0.32)), linear-gradient(180deg, #EB0C0B 0%, #EEEDEE 100%);
+
+
+    background-size: 400% 400%; /* збільшений розмір для плавної анімації */
+    animation: gradientShiftVertical 30s ease infinite;
+}
+
+/* Анімація вертикального переливу */
+@keyframes gradientShiftVertical {
+    0% { background-position: 50% 0%; }
+    50% { background-position: 50% 100%; }
+    100% { background-position: 50% 0%; }
+}
+
+.play_album_track_player_container .title_author_container{
+    /* Frame 26080149 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 12px;
+
+    position: absolute;
+    width: 639px;
+    height: 68px;
+    left: 176px;
+    top: 55px;
+}
+.title_author_container .title_style{
+    /* Take the Lead - VALORANT Original Song */
+
+    width: 639px;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.title_author_container .author_style{
+    /* Derivakat */
+
+    width: 639px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.play_album_track_player_container .genre_style{
+    /* #Pop */
+
+    position: absolute;
+    width: 109px;
+    height: 24px;
+    left: 1237px;
+    top: 55px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+}
+
+.play_album_track_player_container .image_style{
+    /* Rectangle 35 */
+
+    position: absolute;
+    width: 374px;
+    height: 374px;
+    left: 1370px;
+    top: 55px;
+
+    border-radius: 50px;
+    z-index: 1;
+}
+
+.play_album_track_player_container .track_input_duration{
+    /* Frame 26080154 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 60px;
+    gap: 24px;
+
+    position: absolute;
+    width: 1170px;
+    height: 62px;
+    left: 176px;
+    top: 437px;
+}
+.play_album_track_player_container .previous_icon_style{
+    /* ic:round-skip-previous */
+
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    left: 574px;
+    top: 265px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.play_album_track_player_container .previous_icon_style:hover{
+        transform: scale(1.05); /* легке збільшення при наведенні */
+}
+.play_album_track_player_container .play_icon_container{
+    /* ic:round-skip-previous */
+
+    /* ic:round-pause */
+
+    box-sizing: border-box;
+
+    position: absolute;
+    width: 108px;
+    height: 108px;
+    left: 692px;
+    top: 240px;
+
+    display: flex;           /* flex для центрування іконки */
+    justify-content: center; /* горизонтальне центрування */
+    align-items: center;
+
+    border: 2px solid #FFFFFF;
+    border-radius: 100px;
+
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.play_album_track_player_container .play_icon_container:hover {
+    transform: scale(1.05); /* легке збільшення при наведенні */
+    background: rgba(255, 255, 255, 0.15);
+}
+.play_icon_container .play_icon_style{
+    /* Vector */
+    position: absolute;
+    width: 75px;              /* підлаштовуємо розмір піктограми під контейнер */
+    height:75px;
+    display: flex;
+    left: 18px;
+}
+.play_icon_container .pause_icon_style{
+    /* Vector */
+    position: absolute;
+    width: 50px;              /* підлаштовуємо розмір піктограми під контейнер */
+    height:50px;
+    display: flex;
+    left: 26px;
+}
+.play_album_track_player_container .next_icon_style{
+    /* ic:round-skip-next */
+
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    left: 864px;
+    top: 265px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.play_album_track_player_container .next_icon_style:hover{
+    transform: scale(1.05); /* легке збільшення при наведенні */
+}
+
+.play_album_track_list_container{
+    /* Frame 26080084 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 0px;
+    gap: 26px;
+
+    position: absolute;
+    width: 1568px;
+    height: auto;
+    left: 164px;
+    top: 746px;
+
+
+}
+
+.play_album_track_list_container .title_container{
+    /* Frame 26080071 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 12px;
+    gap: 422px;
+
+    width: auto;
+    height: 48px;
+
+    background: linear-gradient(90deg, #5241B3 0%, rgba(16, 16, 16, 0) 79.81%);
+    border-radius: 30px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+.title_container .txt_style{
+    /* next up */
+
+    width: 229px;
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+
+    color: #C9D4FF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.play_album_track_list_container .tracks_container{
+    /* Frame 26080070 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    width: auto;
+    height: 109px;
+
+    justify-content: space-between;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.tracks_container .img_style{
+    /* Rectangle 55 */
+
+    width: 109px;
+    height: 109px;
+
+    border-radius: 10px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.tracks_container .track_info{
+    /* Frame 26080068 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    width: 500px;
+    height: 20px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.tracks_container .track_text{
+    /* Derivakat */
+
+    width: auto;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+
+}
+.tracks_container .track_info_image_container{
+    /* Frame 26080083 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+
+    width: 639px;
+    height: 109px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.tracks_container .play_pause_container{
+    /* ic:round-pause */
+
+    width: 43px;
+    height: 43px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+

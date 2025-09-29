@@ -177,6 +177,12 @@ const LibraryPage: React.FC = () => {
         fetchFollowingUsers();
     }, [user]);
 
+    // метод для переходу на профіль
+
+    const goToUserProfile = (userId: number) => {
+        navigate(`/user/${userId}`);
+    };
+
     return (
         <div className="layout_container mb-[900px] baloo2">
             {activeTab === "All" && (
@@ -277,7 +283,9 @@ const LibraryPage: React.FC = () => {
                         >
 
                             {tracks.length === 0 ? (
-                                <p className="text-gray-400">Улюблених треків поки немає</p>
+                                <div className="user_info_container">
+                                    <span className="txt_style_none">You don`t have Likes</span>
+                                </div>
                             ) : (
 
                                 tracks.slice(0, 7).map((track) => (
@@ -340,12 +348,12 @@ const LibraryPage: React.FC = () => {
                         >
                             {followingUsers.length === 0 ? (
                                 <div className="user_info_container">
-                                    <span className="txt_style">You don`t have Followings</span>
+                                    <span className="txt_style_none">You don`t have Followings</span>
                                 </div>
                             ) : (
                                 followingUsers.map(u => (
                                     <div key={u.id} className="track_card_container">
-                                        <img className="following_img_style" src={getUserAvatarUrl(u)} alt="avatar"/>
+                                        <img className="following_img_style" src={getUserAvatarUrl(u)} onClick={() => goToUserProfile(u.id)} alt="avatar"/>
                                         <div className="info_container">
                                             <div className="title_style">{u.username}</div>
                                         </div>
@@ -409,7 +417,9 @@ const LibraryPage: React.FC = () => {
 
                                 ))
                             ) : (
-                                <p className="text-gray-400 py-4">No albums yet</p>
+                                <div className="user_info_container">
+                                    <span className="txt_style_none">You don`t have Albums</span>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -453,6 +463,7 @@ const LibraryPage: React.FC = () => {
                                             src={p.coverUrl ? `http://localhost:5122/${p.coverUrl}` : "/default-cover.png"}
                                             alt={p.name}
                                             className="img_style"
+                                            onClick={() => navigate(`/play-playlist/${p.id}`)}
                                         />
                                         <div className="info_container">
                                             <span className="title_style">
@@ -464,7 +475,9 @@ const LibraryPage: React.FC = () => {
 
                                 ))
                             ) : (
-                                <p className="text-gray-400 py-4">No albums yet</p>
+                                <div className="user_info_container">
+                                    <span className="txt_style_none">You don`t have Playlists</span>
+                                </div>
                             )}
                         </div>
                     </div>

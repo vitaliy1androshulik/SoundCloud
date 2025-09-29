@@ -14,6 +14,7 @@ import {IGenre} from "../../types/genre.ts";
 import {genreService} from "../../services/genreApi.ts";
 import { followService } from "../../services/followApi.ts";
 import {IUserFollow} from "../../types/follow.ts";
+import {useNavigate} from "react-router-dom";
 //import {IUserFollow} from "../../types/follow.ts";
 //import {useSelector} from "react-redux";
 //import {RootState} from "../../store/store.ts";
@@ -23,8 +24,10 @@ const tabs = ["All","Tracks", "Albums", "Playlists" ,"Reposts"];
 const ProfilePage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>("All");
     const [tracks, setTracks] = useState<ITrack[]>([]);
-
+    const navigate = useNavigate();
     const [user, setUser] = useState<IUser | null>(null);
+
+    const [userTracksCount, setUserTracksCount] = useState<number | null>(null);
 
     useEffect(() => {
         getCurrentUser()
@@ -48,10 +51,13 @@ const ProfilePage: React.FC = () => {
 
 
     const [playlists, setPlaylists] = useState<IPlaylist[]>([]);
+
+    // const [selectedPlaylist, setSelectedPlaylist] = useState<IPlaylist | null>(null);
+    // const [playlistName, setPlaylistName] = useState("");
+    // const [playlistCoverFile, setPlaylistCoverFile] = useState<File | undefined>();
     const [playlistModalOpen, setPlaylistModalOpen] = useState(false);
-    const [playlistName, setPlaylistName] = useState("");
-    const [playlistCoverFile, setPlaylistCoverFile] = useState<File | undefined>();
-    const [playlistTracks, setPlaylistTracks] = useState<{ [playlistId: number]: ITrack[] }>({});
+
+    const [playlistTracks, setPlaylistTracks] = useState<{ [playlistId: number]: ITrack[] |null}>({});
 
 
     const [genres, setGenres] = useState<IGenre[]>([]);
@@ -122,14 +128,6 @@ const ProfilePage: React.FC = () => {
 
     useEffect(() => {
         if (selectedTrack) {
-            setTitle(selectedTrack.title);
-            setCoverUrl(selectedTrack.imageUrl??null); // скидаємо, щоб показувався існуючий imageUrl
-            setFileUrl(selectedTrack.url);
-        }
-
-    }, [selectedTrack]);
-    useEffect(() => {
-        if (selectedTrack) {
             const foundGenre = genres.find(g => g.name === selectedTrack.genre);
 
             if (foundGenre) {
@@ -139,6 +137,15 @@ const ProfilePage: React.FC = () => {
             }
         }
     }, [selectedTrack, genres]);
+
+    useEffect(() => {
+        if (selectedTrack) {
+            setTitle(selectedTrack.title);
+            setCoverUrl(selectedTrack.imageUrl??null); // скидаємо, щоб показувався існуючий imageUrl
+            setFileUrl(selectedTrack.url);
+        }
+
+    }, [selectedTrack]);
 
     const refreshPage = () => {
         window.location.reload();
@@ -156,7 +163,7 @@ const ProfilePage: React.FC = () => {
 
 
     useEffect(() => {
-        if (bannerModalOpen||isUserEditOpen||isModalOpen) {
+        if (bannerModalOpen||isUserEditOpen||isModalOpen||playlistModalOpen||albumModalOpen) {
             // Забороняємо скрол
             document.body.style.overflow = "hidden";
         } else {
@@ -168,7 +175,7 @@ const ProfilePage: React.FC = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [bannerModalOpen,isUserEditOpen,isModalOpen]);
+    }, [bannerModalOpen,isUserEditOpen,isModalOpen, playlistModalOpen,albumModalOpen]);
 
     useEffect(() => {
         if (isUserEditOpen && user) {
@@ -185,6 +192,7 @@ const ProfilePage: React.FC = () => {
         playlistService.getAll().then(setPlaylists).catch(console.error);
         albumService.getMyAlbums().then(setAlbums).catch(console.error);
         genreService.getGenres().then(setGenres).catch(console.error);
+        trackService.getMyTracksCount().then(setUserTracksCount).catch(console.error);
     }, []);
 
     const handleUserUpdate = async (updateData: {
@@ -288,32 +296,32 @@ const ProfilePage: React.FC = () => {
     };
 
 
-    const handlePlaylistCreate = async () => {
-        if (!playlistName) {
-            alert("Enter playlist name");
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append("name", playlistName);
-            if (playlistCoverFile) {
-                formData.append("cover", playlistCoverFile);
-            }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error тимчасово: сервіс приймає FormData у рантаймі
-            const newPlaylist = await playlistService.create(formData); // метод сервісу приймає FormData
-            setPlaylists([...playlists, newPlaylist]);
-
-            // Очистка полів і закриття модалки
-            setPlaylistName("");
-            setPlaylistCoverFile(undefined);
-            setPlaylistModalOpen(false);
-        } catch (err) {
-            console.error("Playlist creation failed", err);
-            alert("Failed to create playlist. Check console for details.");
-        }
-    };
+//     const handlePlaylistCreate = async () => {
+//         if (!playlistName) {
+//             alert("Enter playlist name");
+//             return;
+//         }
+//
+//         try {
+//             const formData = new FormData();
+//             formData.append("name", playlistName);
+//             if (playlistCoverFile) {
+//                 formData.append("cover", playlistCoverFile);
+//             }
+// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// // @ts-expect-error тимчасово: сервіс приймає FormData у рантаймі
+//             const newPlaylist = await playlistService.create(formData); // метод сервісу приймає FormData
+//             setPlaylists([...playlists, newPlaylist]);
+//
+//             // Очистка полів і закриття модалки
+//             setPlaylistName("");
+//             setPlaylistCoverFile(undefined);
+//             setPlaylistModalOpen(false);
+//         } catch (err) {
+//             console.error("Playlist creation failed", err);
+//             alert("Failed to create playlist. Check console for details.");
+//         }
+//     };
 
     // const handleAddToPlaylistClick = (trackId: number) => {
     //     if (!playlists.length) {
@@ -616,6 +624,8 @@ const ProfilePage: React.FC = () => {
     // окремо зберігаємо саме лайкнуті треки
     const [likedTracks, setLikedTracks] = useState<ITrack[]>([]);
 
+    const [likedTracksIds, setLikedTracksIds] = useState<number[]>([]);
+
     useEffect(() => {
         const fetchLikedTracks = async () => {
             try {
@@ -628,6 +638,31 @@ const ProfilePage: React.FC = () => {
         fetchLikedTracks();
     }, []);
 
+
+    const handleRemoveTrack = async (playlistId: number, trackId: number) => {
+        try {
+            await playlistService.removeTrack(playlistId, trackId);
+            // Можна оновити локальний стан плейліста після видалення
+            setPlaylistTracks(prev => ({
+                ...prev,
+                [playlistId]: prev[playlistId]?.filter(t => t.id !== trackId) || []
+            }));
+        } catch (err) {
+            console.error("Error removing track:", err);
+        }
+    };
+    const handleRemoveTrackAlbum = async (albumId: number, trackId: number) => {
+        try {
+            await albumService.removeTrack(albumId, trackId);
+            // Можна оновити локальний стан плейліста після видалення
+            setAlbumTracks(prev => ({
+                ...prev,
+                [albumId]: prev[albumId]?.filter(t => t.id !== trackId) || []
+            }));
+        } catch (err) {
+            console.error("Error removing track:", err);
+        }
+    };
 
 
 
@@ -689,7 +724,7 @@ const ProfilePage: React.FC = () => {
                         Tracks
                     </div>
                     <div className="number">
-                        {tracks.length}
+                        {userTracksCount}
                     </div>
                 </div>
             </div>
@@ -823,20 +858,7 @@ const ProfilePage: React.FC = () => {
                                                 src={p.coverUrl ? `http://localhost:5122/${p.coverUrl}` : "/default-cover.png"}
                                                 alt={p.name}
                                                 className="profile_page_playlist_image"
-                                                onClick={() => {
-                                                    // Якщо плейліст вже грає, ставимо паузу
-                                                    if (
-                                                        currentTrack &&
-                                                        playlistTracks[p.id]?.some(t => t.id === currentTrack.id) &&
-                                                        currentAlbumId === p.id &&
-                                                        isPlaying
-                                                    ) {
-                                                        pauseTrack();
-                                                    } else {
-                                                        // Інакше граємо перший трек плейліста
-                                                        playTrack(playlistTracks[p.id][0], playlistTracks[p.id], p.id);
-                                                    }
-                                                }}
+                                                onClick={() => navigate(`/play-playlist/${p.id}`)}
                                             />
 
                                         </div>
@@ -913,8 +935,8 @@ const ProfilePage: React.FC = () => {
                                                 <div className="track_more_controls_style">
                                                     <img src="src/images/icons/content_copy.png" alt="copy"/>
                                                 </div>
-                                                <div className="track_more_controls_style">
-                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                <div className="track_more_controls_style cursor-pointer">
+                                                    <img src="src/images/icons/information_white.png" alt="information"/>
                                                 </div>
                                             </div>
                                         </ul>
@@ -927,20 +949,7 @@ const ProfilePage: React.FC = () => {
                                                 src={a.coverUrl ? `http://localhost:5122/${a.coverUrl}` : "/default-cover.png"}
                                                 alt={a.title}
                                                 className="profile_page_playlist_image"
-                                                onClick={() => {
-                                                    // Якщо альбом вже грає, ставимо паузу
-                                                    if (
-                                                        currentTrack &&
-                                                        albumTracks[a.id]?.some(t => t.id === currentTrack.id) &&
-                                                        currentAlbumId === a.id &&
-                                                        isPlaying
-                                                    ) {
-                                                        pauseTrack();
-                                                    } else {
-                                                        // Інакше граємо перший трек альбому
-                                                        playTrack(albumTracks[a.id][0], albumTracks[a.id], a.id);
-                                                    }
-                                                }}
+                                                onClick={() => navigate(`/play-album/${a.id}`)}
                                             />
 
                                         </div>
@@ -1019,7 +1028,7 @@ const ProfilePage: React.FC = () => {
                                                     <img src="src/images/icons/content_copy.png" alt="copy"/>
                                                 </div>
                                                 <div className="track_more_controls_style">
-                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                    <img src="src/images/icons/information_white.png" alt="information_white"/>
                                                 </div>
                                             </div>
                                         </ul>
@@ -1035,6 +1044,9 @@ const ProfilePage: React.FC = () => {
 
                     </>
                 )}
+
+
+
                 {activeTab === "Tracks" && (
                     <>
                         {tracks.length ? (
@@ -1088,7 +1100,12 @@ const ProfilePage: React.FC = () => {
                                                         </div>
                                                         <div className="track_more_controls_container">
                                                             <div className="track_more_controls_style">
-                                                                <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                                <img
+                                                                    src={t.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                                                                    alt="like"
+                                                                    onClick={() => toggleLike(t)}
+                                                                    style={{cursor: "pointer"}}
+                                                                />
                                                             </div>
                                                             <div className="track_more_controls_style">
                                                                 <img
@@ -1127,12 +1144,6 @@ const ProfilePage: React.FC = () => {
                         ) : (
                             <p className="text-gray-400 py-4">No tracks yet</p>
                         )}
-                        <button
-                            className=""
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            Upload Track
-                        </button>
                     </>
                 )}
 
@@ -1151,20 +1162,7 @@ const ProfilePage: React.FC = () => {
                                                 src={p.coverUrl ? `http://localhost:5122/${p.coverUrl}` : "/default-cover.png"}
                                                 alt={p.name}
                                                 className="profile_page_playlist_image"
-                                                onClick={() => {
-                                                    // Якщо плейліст вже грає, ставимо паузу
-                                                    if (
-                                                        currentTrack &&
-                                                        playlistTracks[p.id]?.some(t => t.id === currentTrack.id) &&
-                                                        currentAlbumId === p.id &&
-                                                        isPlaying
-                                                    ) {
-                                                        pauseTrack();
-                                                    } else {
-                                                        // Інакше граємо перший трек плейліста
-                                                        playTrack(playlistTracks[p.id][0], playlistTracks[p.id], p.id);
-                                                    }
-                                                }}
+                                                onClick={() => navigate(`/play-playlist/${p.id}`)}
                                             />
 
                                         </div>
@@ -1217,12 +1215,17 @@ const ProfilePage: React.FC = () => {
                                                                 <div>&#160;&#x2022;&#160;</div>
                                                                 <span>{t.title}</span>
                                                             </div>
+                                                            <img
+                                                                className="playlist_close_button_container cursor-pointer"
+                                                                src="src/images/icons/close_icon.png"
+                                                                onClick={() => handleRemoveTrack(p.id, t.id)}
+                                                            />
                                                         </div>
                                                     </li>
                                                 ))}
                                             </ul>
                                             <div className="profile_page_track_controls_buttons">
-                                                <div className="track_more_controls_style">
+                                            <div className="track_more_controls_style">
                                                     <img src="src/images/icons/unlike.png" alt="unlike"/>
                                                 </div>
                                                 <div className="track_more_controls_style">
@@ -1242,7 +1245,7 @@ const ProfilePage: React.FC = () => {
                                                     <img src="src/images/icons/content_copy.png" alt="copy"/>
                                                 </div>
                                                 <div className="track_more_controls_style">
-                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                    <img src="src/images/icons/information_white.png" alt="information_white"/>
                                                 </div>
                                             </div>
                                         </ul>
@@ -1252,12 +1255,6 @@ const ProfilePage: React.FC = () => {
                         ) : (
                             <p className="text-gray-400 py-4">No playlists yet</p>
                         )}
-                        <button
-                            className=""
-                            onClick={() => setPlaylistModalOpen(true)}
-                        >
-                            Create Playlist
-                        </button>
                     </>
                 )}
 
@@ -1273,20 +1270,7 @@ const ProfilePage: React.FC = () => {
                                                 src={a.coverUrl ? `http://localhost:5122/${a.coverUrl}` : "/default-cover.png"}
                                                 alt={a.title}
                                                 className="profile_page_playlist_image"
-                                                onClick={() => {
-                                                    // Якщо альбом вже грає, ставимо паузу
-                                                    if (
-                                                        currentTrack &&
-                                                        albumTracks[a.id]?.some(t => t.id === currentTrack.id) &&
-                                                        currentAlbumId === a.id &&
-                                                        isPlaying
-                                                    ) {
-                                                        pauseTrack();
-                                                    } else {
-                                                        // Інакше граємо перший трек альбому
-                                                        playTrack(albumTracks[a.id][0], albumTracks[a.id], a.id);
-                                                    }
-                                                }}
+                                                onClick={() => navigate(`/play-album/${a.id}`)}
                                             />
 
                                         </div>
@@ -1339,6 +1323,11 @@ const ProfilePage: React.FC = () => {
                                                                 <div>&#160;&#x2022;&#160;</div>
                                                                 <span>{t.title}</span>
                                                             </div>
+                                                            <img
+                                                                className="playlist_close_button_container cursor-pointer"
+                                                                src="src/images/icons/close_icon.png"
+                                                                onClick={() => handleRemoveTrackAlbum(a.id, t.id)}
+                                                            />
                                                         </div>
                                                     </li>
                                                 ))}
@@ -1346,7 +1335,7 @@ const ProfilePage: React.FC = () => {
 
                                             <div className="profile_page_track_controls_buttons">
                                                 <div className="track_more_controls_style">
-                                                    <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                <img src="src/images/icons/unlike.png" alt="unlike"/>
                                                 </div>
                                                 <div className="track_more_controls_style">
                                                     <img
@@ -1365,7 +1354,7 @@ const ProfilePage: React.FC = () => {
                                                     <img src="src/images/icons/content_copy.png" alt="copy"/>
                                                 </div>
                                                 <div className="track_more_controls_style">
-                                                    <img src="src/images/icons/reply.png" alt="reply"/>
+                                                    <img src="src/images/icons/information_white.png" alt="information_white"/>
                                                 </div>
                                             </div>
                                         </ul>
@@ -1378,10 +1367,10 @@ const ProfilePage: React.FC = () => {
                             <p className="text-gray-400 py-4">No albums yet</p>
                         )}
                         <button
-                            className="mt-4 px-6 py-2 bg-indigo-600 rounded hover:bg-indigo-500"
+                            className="profile_page_button_create_album_playlist cursor-pointer"
                             onClick={() => setAlbumModalOpen(true)}
                         >
-                            Create Album
+                            <span className="txt_style">Create album</span>
                         </button>
                     </>
                 )}
@@ -1872,34 +1861,41 @@ const ProfilePage: React.FC = () => {
                 </div>
             )}
             {/* Playlist Modal */}
-            {playlistModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-gray-900 p-6 rounded w-full max-w-md">
-                        <h2 className="text-xl mb-4">Create Playlist</h2>
-                        <input
-                            type="text"
-                            placeholder="Playlist Name"
-                            value={playlistName}
-                            onChange={(e) => setPlaylistName(e.target.value)}
-                            className="w-full mb-2 p-2 rounded bg-gray-800"
-                        />
-                        <input
-                            type="file"
-                            onChange={(e) => setPlaylistCoverFile(e.target.files?.[0])}
-                            className="w-full mb-4"
-                        />
-                        <div className="flex justify-end gap-2">
-                            <button onClick={() => setPlaylistModalOpen(false)}
-                                    className="px-4 py-2 bg-gray-700 rounded">
-                                Cancel
+            {/*{playlistModalOpen && (
+                <div className="profile_page_modal_container">
+                    <div className="edit_playlist_container">
+                        <div className="title_close_container">
+                            <div className="title_container">
+                                <span className="txt_style">Edit playlist</span>
+                            </div>
+                            <div className="profile_page_modal_close_icon"
+                                 onClick={() => setPlaylistModalOpen(false)}>
+                                <img src="src/images/icons/close_icon.png" alt="closeIcon"/>
+                            </div>
+                        </div>
+                        <div className="playlist_image_delete_upload_container">
+                            <button className="button_upload_container cursor-pointer">
+                                <label className="cursor-pointer relative txt_style">Upload
+                                    Picture
+                                </label>
                             </button>
-                            <button onClick={handlePlaylistCreate} className="px-4 py-2 bg-indigo-600 rounded">
-                                Create
-                            </button>
+                        </div>
+                        <div className="playlist_edit_title_container">
+                            <span className="txt_style">Playlist title</span>
+                        <div className="save_cancel_container_playlist">
+                            <div className="cancel_save_buttons_container">
+                                <button onClick={() => setPlaylistModalOpen(false)}
+                                        className="cancel_button_container cursor-pointer">
+                                    <span className="txt_style">Cancel</span>
+                                </button>
+                                <button onClick={handlePlaylistCreate} className="save_button_container cursor-pointer">
+                                    <span className="txt_style">Save</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            )}
+            )}*/}
 
             {/* Add to Playlist Modal */}
             {addToPlaylistModalOpen && (
@@ -1976,62 +1972,75 @@ const ProfilePage: React.FC = () => {
             )}
             {/* Модалка для створення альбому */}
             {albumModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-gray-900 p-6 rounded w-full max-w-md">
-                        <h2 className="text-xl mb-4 text-white">Create Album</h2>
 
-                        {/* Album Title */}
-                        <input
-                            type="text"
-                            placeholder="Album Title"
-                            value={albumTitle}
-                            onChange={(e) => setAlbumTitle(e.target.value)}
-                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
-                        />
+                <div className="profile_page_modal_container baloo2">
+                    <div className="profile_page_modal_user_edit_container">
+                        <div className="profile_page_edit_profile_close_container">
+                            <span className="txt_style">Create album</span>
+                            <div className="img_style cursor-pointer"
+                                 onClick={() => setAlbumModalOpen(false)}
 
-                        {/* Album Description */}
-                        <textarea
-                            placeholder="Description (optional)"
-                            value={albumDescription}
-                            onChange={(e) => setAlbumDescription(e.target.value)}
-                            className="w-full mb-2 p-2 rounded bg-gray-800 text-white"
-                        />
-
-                        {/* Album Public */}
-                        <div className="flex items-center mb-2">
-                            <input
-                                type="checkbox"
-                                checked={albumIsPublic}
-                                onChange={(e) => setAlbumIsPublic(e.target.checked)}
-                                id="albumPublic"
-                                className="mr-2"
-                            />
-                            <label htmlFor="albumPublic" className="text-gray-200">
-                                Public
-                            </label>
+                            >
+                                <img src="src/images/icons/close_icon.png" alt="close"/>
+                            </div>
                         </div>
-
-                        {/* Album Cover */}
-                        <input
-                            type="file"
-                            onChange={(e) => setAlbumCoverFile(e.target.files?.[0])}
-                            className="w-full mb-4 text-white"
-                        />
-
-                        {/* Buttons */}
-                        <div className="flex justify-end gap-2">
-                            <button
-                                onClick={() => setAlbumModalOpen(false)}
-                                className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleAlbumCreate}
-                                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
-                            >
-                                Create
-                            </button>
+                        <div className="user_info_container">
+                            <div className="img_container">
+                                {albumCoverFile ? (
+                                    <img className="img_style_album" src={URL.createObjectURL(albumCoverFile)} alt="UserImage"/>
+                                ) : (
+                                    <img className="img_style_album bg-white"/>
+                                )}
+                                <button className="button_container cursor-pointer">
+                                    <label className="cursor-pointer txt_style">Edit picture
+                                        <input
+                                            type="file"
+                                            onChange={(e) => setAlbumCoverFile(e.target.files?.[0])}
+                                            className="cursor-pointer absolute inset-0 opacity-0 txt_style"
+                                        />
+                                    </label>
+                                </button>
+                            </div>
+                            <div className="user_info_tables_container">
+                            <div className="username_container">
+                                    <label className="username_title ">Title</label>
+                                    <label className="username_input">
+                                        <input
+                                            type="text"
+                                            placeholder="Album Title"
+                                            value={albumTitle}
+                                            onChange={(e) => setAlbumTitle(e.target.value)}
+                                            className="ml-[15px]"
+                                        />
+                                    </label>
+                                </div>
+                                <div className="bio_container">
+                                    <label className="username_title">Description</label>
+                                    <label className="bio_input">
+                                    <textarea
+                                        placeholder="Description (optional)"
+                                        value={albumDescription}
+                                        onChange={(e) => setAlbumDescription(e.target.value)}
+                                        className="bio_input_2"
+                                    />
+                                    </label>
+                                </div>
+                                <div className="button_cancel_save_container">
+                                    <button
+                                        className="cancel_button cursor-pointer"
+                                        onClick={() => setAlbumModalOpen(false)}
+                                        disabled={uploading}
+                                    >
+                                        <span className="txt_style">Cancel</span>
+                                    </button>
+                                    <button
+                                        className="save_button cursor-pointer"
+                                        onClick={handleAlbumCreate}
+                                    >
+                                        <span className="txt_style">{uploading ? "Creating..." : "Create album"}</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

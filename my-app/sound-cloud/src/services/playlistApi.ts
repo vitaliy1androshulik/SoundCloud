@@ -34,7 +34,14 @@ export const playlistService = {
     delete: async (id: number): Promise<void> => {
         await api.delete(`/Playlist/${id}`);
     },
-
+    removeTrack: async (playlistId: number, trackId: number): Promise<void> => {
+        try {
+            await api.delete(`/Playlist/${playlistId}/tracks/${trackId}`);
+        } catch (err) {
+            console.error(`Failed to remove track ${trackId} from playlist ${playlistId}:`, err);
+            throw err;
+        }
+    },
     // --- нові методи для треків у плейліст ---
     addTrack: async (playlistId: number, trackId: number): Promise<void> => {
         await api.post(`/Playlist/${playlistId}/tracks/${trackId}`);

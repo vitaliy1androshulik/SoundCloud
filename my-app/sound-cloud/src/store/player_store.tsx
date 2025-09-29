@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { PlayerContextType } from "../types/player_context";
 import { ITrack } from "../types/track";
 import api from "../utilities/axiosInstance.ts";
+import { createRef } from "react";
 
 export const usePlayerStore = create<PlayerContextType>((set, get) => ({
     track: null,
@@ -11,7 +12,23 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
     currentIndex: -1,
     currentAlbumId: null,
     history: [],
+    audioRef: createRef<HTMLAudioElement>(), // 🔹 додаємо глобальний ref
+    volume: 1, // дефолтна гучність
 
+    setVolume: (volume: number) => {
+        set({ volume });
+        const audio = get().audioRef.current;
+        if (audio) audio.volume = volume;
+    },
+
+    setCurrentTrack: (track: ITrack | null, autoplay = false) => {
+        set({ track, isPlaying: false });
+        if (autoplay && get().audioRef.current && track) {
+            const audio = get().audioRef.current;
+            audio.src = `http://localhost:5122${track.url}`;
+            audio.play().catch(console.error);
+        }
+    },
     pauseTrack: () => {
         set({ isPlaying: false });
     },
@@ -29,18 +46,35 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
         });
 
         get().addToHistory(track);
+
+        // 🔹 Автовідтворення через глобальний audioRef
+        const audio = get().audioRef.current;
+        if (audio) {
+            audio.src = `http://localhost:5122${track.url}`;
+            audio.play().catch(console.error);
+        }
+
+        // Можна тут додати POST на /play, якщо треба
+        api.post(`http://localhost:5122/api/Track/${track.id}/play`).catch(console.error);
     },
 
-    togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
+    togglePlay: () => {
+        set((state) => {
+            const audio = state.audioRef.current;
+            if (audio) {
+                if (state.isPlaying) audio.pause();
+                else audio.play().catch(console.error);
+            }
+            return { isPlaying: !state.isPlaying };
+        });
+    },
 
     addToHistory: (track) => {
-        // локальне оновлення
         set((state) => {
             const newHistory = [track, ...state.history.filter(t => t.id !== track.id)];
             localStorage.setItem("trackHistory", JSON.stringify(newHistory));
             return { history: newHistory };
         });
-
     },
 
     refreshHistory: async () => {
@@ -49,10 +83,11 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
             const serverHistory: ITrack[] = res.data;
 
             set((state) => {
-                // об’єднуємо локальні та серверні дані
                 const merged = [
-                    ...state.history,
-                    ...serverHistory.filter(t => !state.history.some(h => h.id === t.id))
+                    ...(state.history ?? []).filter(Boolean),
+                    ...serverHistory.filter(
+                        t => t && !(state.history ?? []).some(h => h && h.id === t.id)
+                    )
                 ];
                 localStorage.setItem("trackHistory", JSON.stringify(merged));
                 return { history: merged };
@@ -74,25 +109,50 @@ export const usePlayerStore = create<PlayerContextType>((set, get) => ({
                 console.warn("initHistory parse error", err);
             }
         }
-
-        // get().refreshHistory(); // ❌ більше не викликаємо автоматично
     },
 
+    clearTrack: () => {
+        set({
+            track: null,
+            playlist: [],
+            currentIndex: -1,
+            currentAlbumId: null,
+            isPlaying: false
+        });
+
+        const audio = get().audioRef.current;
+        if (audio) {
+            audio.pause();
+            audio.src = "";
+        }
+    },
     nextTrack: () => {
-        const { playlist, currentIndex } = (get() as any); // додай playlist у state якщо є
+        const { playlist, currentIndex } = get();
         if (!playlist || playlist.length === 0) return;
         const nextIndex = (currentIndex + 1) % playlist.length;
         const track = playlist[nextIndex];
         set({ track, currentIndex: nextIndex, isPlaying: true });
         get().addToHistory(track);
+
+        const audio = get().audioRef.current;
+        if (audio) {
+            audio.src = `http://localhost:5122${track.url}`;
+            audio.play().catch(console.error);
+        }
     },
 
     previousTrack: () => {
-        const { playlist, currentIndex } = (get() as any);
+        const { playlist, currentIndex } = get();
         if (!playlist || playlist.length === 0) return;
         const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
         const track = playlist[prevIndex];
         set({ track, currentIndex: prevIndex, isPlaying: true });
         get().addToHistory(track);
+
+        const audio = get().audioRef.current;
+        if (audio) {
+            audio.src = `http://localhost:5122${track.url}`;
+            audio.play().catch(console.error);
+        }
     },
 }));

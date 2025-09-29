@@ -918,7 +918,7 @@
     padding: 12px 24px;
     gap: 4px;
 
-    width: 109px;
+    width: 120px;
     height: 44px;
 
     border: 2px solid #5241B3;
@@ -1667,7 +1667,29 @@
     align-self: stretch;
     flex-grow: 0;
 }
+.user_info_container .txt_style_none{
+    /* Take Aim */
+    margin-top:-60px;
+    width: auto;
+    height: 20px;
 
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
 .user_info_container .user_container{
     /* Artist */
 
@@ -1678,7 +1700,7 @@
     padding: 0px;
     gap: 24px;
 
-    width: 374px;
+    width: auto;
     height: 56px;
 
 
@@ -2759,3 +2781,191 @@
     justify-content: center;
 
 }
+
+.profile_page_button_create_album_playlist{
+    /* Frame 26080087 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+
+    width: auto;
+    height: 44px;
+
+    background: #5241B3;
+    border-radius: 50px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+
+.profile_page_button_create_album_playlist .txt_style{
+    /* Upload now */
+
+    width: auto;
+    height: 20px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    /* identical to box height, or 100% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.profile_page_tracks .playlist_close_button_container{
+    /* ic:baseline-close */
+
+    width: 15px;
+    height: 15px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+
+}
+
+
+.profile_page_modal_container .album_create_container{
+    /* Frame 26080108 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 32px 36px;
+    gap: 32px;
+
+    position: absolute;
+    width: 772px;
+    height: 639px;
+    left: 574px;
+    top: 188px;
+
+    background: #101010;
+    border-radius: 30px;
+
+}
+.album_create_container .title_container{
+    /* Frame 26080106 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 420px;
+
+    width: 700px;
+    height: 48px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.title_container .create_album_container_text{
+    /* Edit profile */
+
+    margin: 0 auto;
+    width: 241px;
+    height: 32px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    /* identical to box height, or 100% */
+
+    color: #FFFFFF;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+.title_container .close_button_container{
+    /* ic:baseline-close */
+    display:flex;
+    box-sizing: border-box;
+
+    margin: 0 auto;
+    width: 48px;
+    height: 48px;
+
+    align-items:center;
+    justify-content: center;
+
+    border: 2px solid #344289;
+    border-radius: 100px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+}
+.album_create_container .album_info_container{
+    /* Frame 26080107 */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
+
+    width: 700px;
+    height: 419px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+.img_container .img_style_album{
+    /* Ellipse 60 */
+
+    width: 241px;
+    height: 241px;
+
+    object-fit: cover;
+    border-radius: 30px;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: center;
+    flex-grow: 0;
+}
+
+
