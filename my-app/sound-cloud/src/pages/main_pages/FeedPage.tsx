@@ -7,7 +7,9 @@ import "../../styles/main_pages/feed_page/layout.css"
 import {IUser} from "../../types/user.ts";
 import {getTopUsers} from "../../services/User/user_info.ts";
 import { followService } from "../../services/followApi.ts";
+
 import {PlaylistModal} from "../../components/PlaylistModal.tsx";
+
 //import { IUserFollow } from "../../types/follow.ts";
 
 
@@ -128,6 +130,12 @@ const FeedPage: React.FC = ()=> {
         }
     };
 
+    // метод для переходу на профіль
+    const navigate = useNavigate();
+
+    const goToUserProfile = (userId: number) => {
+        navigate(`/user/${userId}`);
+    };
 
 
     return (
@@ -237,7 +245,8 @@ const FeedPage: React.FC = ()=> {
                             </div>
 
                             <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)}
-                                 alt={"userAvatar"}/>
+                                 alt={"userAvatar"}
+                                 onClick={() => goToUserProfile(user.id)}/>
                             <div className="top_creators_author_container">
                                 {user.username}
                             </div>
@@ -263,7 +272,8 @@ const FeedPage: React.FC = ()=> {
                      text-white text-[20px] font-bold"
                             key={user.id}>
                             <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)}
-                                 alt={"userAvatar"}/>
+                                 alt={"userAvatar"}
+                                 onClick={() => goToUserProfile(user.id)}/>
                             <div className="recommended_for_you_author_container">
                                 {user.username}
                             </div>

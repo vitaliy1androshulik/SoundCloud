@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+
     <list default="true" id="ad089105-f580-451a-9b73-332054f7bf5c" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/play_playlist/PlayPlaylistPage.tsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/play_album/layout.css" afterDir="false" />
@@ -12,11 +13,13 @@
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/Player.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/TrackProgress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/components/player/TrackProgress.tsx" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/FeedPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/HomePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/main_pages/LibraryPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/play_album/PlayAlbumPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/play_album/PlayAlbumPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/pages/profile/ProfilePage.tsx" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/albumAPI.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/playlistApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/playlistApi.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/services/trackApi.ts" afterDir="false" />
@@ -26,12 +29,14 @@
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/player/player.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/player/player.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/profile_page/profile_layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/styles/profile_page/profile_layout.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-app/sound-cloud/src/types/player_context.ts" beforeDir="false" afterPath="$PROJECT_DIR$/my-app/sound-cloud/src/types/player_context.ts" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -78,5 +83,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+
   </component>
 </project>

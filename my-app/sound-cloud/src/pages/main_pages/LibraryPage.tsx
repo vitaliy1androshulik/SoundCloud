@@ -177,6 +177,12 @@ const LibraryPage: React.FC = () => {
         fetchFollowingUsers();
     }, [user]);
 
+    // метод для переходу на профіль
+
+    const goToUserProfile = (userId: number) => {
+        navigate(`/user/${userId}`);
+    };
+
     return (
         <div className="layout_container mb-[900px] baloo2">
             {activeTab === "All" && (
@@ -347,7 +353,7 @@ const LibraryPage: React.FC = () => {
                             ) : (
                                 followingUsers.map(u => (
                                     <div key={u.id} className="track_card_container">
-                                        <img className="following_img_style" src={getUserAvatarUrl(u)} alt="avatar"/>
+                                        <img className="following_img_style" src={getUserAvatarUrl(u)} onClick={() => goToUserProfile(u.id)} alt="avatar"/>
                                         <div className="info_container">
                                             <div className="title_style">{u.username}</div>
                                         </div>
