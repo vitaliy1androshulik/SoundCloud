@@ -110,8 +110,8 @@ const HomePage: React.FC = () => {
             .catch((err) => console.error(err));
 
     }, []);
-    const getTrackImageUrl = (track: ITrack) => {
-        if (!track.imageUrl) return "/default-cover.png"; // запасна картинка
+    const getTrackImageUrl = (track?: ITrack | null) => {
+        if (!track || !track.imageUrl) return "/default-cover.png"; // запасна картинка
         return `http://localhost:5122${track.imageUrl}`;
     };
     const getUserAvatarUrl = (user: IUser) => {

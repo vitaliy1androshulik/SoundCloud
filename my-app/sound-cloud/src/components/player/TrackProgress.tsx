@@ -11,39 +11,45 @@ export const TrackProgress: React.FC<TrackProgressProps> = ({ audioRef, track })
     const [duration, setDuration] = useState(0);
 
     // обчислення прогресу
-    const progressPercent = (currentTime / duration) * 99;
-    const offset = Math.max(0, 1 - (currentTime / duration) * 1);
-    const valWithOffset = Math.min(progressPercent + offset, 100);
+    const progressPercent = duration ? (currentTime / duration) * 100 : 0;
 
-    // слухачі часу
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
 
         const updateTime = () => setCurrentTime(audio.currentTime);
-        const setAudioDuration = () => setDuration(audio.duration);
+        const setAudioDuration = () => setDuration(audio.duration || 0);
 
         audio.addEventListener("timeupdate", updateTime);
         audio.addEventListener("loadedmetadata", setAudioDuration);
+
+        // Якщо трек вже завантажений, одразу встановлюємо duration
+        if (audio.readyState >= 1) setAudioDuration();
 
         return () => {
             audio.removeEventListener("timeupdate", updateTime);
             audio.removeEventListener("loadedmetadata", setAudioDuration);
         };
-    }, [track]);
+    }, [track, audioRef]);
 
-    // перемотування
     const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!audioRef.current) return;
+        const audio = audioRef.current;
+        if (!audio) return;
         const newTime = Number(e.target.value);
-        audioRef.current.currentTime = newTime;
+        audio.currentTime = newTime;
         setCurrentTime(newTime);
     };
 
+    const formatTime = (time: number) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    };
+
     return (
-        <div className="track_time_skip_container">
+        <>
             <div className="track_duration_first_time_container">
-                {Math.floor(currentTime / 60)}:{("0" + Math.floor(currentTime % 60)).slice(-2)}
+                {formatTime(currentTime)}
             </div>
             <div>
                 <input
@@ -53,12 +59,12 @@ export const TrackProgress: React.FC<TrackProgressProps> = ({ audioRef, track })
                     value={currentTime}
                     className="track_duration_input"
                     onChange={handleSeek}
-                    style={{ "--val": `${valWithOffset}%` } as React.CSSProperties}
+                    style={{ "--val": `${progressPercent}%` } as React.CSSProperties}
                 />
             </div>
             <div className="track_duration_second_time_container">
-                {Math.floor(duration / 60)}:{("0" + Math.floor(duration % 60)).slice(-2)}
+                {formatTime(duration)}
             </div>
-        </div>
+        </>
     );
 };

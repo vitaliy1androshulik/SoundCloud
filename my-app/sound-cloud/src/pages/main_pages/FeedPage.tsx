@@ -7,7 +7,9 @@ import "../../styles/main_pages/feed_page/layout.css"
 import {IUser} from "../../types/user.ts";
 import {getTopUsers} from "../../services/User/user_info.ts";
 import { followService } from "../../services/followApi.ts";
-import {useNavigate} from "react-router-dom";
+
+import {PlaylistModal} from "../../components/PlaylistModal.tsx";
+
 //import { IUserFollow } from "../../types/follow.ts";
 
 
@@ -16,12 +18,11 @@ const FeedPage: React.FC = ()=> {
     const pauseTrack = usePlayerStore((state) => state.pauseTrack);
 
     const history = usePlayerStore(state => state.history);
-
+    const [modalOpen, setModalOpen] = useState(false);
     const [loop, setLoop] = useState<boolean>(false);
 
     const [tracks, setTracks] = useState<ITrack[]>([]);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-
     const [currentPage, setCurrentPage] = useState(1);
     const tracksPerPage = 6;
     const indexOfLastTrack = currentPage * tracksPerPage;
@@ -29,7 +30,7 @@ const FeedPage: React.FC = ()=> {
     const currentTracks = tracks.slice(indexOfFirstTrack, indexOfLastTrack);
 
     const totalPages = Math.ceil(tracks.length / tracksPerPage);
-
+    const setCurrentTrack = usePlayerStore(state => state.setCurrentTrack);
     //для лайків
     const [likedTracksIds, setLikedTracksIds] = useState<number[]>([]);
     useEffect(() => {
@@ -215,7 +216,7 @@ const FeedPage: React.FC = ()=> {
                                             <div className="track_more_controls_style">
                                                 <img src="src/images/icons/content_copy.png" alt="copy"/>
                                             </div>
-                                            <div className="track_more_controls_style">
+                                            <div className="track_more_controls_style cursor-pointer">
                                                 <img src="src/images/icons/add_playlist.png" id="add_playlist_icon"
                                                      alt="addPlaylist"/>
                                             </div>
@@ -374,7 +375,11 @@ const FeedPage: React.FC = ()=> {
                 </div>
 
             </div>
-
+            <PlaylistModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                getCurrentTrack={() => currentTrack}
+            />
             <audio ref={audioRef}/>
         </main>
     );

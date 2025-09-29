@@ -38,6 +38,15 @@ export const albumService = {
         return res.data;
     },
 
+    removeTrack: async (albumId: number, trackId: number): Promise<void> => {
+        try {
+            await api.delete(`/Album/${albumId}/tracks/${trackId}`);
+        } catch (err) {
+            console.error(`Failed to remove track ${trackId} from album ${albumId}:`, err);
+            throw err;
+        }
+    },
+
     getTracks: async (albumId: number) => {
         const res = await api.get(`/Album/${albumId}/tracks`);
         return res.data;

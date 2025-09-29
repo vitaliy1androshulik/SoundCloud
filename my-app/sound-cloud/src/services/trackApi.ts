@@ -35,7 +35,15 @@ export const trackService = {
             throw error;
         }
     },
-
+    getMyTracksCount: async (): Promise<number> => {
+        try {
+            const tracks: ITrack[] = await trackService.getMyTracks();
+            return tracks.length;
+        } catch (err) {
+            console.error("Failed to fetch user's tracks count:", err);
+            return 0;
+        }
+    },
     // Отримати всі треки конкретного користувача
     getAllByUser: async (userId: number): Promise<ITrack[]> => {
         const res = await api.get<ITrack[]>(`/track/user/${userId}`);

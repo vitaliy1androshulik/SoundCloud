@@ -51,11 +51,15 @@ public class PlaylistService : IPlaylistService
     {
         var p = await _db.Playlists.FindAsync(id);
         if (p == null) return null;
-
+        var owner = await _db.Users
+                         .Where(u => u.Id == p.OwnerId)
+                         .Select(u => u.Username)
+                         .FirstOrDefaultAsync();
         return new PlaylistDto
         {
             Id = p.Id,
             Name = p.Name,
+            OwnerName= owner,
             CoverUrl = p.CoverUrl
         };
     }
