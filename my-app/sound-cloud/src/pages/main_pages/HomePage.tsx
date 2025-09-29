@@ -319,8 +319,7 @@ const HomePage: React.FC = () => {
                         className="button_side_bar_left_container"
                         onClick={() => scrollLeft(scrollArtist)}
                     >
-                        <img src="src/images/icons/arrow_left_side_bar.png"
-                             alt="ArrowLeft"/>
+                        <img src="src/images/icons/arrow_left_side_bar.png" alt="ArrowLeft"/>
                     </button>
                 )}
                 {showRightArtist && (
@@ -328,24 +327,29 @@ const HomePage: React.FC = () => {
                         className="button_side_bar_right_container"
                         onClick={() => scrollRight(scrollArtist)}
                     >
-                        <img src="src/images/icons/arrow_right_side_bar.png"
-                             alt="ArrowRight"/>
+                        <img src="src/images/icons/arrow_right_side_bar.png" alt="ArrowRight"/>
                     </button>
                 )}
                 <div className="first_first_container_track" ref={scrollArtist}>
-                    {tracks.map(track => (
-                        <li className="first_first_track" key={track.id}>
-                            <img className="track_image_home_page" src={getTrackImageUrl(track)} alt={""}
-                                 onClick={() => playTrack(track, tracks)}
-                            />
-                            <div className="track_information_container">
-                                <span className="track_name baloo2">
-                                    {track.title.length > 16 ? track.title.slice(0, 16) + "…" : track.title}
-                                </span>
-                                <span className="track_author_home_page baloo2">{track.author}</span>
-                            </div>
-                        </li>
-                    ))}
+                    {users.length === 0 ? (
+                        <div className="user_info_container">
+                            <span className="txt_style">You don`t have Followings</span>
+                        </div>
+                    ) : (
+                        users.map(u => (
+                            <li key={u.id} className="first_first_track">
+                                <img
+                                    className="following_img_style"
+                                    src={getUserAvatarUrl(u)}
+                                    alt="avatar"
+                                    onClick={() => goToUserProfile(u.id)}
+                                />
+                                <div className="track_information_container">
+                                    <span className="track_name baloo2">{u.username}</span>
+                                </div>
+                            </li>
+                        ))
+                    )}
                 </div>
             </div>
             <div className="playlist_container">
@@ -478,7 +482,8 @@ const HomePage: React.FC = () => {
                      text-white text-[20px] font-bold"
                             key={user.id}>
                             <img className="top_creators_avatar_container" src={getUserAvatarUrl(user)}
-                                 alt={"userAvatar"}/>
+                                 alt={"userAvatar"}
+                                 onClick={() => goToUserProfile(user.id)}/>
                             <div className="recommended_for_you_author_container">
                                 {user.username}
                             </div>

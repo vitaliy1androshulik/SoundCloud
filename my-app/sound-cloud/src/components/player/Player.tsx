@@ -8,6 +8,11 @@ import api from "../../utilities/axiosInstance.ts";
 import {trackService} from "../../services/trackApi.ts";
 import {PlaylistModal} from "../PlaylistModal.tsx";
 import { TrackProgress } from "./TrackProgress";
+
+import like from "../../images/icons/like.png";
+import unlike from "../../images/icons/unlike.png";
+
+
 interface PlayerProps {
     footerSelector: string;
 }
@@ -163,7 +168,7 @@ export default function Player({ footerSelector }: PlayerProps) {
                 <div className="track_control_container">
                     <div className="track_control_like_container">
                         <img
-                            src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                            src={track.isLikedByCurrentUser ? like : unlike}
                             alt="like"
                             onClick={() => {
                                 toggleLike(track);

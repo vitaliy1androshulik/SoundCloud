@@ -694,3 +694,19 @@
     order: 1;
     flex-grow: 0;
 }
+
+.following_img_style{
+    /* Ellipse 66 */
+
+    width: 210px;
+    height: 210px;
+
+    border-radius: 50%;
+    transform: matrix(-1, 0, 0, 1, 0, 0);
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}

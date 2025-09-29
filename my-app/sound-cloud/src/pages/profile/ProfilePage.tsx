@@ -616,6 +616,8 @@ const ProfilePage: React.FC = () => {
     // окремо зберігаємо саме лайкнуті треки
     const [likedTracks, setLikedTracks] = useState<ITrack[]>([]);
 
+    const [likedTracksIds, setLikedTracksIds] = useState<number[]>([]);
+
     useEffect(() => {
         const fetchLikedTracks = async () => {
             try {
@@ -628,7 +630,15 @@ const ProfilePage: React.FC = () => {
         fetchLikedTracks();
     }, []);
 
-
+    useEffect(() => {
+        trackService.getAll()
+            .then((data) => {
+                setTracks(data);
+                const likedIds = data.filter(t => t.isLikedByCurrentUser).map(t => t.id);
+                setLikedTracksIds(likedIds);
+            })
+            .catch((err) => console.error(err));
+    }, []);
 
 
     const toggleLike = async (track: ITrack) => {
@@ -1035,6 +1045,9 @@ const ProfilePage: React.FC = () => {
 
                     </>
                 )}
+
+
+
                 {activeTab === "Tracks" && (
                     <>
                         {tracks.length ? (
@@ -1088,7 +1101,12 @@ const ProfilePage: React.FC = () => {
                                                         </div>
                                                         <div className="track_more_controls_container">
                                                             <div className="track_more_controls_style">
-                                                                <img src="src/images/icons/unlike.png" alt="unlike"/>
+                                                                <img
+                                                                    src={t.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                                                                    alt="like"
+                                                                    onClick={() => toggleLike(t)}
+                                                                    style={{cursor: "pointer"}}
+                                                                />
                                                             </div>
                                                             <div className="track_more_controls_style">
                                                                 <img
@@ -1976,8 +1994,8 @@ const ProfilePage: React.FC = () => {
             )}
             {/* Модалка для створення альбому */}
             {albumModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-gray-900 p-6 rounded w-full max-w-md">
+                <div className="background">
+                    <div className="profile_page_create_album_modal_container">
                         <h2 className="text-xl mb-4 text-white">Create Album</h2>
 
                         {/* Album Title */}
