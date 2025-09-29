@@ -79,7 +79,7 @@
 }
 .player_track_author{
 
-    width: 220px;
+    width: 150px;
     height: 17px;
 
     font-style: normal;
@@ -87,7 +87,6 @@
     font-size: 14px;
     line-height: 17px;
     /* identical to box height, or 100% */
-    display: block;
     align-items: center;
 
     color: rgba(255, 255, 255, 0.6);
@@ -96,8 +95,6 @@
     order: 1;
     align-self: stretch;
     flex-grow: 0;
-
-    position: relative;
 
 }
 .player_track_title,
@@ -115,7 +112,6 @@
     width: max-content;    /* ширина під розмір обох копій */
     animation: scrollText 8s linear infinite;
 }
-
 @keyframes scrollText {
     0%   { transform: translateX(100%); }
     100%  { transform: translateX(-100%); }

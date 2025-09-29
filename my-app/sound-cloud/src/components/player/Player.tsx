@@ -160,7 +160,7 @@ export default function Player({ footerSelector }: PlayerProps) {
                     <div className={`player_track_title ${track.title.length > 10 ? "scrolling" : ""}`}>
                         {track.title}
                     </div>
-                    <div className={`player_track_author ${track.author.length > 10 ? "scrolling" : ""}`}>
+                    <div className={`player_track_author ${track.author.length > 25 ? "scrolling" : ""}`}>
                         {track.author}
                     </div>
                 </div>
