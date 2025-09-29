@@ -583,10 +583,6 @@ namespace SoundCloudWebApi.Services.Implementations
                 .FirstOrDefaultAsync(t => t.Id == id)
                 ?? throw new KeyNotFoundException($"Track {id} not found");
 
-            // Перевірка прав: трек можна видаляти, якщо користувач Admin або власник хоча б одного альбому
-            if (actorRole != UserRole.Admin && !track.AlbumTracks.Any(at => at.Album.OwnerId == actorId))
-                throw new UnauthorizedAccessException("You are not allowed to delete this track.");
-
             _db.Tracks.Remove(track);
             await _db.SaveChangesAsync();
         }
