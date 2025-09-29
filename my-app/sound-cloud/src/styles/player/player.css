@@ -182,6 +182,7 @@
     flex-grow: 0;
 }
 .track_time_skip_container {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -195,6 +196,7 @@
     flex: none;
     order: 2;
     flex-grow: 0;
+
 }
 .track_duration_input {
     -webkit-appearance: none; /* відключає стандартний стиль */

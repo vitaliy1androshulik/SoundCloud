@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import "../../styles/player/player.css";
 import "../../styles/footer.css";
@@ -8,12 +8,15 @@ import api from "../../utilities/axiosInstance.ts";
 import {trackService} from "../../services/trackApi.ts";
 import {PlaylistModal} from "../PlaylistModal.tsx";
 import { TrackProgress } from "./TrackProgress";
+import like_icon from "../../images/icons/like.png";
+import unlike_icon from "../../images/icons/unlike.png";
+
 interface PlayerProps {
     footerSelector: string;
 }
 export default function Player({ footerSelector }: PlayerProps) {
     const { track, isPlaying, togglePlay,nextTrack,previousTrack } = usePlayerStore();
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioRef = usePlayerStore(state => state.audioRef); // глобал
     const [bottomOffset, setBottomOffset] = useState(0);
 
     const [modalOpen, setModalOpen] = useState(false);
@@ -21,7 +24,6 @@ export default function Player({ footerSelector }: PlayerProps) {
 
     const[loop, setLoop] = useState<boolean>(false);
 
-    const [volume, setVolume] = useState(1);
     const max = 1;
     const minBottom = 50;   // коли футер не видно
     const maxBottom = 100;  // коли футер повністю видно
@@ -42,12 +44,12 @@ export default function Player({ footerSelector }: PlayerProps) {
     }, [modalOpen]);
 
 
+    const volume = usePlayerStore(state => state.volume);
+    const setVolume = usePlayerStore(state => state.setVolume);
+
     const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = Number(e.target.value);
         setVolume(newVolume);
-        if (audioRef.current) {
-            audioRef.current.volume = newVolume;
-        }
     };
     useEffect(() => {
         const footer = document.querySelector(footerSelector);
@@ -163,7 +165,7 @@ export default function Player({ footerSelector }: PlayerProps) {
                 <div className="track_control_container">
                     <div className="track_control_like_container">
                         <img
-                            src={track.isLikedByCurrentUser ? "src/images/icons/like.png" : "src/images/icons/unlike.png"}
+                            src={track.isLikedByCurrentUser ? like_icon :unlike_icon}
                             alt="like"
                             onClick={() => {
                                 toggleLike(track);
@@ -211,7 +213,9 @@ export default function Player({ footerSelector }: PlayerProps) {
 
                     </div>
                 </div>
-                <TrackProgress audioRef={audioRef} track={track} />
+                <div className="track_time_skip_container">
+                    <TrackProgress audioRef={audioRef} track={track}/>
+                </div>
                 <div className="track_loudness_container">
                     <div className="track_loudness_image_container">
                         <img src="/src/images/player/volume_up_icon.png" alt="Volume"/>

@@ -277,7 +277,9 @@ const LibraryPage: React.FC = () => {
                         >
 
                             {tracks.length === 0 ? (
-                                <p className="text-gray-400">Улюблених треків поки немає</p>
+                                <div className="user_info_container">
+                                    <span className="txt_style_none">You don`t have Likes</span>
+                                </div>
                             ) : (
 
                                 tracks.slice(0, 7).map((track) => (
@@ -340,7 +342,7 @@ const LibraryPage: React.FC = () => {
                         >
                             {followingUsers.length === 0 ? (
                                 <div className="user_info_container">
-                                    <span className="txt_style">You don`t have Followings</span>
+                                    <span className="txt_style_none">You don`t have Followings</span>
                                 </div>
                             ) : (
                                 followingUsers.map(u => (
@@ -409,7 +411,9 @@ const LibraryPage: React.FC = () => {
 
                                 ))
                             ) : (
-                                <p className="text-gray-400 py-4">No albums yet</p>
+                                <div className="user_info_container">
+                                    <span className="txt_style_none">You don`t have Albums</span>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -453,6 +457,7 @@ const LibraryPage: React.FC = () => {
                                             src={p.coverUrl ? `http://localhost:5122/${p.coverUrl}` : "/default-cover.png"}
                                             alt={p.name}
                                             className="img_style"
+                                            onClick={() => navigate(`/play-playlist/${p.id}`)}
                                         />
                                         <div className="info_container">
                                             <span className="title_style">
@@ -464,7 +469,9 @@ const LibraryPage: React.FC = () => {
 
                                 ))
                             ) : (
-                                <p className="text-gray-400 py-4">No albums yet</p>
+                                <div className="user_info_container">
+                                    <span className="txt_style_none">You don`t have Playlists</span>
+                                </div>
                             )}
                         </div>
                     </div>

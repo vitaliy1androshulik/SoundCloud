@@ -7,6 +7,7 @@ import LoginSignup from "./pages/login_signup/Login_Signup";
 import LibraryPage from "./pages/main_pages/LibraryPage.tsx";
 import ProfilePage from "./pages/profile/ProfilePage.tsx";
 import PlayAlbumPage from "./pages/play_album/PlayAlbumPage.tsx";
+import PlayPlaylistPage from "./pages/play_playlist/PlayPlaylistPage.tsx";
 import './index.css';
 import FeedPage from "./pages/main_pages/FeedPage.tsx";
 import {useDispatch} from "react-redux";
@@ -61,6 +62,7 @@ export default function App() {
                     <Route path="/library" element={<LibraryPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/play-album/:id" element={<PlayAlbumPage />} />
+                    <Route path="/play-playlist/:id" element={<PlayPlaylistPage />} />
                     <Route path="/profile" element={<ProfilePage />} />  {/* для свого профілю */}
                     <Route path="/user/:id" element={<UserProfilePage />} /> {/* для інших користувачів */}
                     <Route path="/search-page" element={<SearchPage/>}/>
